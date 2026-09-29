@@ -17,3 +17,16 @@ export type TimeOfDay = z.infer<typeof TimeOfDay>;
 
 export const Latitude = z.number().min(-90).max(90);
 export const Longitude = z.number().min(-180).max(180);
+
+/** IANA timezone name, validated by the runtime's Intl data. */
+export const TimeZone = z.string().refine(
+  (tz) => {
+    try {
+      new Intl.DateTimeFormat('en-US', { timeZone: tz });
+      return true;
+    } catch {
+      return false;
+    }
+  },
+  { message: 'Unknown timezone' },
+);
