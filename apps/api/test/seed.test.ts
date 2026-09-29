@@ -1,6 +1,8 @@
 import { env } from 'cloudflare:test';
+import { Session } from '@leftover/shared';
 import { describe, expect, it } from 'vitest';
 import seedSql from '../seed/dev.sql?raw';
+import { jsonRequest } from './helpers/auth';
 import { runSql } from './helpers/run-sql';
 
 describe('dev seed', () => {
@@ -39,5 +41,17 @@ describe('dev seed', () => {
         "UPDATE bags SET qty_available = -1 WHERE id = 'seed-bag-crumb-surprise'",
       ).run(),
     ).rejects.toThrow(/CHECK constraint failed/);
+  });
+});
+
+describe('dev seed demo logins', () => {
+  it('logs in the demo customer with leftover24', async () => {
+    await runSql(env.DB, seedSql);
+    const res = await jsonRequest('/auth/login', 'POST', {
+      email: 'olena@seed.leftover.app',
+      password: 'leftover24',
+    });
+    expect(res.status).toBe(200);
+    expect(Session.parse(await res.json()).user.role).toBe('customer');
   });
 });
