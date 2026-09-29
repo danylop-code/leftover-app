@@ -48,10 +48,11 @@ No artboards. This is groundwork for every flow. Data model and conventions: [RE
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/02-api-foundation`
