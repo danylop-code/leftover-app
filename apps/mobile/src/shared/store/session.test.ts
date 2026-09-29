@@ -9,6 +9,7 @@ const user: Me = {
   firstName: 'Olena',
   role: 'customer',
   createdAt: '2026-09-29T10:00:00.000Z',
+  storeId: null,
 };
 
 beforeEach(() => useSession.setState({ status: 'hydrating', token: null, user: null }));

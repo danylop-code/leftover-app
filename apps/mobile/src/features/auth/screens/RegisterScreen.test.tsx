@@ -18,6 +18,7 @@ const user = {
   firstName: 'Olena',
   role: 'store',
   createdAt: '2026-09-29T10:00:00.000Z',
+  storeId: null,
 };
 
 const fill = (email = 'Olena@Example.com', password = 'leftover24') => {

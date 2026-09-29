@@ -50,8 +50,23 @@ describe('Session', () => {
       firstName: 'A',
       role: 'store',
       createdAt: '2026-09-29T10:00:00.000Z',
+      storeId: null,
     };
     expect(Session.parse({ token: 't', user: me })).toEqual({ token: 't', user: me });
     expect(Me.parse(me)).toEqual(me);
+  });
+});
+
+describe('Me', () => {
+  it('carries the owned store id (null until shop setup)', () => {
+    const base = {
+      id: 'u1',
+      email: 'a@b.co',
+      firstName: 'A',
+      role: 'store',
+      createdAt: '2026-09-29T10:00:00.000Z',
+    };
+    expect(Me.parse({ ...base, storeId: 's1' }).storeId).toBe('s1');
+    expect(Me.safeParse(base).success).toBe(false);
   });
 });

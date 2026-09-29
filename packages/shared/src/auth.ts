@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Id } from './common';
 import { Role, User } from './user';
 
 export const PASSWORD_MIN_LENGTH = 8;
@@ -21,8 +22,8 @@ export const LoginBody = z.object({
 });
 export type LoginBody = z.infer<typeof LoginBody>;
 
-/** The signed-in user as returned by `GET /me`. */
-export const Me = User;
+/** The signed-in user as returned by `GET /me`, plus the shop they own (null until shop setup). */
+export const Me = User.extend({ storeId: Id.nullable() });
 export type Me = z.infer<typeof Me>;
 
 /** Returned by register and login. The token is opaque; send it as `Authorization: Bearer`. */

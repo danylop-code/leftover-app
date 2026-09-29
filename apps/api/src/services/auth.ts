@@ -1,7 +1,7 @@
 import type { LoginBody, Me, RegisterBody, Session } from '@leftover/shared';
 import { and, eq, gt } from 'drizzle-orm';
 import type { Db } from '../db/client';
-import { sessions, users } from '../db/schema';
+import { sessions, stores, users } from '../db/schema';
 import { now } from '../lib/clock';
 import { conflict, unauthorized } from '../lib/errors';
 import { newId } from '../lib/ids';
@@ -82,18 +82,23 @@ export const hashToken = async (token: string) => {
 type UserRow = typeof users.$inferSelect;
 
 /** Public shape; the password hash never leaves this module. */
-export const toMe = (u: UserRow): Me => ({
+export const toMe = (u: UserRow, storeId: string | null): Me => ({
   id: u.id,
   email: u.email,
   firstName: u.firstName,
   role: u.role,
   createdAt: u.createdAt,
+  storeId,
 });
+
+const storeIdOf = async (db: Db, userId: string) =>
+  (await db.select({ id: stores.id }).from(stores).where(eq(stores.ownerId, userId)).get())?.id ??
+  null;
 
 const EMAIL_TAKEN = 'An account with this email already exists.';
 const emailTaken = () => conflict('email_taken', EMAIL_TAKEN, { fields: { email: [EMAIL_TAKEN] } });
 
-const createSession = async (db: Db, user: UserRow): Promise<Session> => {
+const createSession = async (db: Db, user: UserRow, storeId: string | null): Promise<Session> => {
   const token = generateToken();
   const at = now();
   await db.insert(sessions).values({
@@ -102,7 +107,7 @@ const createSession = async (db: Db, user: UserRow): Promise<Session> => {
     createdAt: at.toISOString(),
     expiresAt: new Date(at.getTime() + SESSION_TTL_DAYS * DAY_MS).toISOString(),
   });
-  return { token, user: toMe(user) };
+  return { token, user: toMe(user, storeId) };
 };
 
 export const register = async (db: Db, body: RegisterBody): Promise<Session> => {
@@ -127,7 +132,7 @@ export const register = async (db: Db, body: RegisterBody): Promise<Session> => 
     if (String(e).includes('UNIQUE')) throw emailTaken();
     throw e;
   }
-  return createSession(db, user);
+  return createSession(db, user, null);
 };
 
 // Verified against when the email is unknown, so both failures take the same time.
@@ -138,15 +143,16 @@ export const login = async (db: Db, body: LoginBody): Promise<Session> => {
   dummyHash ??= hashPassword('not-a-real-password');
   const ok = await verifyPassword(body.password, user?.passwordHash ?? (await dummyHash));
   if (!user || !ok) throw unauthorized('invalid_credentials', 'Email or password is incorrect.');
-  return createSession(db, user);
+  return createSession(db, user, await storeIdOf(db, user.id));
 };
 
 /** The user behind a live (unexpired) token, or null. */
 export const userForToken = async (db: Db, token: string) => {
   const row = await db
-    .select({ user: users, tokenHash: sessions.tokenHash })
+    .select({ user: users, tokenHash: sessions.tokenHash, storeId: stores.id })
     .from(sessions)
     .innerJoin(users, eq(users.id, sessions.userId))
+    .leftJoin(stores, eq(stores.ownerId, users.id))
     .where(
       and(
         eq(sessions.tokenHash, await hashToken(token)),

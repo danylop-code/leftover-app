@@ -15,6 +15,7 @@ const customer: Me = {
   firstName: 'Olena',
   role: 'customer',
   createdAt: '2026-09-29T10:00:00.000Z',
+  storeId: null,
 };
 const owner: Me = {
   ...customer,

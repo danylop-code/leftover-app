@@ -25,7 +25,12 @@ describe('POST /auth/register', () => {
     expect(res.status).toBe(201);
     const session = Session.parse(await res.json());
     expect(session.token.length).toBeGreaterThan(20);
-    expect(session.user).toMatchObject({ role: 'customer', email, firstName: 'Olena' });
+    expect(session.user).toMatchObject({
+      role: 'customer',
+      email,
+      firstName: 'Olena',
+      storeId: null,
+    });
   });
 
   it('creates a shop owner with role store', async () => {
