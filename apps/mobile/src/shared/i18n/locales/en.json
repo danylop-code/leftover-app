@@ -96,7 +96,6 @@
       "signedInAs": "Signed in as {{name}} · {{email}}",
       "comingSoon": "This screen arrives in a later update.",
       "logout": "Log out",
-      "location": "Where should we look?",
       "setup": "Set up your shop"
     }
   },
@@ -121,11 +120,9 @@
     "category": "Category",
     "address": "Address",
     "addressPlaceholder": "Street and number, city",
-    "addressHelp": "Search the address to place the pin, then drag it to fine-tune.",
-    "searching": "Finding your address…",
+    "addressHelp": "Start typing and pick your address, then drag the pin to fine-tune.",
     "found": "Pin placed at your address — drag it to fine-tune.",
     "moved": "Pin moved. Your typed address stays as it is.",
-    "notFound": "We couldn’t find that address. Drag the pin to your shop instead.",
     "map": "Shop location on the map",
     "hours": "Opening hours",
     "opensAt": "Opens at",
@@ -137,9 +134,37 @@
       "name": "Enter your shop’s name (2–60 characters).",
       "category": "Pick a category.",
       "address": "Enter the street address (3–120 characters).",
-      "pin": "Find your address or drag the pin to your shop.",
+      "pin": "Pick your address from the suggestions, or drag the pin to your shop.",
       "time": "Use HH:mm, e.g. 08:00.",
       "closesAfterOpens": "Closing time must be after opening time."
+    }
+  },
+  "location": {
+    "title": "Where should we look?",
+    "search": "Search street or place",
+    "useCurrent": "Use my current location",
+    "locating": "Finding you…",
+    "change": "Change",
+    "map": "Search area on the map",
+    "noPlace": "Search, or tap the map to choose a spot.",
+    "droppedPin": "Dropped pin",
+    "radius": "Search radius",
+    "showResults": "Show results",
+    "denied": {
+      "title": "Location access is off",
+      "text": "Search for a street or place instead, or allow location for Leftover in Settings."
+    },
+    "failed": {
+      "title": "Couldn’t find where you are",
+      "text": "Try again, or search for a street or place."
+    },
+    "searchScreen": {
+      "field": "Search address",
+      "clear": "Clear",
+      "suggestions": "Suggestions",
+      "recent": "Recent",
+      "searching": "Searching…",
+      "noResults": "No matches. Try a street name or a place."
     }
   }
 }
