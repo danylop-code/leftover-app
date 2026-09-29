@@ -57,6 +57,9 @@ export const stores = sqliteTable(
     opensAt: text('opens_at').notNull(),
     closesAt: text('closes_at').notNull(),
     timezone: text('timezone').notNull().default('Europe/Kyiv'),
+    /** R2 keys of the uploaded logo and cover (20). */
+    logoKey: text('logo_key'),
+    coverKey: text('cover_key'),
     createdAt: createdAt(),
   },
   (t) => [index('stores_lat_lng_idx').on(t.lat, t.lng)],
@@ -81,6 +84,8 @@ export const bags = sqliteTable(
     pickupStart: text('pickup_start').notNull(),
     pickupEnd: text('pickup_end').notNull(),
     isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+    /** R2 key of the uploaded photo (20). */
+    photoKey: text('photo_key'),
     createdAt: createdAt(),
     updatedAt: text('updated_at').notNull(),
   },

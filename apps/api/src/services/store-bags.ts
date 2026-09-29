@@ -12,6 +12,7 @@ import { bags, orders, stores } from '../db/schema';
 import { now, nowIso } from '../lib/clock';
 import { AppError, conflict, fieldsFromZod, notFound, ValidationError } from '../lib/errors';
 import { newId } from '../lib/ids';
+import { imageUrl } from './image-keys';
 import { localDate } from './opening-hours';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -34,6 +35,7 @@ export const toBag = (b: BagRow): Bag => ({
   pickupStart: b.pickupStart,
   pickupEnd: b.pickupEnd,
   isActive: b.isActive,
+  photoUrl: imageUrl(b.photoKey),
 });
 
 /** Reserved or collected bags: total minus what's still available. */
@@ -46,7 +48,7 @@ export const requireMyStore = async (db: Db, ownerId: string): Promise<StoreRow>
   return store;
 };
 
-const findMyBag = async (db: Db, storeId: string, id: string) => {
+export const findMyBag = async (db: Db, storeId: string, id: string) => {
   const bag = await db
     .select()
     .from(bags)
@@ -117,6 +119,7 @@ export const createMyBag = async (db: Db, ownerId: string, input: BagBody): Prom
     storeId: store.id,
     ...body,
     qtyAvailable: body.qtyTotal,
+    photoKey: null,
     createdAt: at,
     updatedAt: at,
   };
@@ -179,9 +182,14 @@ export const updateMyBag = async (
  * Deletes a bag nobody has ordered. With reserved orders: 409 `has_reservations` (pause it
  * instead); with only past orders it can't be removed either (their history points at it).
  */
-export const deleteMyBag = async (db: Db, ownerId: string, id: string): Promise<void> => {
+export const deleteMyBag = async (
+  db: Db,
+  ownerId: string,
+  id: string,
+  images: R2Bucket,
+): Promise<void> => {
   const store = await requireMyStore(db, ownerId);
-  await findMyBag(db, store.id, id);
+  const bag = await findMyBag(db, store.id, id);
   const linked = await db
     .select({ status: orders.status })
     .from(orders)
@@ -192,4 +200,5 @@ export const deleteMyBag = async (db: Db, ownerId: string, id: string): Promise<
   if (linked.length > 0)
     throw new AppError(409, 'has_orders', 'This bag has past orders. Pause it instead.');
   await db.delete(bags).where(and(eq(bags.id, id), eq(bags.storeId, store.id)));
+  if (bag.photoKey) await images.delete(bag.photoKey);
 };

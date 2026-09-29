@@ -12,7 +12,7 @@ export type FavoritesQuery = z.infer<typeof FavoritesQuery>;
 
 /** A saved shop on the Saved tab. */
 export const SavedShop = z.object({
-  store: Store.pick({ id: true, name: true, category: true, address: true }),
+  store: Store.pick({ id: true, name: true, category: true, address: true, logoUrl: true }),
   distanceKm: z.number().nonnegative(),
   rating: StoreRating.nullable(),
   /** Bags that can still be reserved (active, in stock, window not over). */

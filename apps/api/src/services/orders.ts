@@ -12,6 +12,7 @@ import { bags, orders, stores } from '../db/schema';
 import { now, nowIso } from '../lib/clock';
 import { conflict, notFound } from '../lib/errors';
 import { newId } from '../lib/ids';
+import { imageUrl } from './image-keys';
 import { CODE_WINDOW_HOURS, pickCode } from './pickup-code';
 import { ratingsForOrders } from './reviews';
 
@@ -126,6 +127,7 @@ const detailColumns = {
     category: bags.category,
     pickupStart: bags.pickupStart,
     pickupEnd: bags.pickupEnd,
+    photoKey: bags.photoKey,
   },
   store: {
     id: stores.id,
@@ -134,13 +136,14 @@ const detailColumns = {
     lat: stores.lat,
     lng: stores.lng,
     timezone: stores.timezone,
+    logoKey: stores.logoKey,
   },
 };
 
 type DetailRow = {
   order: OrderRow;
-  bag: OrderDetail['bag'];
-  store: OrderDetail['store'];
+  bag: Omit<OrderDetail['bag'], 'photoUrl'> & { photoKey: string | null };
+  store: Omit<OrderDetail['store'], 'logoUrl'> & { logoKey: string | null };
 };
 
 const toDetail = (row: DetailRow, rating: number | null, at: Date): OrderDetail => {
@@ -151,8 +154,8 @@ const toDetail = (row: DetailRow, rating: number | null, at: Date): OrderDetail 
       { status: row.order.status, pickupStart: row.bag.pickupStart, pickupEnd: row.bag.pickupEnd },
       at,
     ),
-    bag: row.bag,
-    store: row.store,
+    bag: (({ photoKey, ...bag }) => ({ ...bag, photoUrl: imageUrl(photoKey) }))(row.bag),
+    store: (({ logoKey, ...store }) => ({ ...store, logoUrl: imageUrl(logoKey) }))(row.store),
     rating,
   };
 };

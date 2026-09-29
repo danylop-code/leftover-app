@@ -20,6 +20,7 @@ import {
 } from '../lib/errors';
 import { newId } from '../lib/ids';
 import { favoriteStoreIds } from './favorites';
+import { imageUrl } from './image-keys';
 import { openStatus } from './opening-hours';
 import { recentReviews, storeRatingDetail } from './reviews';
 
@@ -35,6 +36,8 @@ export const toStore = (s: StoreRow): Store => ({
   opensAt: s.opensAt,
   closesAt: s.closesAt,
   timezone: s.timezone,
+  logoUrl: imageUrl(s.logoKey),
+  coverUrl: imageUrl(s.coverKey),
 });
 
 const storeExists = () => conflict('store_exists', 'You already have a shop.');
@@ -61,6 +64,8 @@ export const createMyStore = async (
     ownerId,
     ...body,
     timezone: body.timezone ?? market.timezone,
+    logoKey: null,
+    coverKey: null,
     createdAt: now().toISOString(),
   };
   try {
@@ -120,13 +125,15 @@ export const getStoreDetail = async (
       qtyAvailable: bags.qtyAvailable,
       pickupStart: bags.pickupStart,
       pickupEnd: bags.pickupEnd,
+      photoKey: bags.photoKey,
     })
     .from(bags)
     .where(and(eq(bags.storeId, id), eq(bags.isActive, true), gt(bags.pickupEnd, nowIso())))
     .orderBy(asc(bags.pickupStart))
     .all();
-  const available = today.filter((b) => b.qtyAvailable > 0);
-  const soldOut = today.filter((b) => b.qtyAvailable <= 0);
+  const listed = today.map(({ photoKey, ...b }) => ({ ...b, photoUrl: imageUrl(photoKey) }));
+  const available = listed.filter((b) => b.qtyAvailable > 0);
+  const soldOut = listed.filter((b) => b.qtyAvailable <= 0);
   const store = toStore(row);
   const [rating, reviews, saved] = await Promise.all([
     storeRatingDetail(db, id),
