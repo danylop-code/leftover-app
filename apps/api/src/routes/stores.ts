@@ -16,5 +16,5 @@ export const stores = new Hono<AppEnv>()
   )
   // Any signed-in user; declared after /me so "me" never reads as a store id.
   .get('/:id', requireAuth, validate('query', StoreDetailQuery), async (c) =>
-    c.json(await getStoreDetail(c.var.db, c.req.param('id'), c.req.valid('query'))),
+    c.json(await getStoreDetail(c.var.db, c.req.param('id'), c.req.valid('query'), c.var.user.id)),
   );

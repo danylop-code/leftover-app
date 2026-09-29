@@ -1,5 +1,6 @@
 import { env } from 'cloudflare:test';
 import type { Category } from '@leftover/shared';
+import { jsonRequest, registerUser } from './auth';
 
 // Direct D1 inserts for discovery tests: shops and bags placed at chosen coordinates.
 
@@ -74,4 +75,67 @@ export const insertBag = async (storeId: string, fields: BagFields = {}) => {
     )
     .run();
   return id;
+};
+
+type OrderFields = {
+  qty?: number;
+  status?: 'reserved' | 'collected' | 'cancelled';
+  code?: string;
+  unitPriceMinor?: number;
+  unitOriginalPriceMinor?: number;
+  createdAt?: string;
+  collectedAt?: string | null;
+  cancelledAt?: string | null;
+};
+
+/** An order row as it would exist after reserving (stock is not touched: set it on the bag). */
+export const insertOrder = async (
+  userId: string,
+  bagId: string,
+  storeId: string,
+  fields: OrderFields = {},
+) => {
+  const id = nextId('order');
+  await env.DB.prepare(
+    `INSERT INTO orders (id, user_id, bag_id, store_id, qty, unit_price_minor,
+       unit_original_price_minor, code, status, created_at, collected_at, cancelled_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+  )
+    .bind(
+      id,
+      userId,
+      bagId,
+      storeId,
+      fields.qty ?? 1,
+      fields.unitPriceMinor ?? 14900,
+      fields.unitOriginalPriceMinor ?? 45000,
+      fields.code ?? String(Math.floor(Math.random() * 10000)).padStart(4, '0'),
+      fields.status ?? 'reserved',
+      fields.createdAt ?? '2026-09-29T10:00:00.000Z',
+      fields.collectedAt ?? null,
+      fields.cancelledAt ?? null,
+    )
+    .run();
+  return id;
+};
+
+/** A shop owner with a shop at `at`, signed in. */
+export const shopOwner = async (at: { lat: number; lng: number }) => {
+  const session = await registerUser('store');
+  const res = await jsonRequest(
+    '/stores/me',
+    'POST',
+    {
+      name: 'Owner’s shop',
+      category: 'bakery',
+      address: 'Street 1',
+      lat: at.lat,
+      lng: at.lng,
+      opensAt: '08:00',
+      closesAt: '20:00',
+    },
+    session.token,
+  );
+  const store = (await res.json()) as { id: string };
+  return { token: session.token, userId: session.user.id, storeId: store.id };
 };

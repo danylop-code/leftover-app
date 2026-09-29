@@ -3,6 +3,8 @@ import { and, eq, gt, gte, lte } from 'drizzle-orm';
 import type { Db } from '../db/client';
 import { bags, stores } from '../db/schema';
 import { nowIso } from '../lib/clock';
+import { favoriteStoreIds } from './favorites';
+import { storeRatings } from './reviews';
 
 // Kilometres per degree of latitude on the sphere haversineKm uses (R = 6371.0088 km).
 const KM_PER_DEGREE = (6371.0088 * Math.PI) / 180;
@@ -42,7 +44,11 @@ export const rankNearby = <T extends Rankable>(rows: T[], from: LatLng, radiusKm
  * Bags customers can still reserve near the query point: active, in stock, window not over.
  * Distances are always from the query's lat/lng (the customer's selected location).
  */
-export const nearbyBags = async (db: Db, query: NearbyQuery): Promise<NearbyBag[]> => {
+export const nearbyBags = async (
+  db: Db,
+  query: NearbyQuery,
+  userId: string,
+): Promise<NearbyBag[]> => {
   const from = { lat: query.lat, lng: query.lng };
   const box = boundingBox(from, query.radiusKm);
   const rows = await db
@@ -77,7 +83,13 @@ export const nearbyBags = async (db: Db, query: NearbyQuery): Promise<NearbyBag[
     )
     .all();
 
-  return rankNearby(rows, from, query.radiusKm).map(({ row, distanceKm }) => ({
+  const ranked = rankNearby(rows, from, query.radiusKm);
+  const storeIds = ranked.map((r) => r.row.storeId);
+  const [ratings, saved] = await Promise.all([
+    storeRatings(db, storeIds),
+    favoriteStoreIds(db, userId, storeIds),
+  ]);
+  return ranked.map(({ row, distanceKm }) => ({
     id: row.id,
     title: row.title,
     category: row.category,
@@ -88,5 +100,7 @@ export const nearbyBags = async (db: Db, query: NearbyQuery): Promise<NearbyBag[
     pickupEnd: row.pickupEnd,
     store: { id: row.storeId, name: row.storeName, timezone: row.timezone },
     distanceKm,
+    rating: ratings.get(row.storeId) ?? null,
+    isFavorite: saved.has(row.storeId),
   }));
 };

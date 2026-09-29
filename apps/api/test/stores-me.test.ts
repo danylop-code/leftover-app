@@ -113,3 +113,14 @@ describe('role guard', () => {
     },
   );
 });
+
+describe('concurrent setup', () => {
+  it('two simultaneous creates for one owner: one 201, one 409 store_exists (never 500)', async () => {
+    const { token } = await registerUser('store');
+    const results = await Promise.all([
+      jsonRequest('/stores/me', 'POST', profile, token),
+      jsonRequest('/stores/me', 'POST', profile, token),
+    ]);
+    expect(results.map((r) => r.status).sort()).toEqual([201, 409]);
+  });
+});

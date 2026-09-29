@@ -10,9 +10,17 @@ import { and, asc, eq, gt } from 'drizzle-orm';
 import type { Db } from '../db/client';
 import { bags, stores } from '../db/schema';
 import { now, nowIso } from '../lib/clock';
-import { conflict, fieldsFromZod, notFound, ValidationError } from '../lib/errors';
+import {
+  conflict,
+  fieldsFromZod,
+  isUniqueViolation,
+  notFound,
+  ValidationError,
+} from '../lib/errors';
 import { newId } from '../lib/ids';
+import { favoriteStoreIds } from './favorites';
 import { openStatus } from './opening-hours';
+import { recentReviews, storeRatingDetail } from './reviews';
 
 type StoreRow = typeof stores.$inferSelect;
 
@@ -50,7 +58,7 @@ export const createMyStore = async (
   try {
     await db.insert(stores).values(row);
   } catch (e) {
-    if (String(e).includes('UNIQUE')) throw storeExists();
+    if (isUniqueViolation(e)) throw storeExists();
     throw e;
   }
   return toStore(row);
@@ -80,6 +88,7 @@ export const getStoreDetail = async (
   db: Db,
   id: string,
   from: StoreDetailQuery,
+  userId: string,
 ): Promise<StoreDetail> => {
   const row = await db.select().from(stores).where(eq(stores.id, id)).get();
   if (!row) throw notFound('This shop doesn’t exist.');
@@ -87,6 +96,7 @@ export const getStoreDetail = async (
     .select({
       id: bags.id,
       title: bags.title,
+      description: bags.description,
       category: bags.category,
       priceMinor: bags.priceMinor,
       originalPriceMinor: bags.originalPriceMinor,
@@ -101,12 +111,19 @@ export const getStoreDetail = async (
   const available = today.filter((b) => b.qtyAvailable > 0);
   const soldOut = today.filter((b) => b.qtyAvailable <= 0);
   const store = toStore(row);
+  const [rating, reviews, saved] = await Promise.all([
+    storeRatingDetail(db, id),
+    recentReviews(db, id),
+    favoriteStoreIds(db, userId, [id]),
+  ]);
   return {
     store,
     distanceKm: haversineKm(from, store),
     openStatus: openStatus(store, now()),
     bags: [...available, ...soldOut],
     counts: { available: available.length, total: today.length },
-    rating: null,
+    rating,
+    recentReviews: reviews,
+    isFavorite: saved.has(id),
   };
 };

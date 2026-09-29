@@ -5,6 +5,8 @@
 -- Demo logins (all share the password `leftover24`): olena@seed.leftover.app (customer),
 -- crumb@ / kasha@ / zelena@ / morning@ / greenrow@seed.leftover.app (shop owners).
 
+DELETE FROM reviews WHERE order_id LIKE 'seed-%' OR store_id LIKE 'seed-%';
+DELETE FROM favorites WHERE user_id LIKE 'seed-%' OR store_id LIKE 'seed-%';
 DELETE FROM orders WHERE id LIKE 'seed-%' OR bag_id LIKE 'seed-%';
 DELETE FROM bags WHERE id LIKE 'seed-%';
 DELETE FROM stores WHERE id LIKE 'seed-%';
@@ -38,3 +40,13 @@ INSERT INTO bags (id, store_id, title, description, category, price_minor, origi
   ('seed-bag-morning-pastry', 'seed-store-morning', 'Coffee & pastry bag', 'Pastries plus a bag of beans.', 'cafe', 12900, 38000, 2, 2, strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '+1 hours'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '+2 hours'), 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
   ('seed-bag-morning-yesterday', 'seed-store-morning', 'Morning bag', 'Window already over.', 'cafe', 9900, 30000, 2, 2, strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-3 hours'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-2 hours'), 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
   ('seed-bag-greenrow-veg', 'seed-store-greenrow', 'Veg & fruit box', 'Seasonal produce, slightly imperfect.', 'produce', 11900, 34000, 5, 5, strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '+1 hours'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '+3 hours'), 1, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+
+-- Olena's pickup history (collected earlier today) and her reviews, so Discover shows ratings,
+-- My orders has a Past tab and Profile has stats. They're counted in the bags' stock already.
+INSERT INTO orders (id, user_id, bag_id, store_id, qty, unit_price_minor, unit_original_price_minor, code, status, created_at, collected_at, cancelled_at) VALUES
+  ('seed-order-crumb', 'seed-customer-olena', 'seed-bag-crumb-surprise', 'seed-store-crumb', 1, 14900, 45000, '4827', 'collected', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-5 hours'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-3 hours'), NULL),
+  ('seed-order-kasha', 'seed-customer-olena', 'seed-bag-kasha-hot', 'seed-store-kasha', 1, 17900, 52000, '3150', 'collected', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-5 hours'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-2 hours'), NULL);
+
+INSERT INTO reviews (order_id, store_id, user_id, overall, quality, variety, freshness, ease, text, created_at) VALUES
+  ('seed-order-crumb', 'seed-store-crumb', 'seed-customer-olena', 5, 5, 4, 5, 4, 'Two loaves, a cinnamon roll and focaccia. All fresh — lovely value.', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-2 hours')),
+  ('seed-order-kasha', 'seed-store-kasha', 'seed-customer-olena', 4, 4, NULL, 5, NULL, 'Generous portions, still warm.', strftime('%Y-%m-%dT%H:%M:%fZ', 'now', '-1 hours'));
