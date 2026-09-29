@@ -1,3 +1,4 @@
+import type { Category } from '@leftover/shared';
 import type { SearchArea } from '../store/location';
 
 // Query keys factory — the single source of query keys (rules/state-and-data.md).
@@ -8,8 +9,8 @@ import type { SearchArea } from '../store/location';
 export const keys = {
   me: () => ['me'] as const,
   myStore: () => ['stores', 'me'] as const,
-  /** Discover (06). Includes the whole area, so a new location or radius refetches. */
-  nearby: (area: SearchArea) => ['bags', 'nearby', area] as const,
+  /** Discover: every input, so a new location, radius or category refetches. */
+  nearby: (p: SearchArea & { category: Category | null }) => ['bags', 'nearby', p] as const,
   addressSuggestions: (p: { q: string; near: { lat: number; lng: number } | null }) =>
     ['geo', 'autocomplete', p] as const,
 } as const;

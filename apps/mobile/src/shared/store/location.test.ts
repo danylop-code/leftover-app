@@ -21,7 +21,7 @@ const state = () => useLocation.getState();
 const nearbyKey = () => {
   const area = searchAreaOf(state());
   if (!area) throw new Error('no search area');
-  return keys.nearby(area);
+  return keys.nearby({ ...area, category: null });
 };
 
 describe('location store', () => {
