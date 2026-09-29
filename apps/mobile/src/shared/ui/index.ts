@@ -18,6 +18,7 @@ export { IconButton } from './IconButton/IconButton';
 export { Icon, type IconName } from './icons';
 export { ListGroup } from './ListRow/ListGroup';
 export { ListRow } from './ListRow/ListRow';
+export { MapPicker } from './MapPicker/MapPicker';
 export { OrderCard } from './OrderCard/OrderCard';
 export { Price } from './Price/Price';
 export { RatingBar } from './RatingBar/RatingBar';
