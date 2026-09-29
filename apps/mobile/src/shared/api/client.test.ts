@@ -14,7 +14,7 @@ let fetchMock: jest.SpyInstance;
 
 beforeEach(() => {
   process.env.EXPO_PUBLIC_API_URL = 'https://api.test';
-  useSession.getState().clear();
+  useSession.setState({ status: 'signedOut', token: null, user: null });
   fetchMock = jest.spyOn(globalThis, 'fetch');
 });
 
@@ -27,7 +27,7 @@ const lastCall = () => {
 
 describe('apiRequest', () => {
   it('sends the bearer token from the session store', async () => {
-    useSession.getState().setToken('tok_123');
+    useSession.setState({ status: 'signedIn', token: 'tok_123' });
     fetchMock.mockResolvedValue(json(200, { id: 'a', priceMinor: 14900 }));
     await apiRequest('/things/a', { schema: Thing });
     const { url, headers } = lastCall();
@@ -118,5 +118,27 @@ describe('apiRequest', () => {
     await expect(
       apiRequest('/favorites/s1', { method: 'PUT', schema: NoContent }),
     ).resolves.toBeUndefined();
+  });
+
+  it('signs out when an authenticated request gets 401', async () => {
+    useSession.setState({ status: 'signedIn', token: 'expired' });
+    fetchMock.mockResolvedValue(
+      json(401, { error: { code: 'unauthorized', message: 'Please log in.' } }),
+    );
+    await expect(apiRequest('/me', { schema: Thing })).rejects.toMatchObject({ status: 401 });
+    expect(useSession.getState()).toMatchObject({ status: 'signedOut', token: null });
+  });
+
+  it('does not touch the session on a 401 without a token (bad login)', async () => {
+    const signOut = jest.spyOn(useSession.getState(), 'signOut');
+    fetchMock.mockResolvedValue(
+      json(401, { error: { code: 'invalid_credentials', message: 'Nope' } }),
+    );
+    await expect(
+      apiRequest('/auth/login', { method: 'POST', schema: Thing }),
+    ).rejects.toMatchObject({
+      code: 'invalid_credentials',
+    });
+    expect(signOut).not.toHaveBeenCalled();
   });
 });
