@@ -50,10 +50,11 @@ Artboards **Welcome**, **Register** (role picker: "I'm a customer" / "I run a sh
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/03-auth`
