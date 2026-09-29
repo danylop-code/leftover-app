@@ -1,6 +1,5 @@
-import { View } from 'react-native';
+import { SessionRedirect } from '../src/features/auth/components/SessionRedirect/SessionRedirect';
 
-// Placeholder until feature 03 (auth) routes to Welcome or the role's home.
 export default function Index() {
-  return <View />;
+  return <SessionRedirect />;
 }
