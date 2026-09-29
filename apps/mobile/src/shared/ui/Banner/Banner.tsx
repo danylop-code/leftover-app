@@ -14,6 +14,8 @@ export function Banner({ title, text, icon = 'alert', tone = 'info' }: Props) {
   return (
     <View
       style={[styles.root, { backgroundColor: t.bg }]}
+      accessible
+      accessibilityLiveRegion={tone === 'info' ? undefined : 'polite'}
       accessibilityRole={tone === 'info' ? 'summary' : 'alert'}
     >
       <View style={styles.icon}>

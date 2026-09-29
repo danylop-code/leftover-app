@@ -30,6 +30,7 @@ export { Stepper } from './Stepper/Stepper';
 export { StoreLogo } from './StoreLogo/StoreLogo';
 export { StoreRow } from './StoreRow/StoreRow';
 export { Switch } from './Switch/Switch';
+export { RouterTabBar } from './TabBar/RouterTabBar';
 export { TabBar, type TabItem } from './TabBar/TabBar';
 export { Text } from './Text/Text';
 export { Ticket } from './Ticket/Ticket';
