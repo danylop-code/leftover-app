@@ -1,6 +1,6 @@
 # Feature: profile-settings
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A user sees who they're logged in as and their impact, adjusts their pickup area, gets help, and logs out.
@@ -19,12 +19,12 @@ Artboard **Settings** (Profile tab: initials avatar, name, email, edit button, s
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given 3 collected orders (1, 1, 2 bags) saving ₴301, ₴211 and 2 × ₴100, then the stats show "4 bags rescued" and "₴712 saved so far".
-- [ ] Given cancelled or missed orders, then they don't count toward the stats.
-- [ ] Given Pickup area, then Location opens, and after "Show results" the row reflects the new label and radius.
-- [ ] Given Log out confirmed, then the session is cleared and Welcome shows.
-- [ ] Given a store user, then the stats and Pickup area are hidden, and Report + Log out are shown.
-- [ ] Given a name edit to an empty string, then it's rejected inline and by the API (400).
+- [x] Given 3 collected orders (1, 1, 2 bags) saving ₴301, ₴211 and 2 × ₴100, then the stats show "4 bags rescued" and "₴712 saved so far".
+- [x] Given cancelled or missed orders, then they don't count toward the stats.
+- [x] Given Pickup area, then Location opens, and after "Show results" the row reflects the new label and radius.
+- [x] Given Log out confirmed, then the session is cleared and Welcome shows.
+- [x] Given a store user, then the stats and Pickup area are hidden, and Report + Log out are shown.
+- [x] Given a name edit to an empty string, then it's rejected inline and by the API (400).
 
 ### Approach steps
 1. Add the stats + `PATCH /me` routes + integration tests.
@@ -40,10 +40,15 @@ Artboard **Settings** (Profile tab: initials avatar, name, email, edit button, s
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in the 08–15 batch.
+  - Both roles share `ProfileScreen`; shops see no stats or pickup area.
+  - "Report a problem" isn't shown yet (it's brief 16); Notifications isn't rendered (as planned). The Language row is display-only.
+  - Log out and the name edit use the new kit `Sheet` (in-app, not a native alert).

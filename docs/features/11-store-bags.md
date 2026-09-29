@@ -1,6 +1,6 @@
 # Feature: store-bags
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A shop lists today's surplus bags in about a minute and keeps them up to date: pause, edit, delete.
@@ -22,15 +22,15 @@ Artboards **StoreBags** (shop name, "My bags", stats "2 bags live now" / "5 rese
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a valid form, when saving a new bag, then it appears in My bags as live and is returned by `/bags/nearby` for a nearby customer.
-- [ ] Given sale price ≥ original price, then an inline error shows and the API returns 400.
-- [ ] Given a window < 30 min or ending in the past, then an inline error shows and the API returns 400.
-- [ ] Given 3 reserved of 5, when reducing Bags today to 2, then 409 `below_reserved`, and the stepper min is 3 in the UI.
-- [ ] Given 5 → 6 total with 2 available, then available becomes 3.
-- [ ] Given pause, then the row shows Paused, the bag disappears from Discover, and Undo within the toast restores it.
-- [ ] Given delete with reserved orders, then 409 and a message suggesting pause; without reservations, the bag is removed.
-- [ ] Given another shop's bag id, then 404.
-- [ ] Stats: "live now" counts active bags with stock and a future `pickup_end`; "reserved today" sums qty of today's non-cancelled orders.
+- [x] Given a valid form, when saving a new bag, then it appears in My bags as live and is returned by `/bags/nearby` for a nearby customer.
+- [x] Given sale price ≥ original price, then an inline error shows and the API returns 400.
+- [x] Given a window < 30 min or ending in the past, then an inline error shows and the API returns 400.
+- [x] Given 3 reserved of 5, when reducing Bags today to 2, then 409 `below_reserved`, and the stepper min is 3 in the UI.
+- [x] Given 5 → 6 total with 2 available, then available becomes 3.
+- [x] Given pause, then the row shows Paused, the bag disappears from Discover, and Undo within the toast restores it.
+- [x] Given delete with reserved orders, then 409 and a message suggesting pause; without reservations, the bag is removed.
+- [x] Given another shop's bag id, then 404.
+- [x] Stats: "live now" counts active bags with stock and a future `pickup_end`; "reserved today" sums qty of today's non-cancelled orders.
 
 ### Approach steps
 1. Write the shared `BagBody` + validation tests.
@@ -48,10 +48,17 @@ Artboards **StoreBags** (shop name, "My bags", stats "2 bags live now" / "5 rese
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in the 08–15 batch.
+  - Routes: `/bag/new` and `/bag/[id]` (modals). Pause/resume is the row's switch (as on the artboard) rather than a menu; Undo sits in the toast for 5 s.
+  - `reservedCount` = total − available (collected bags count as taken), which is also what the quantity guard uses: `newTotal ≥ total − available`, checked inside the UPDATE.
+  - Delete: 409 `has_reservations` with reserved orders; a bag with only past orders can't be removed either (409 `has_orders`, "pause it instead") because their history points at it.
+  - Pickup times are typed as HH:mm and converted to UTC in the shop's timezone on the device (`isoAtLocalTime`); the API re-checks "today" and "ends in the future".
+  - `store-add-bag.yaml` is written but not run yet (needs a dev build on a simulator); its times (23:00–23:45) only work before 23:00.

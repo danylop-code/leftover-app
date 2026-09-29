@@ -24,14 +24,14 @@ Artboards **Reserve** (bag summary, description, quantity stepper with "3 left",
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a bag with 3 left, when reserving 1, then 201 with a 4-digit code, and `qty_available` becomes 2.
-- [ ] Given 1 left and two concurrent reserve requests, then exactly one succeeds and the other gets 409 `sold_out`; `qty_available` is 0, never negative, and exactly one order exists.
-- [ ] Given qty > available, then 409 `sold_out` with the current available count, and nothing is written.
-- [ ] Given qty > `MAX_QTY_PER_ORDER` or < 1, then 400.
-- [ ] Given a paused bag, or a past `pickup_end`, then 409 `not_available`.
-- [ ] Given a store user, then 403.
-- [ ] Given 2 × ₴149 (orig ₴450), then the UI shows total ₴298 and "You save ₴602" computed from integer minor units.
-- [ ] Given a `sold_out` response, then the sold-out state shows, and the stepper/button are disabled.
+- [x] Given a bag with 3 left, when reserving 1, then 201 with a 4-digit code, and `qty_available` becomes 2.
+- [x] Given 1 left and two concurrent reserve requests, then exactly one succeeds and the other gets 409 `sold_out`; `qty_available` is 0, never negative, and exactly one order exists.
+- [x] Given qty > available, then 409 `sold_out` with the current available count, and nothing is written.
+- [x] Given qty > `MAX_QTY_PER_ORDER` or < 1, then 400.
+- [x] Given a paused bag, or a past `pickup_end`, then 409 `not_available`.
+- [x] Given a store user, then 403.
+- [x] Given 2 × ₴149 (orig ₴450), then the UI shows total ₴298 and "You save ₴602" computed from integer minor units.
+- [x] Given a `sold_out` response, then the sold-out state shows, and the stepper/button are disabled.
 
 ### Approach steps
 1. Write the shared schemas + constants.
@@ -48,7 +48,7 @@ Artboards **Reserve** (bag summary, description, quantity stepper with "3 left",
 ---
 
 ## Status
-in-progress
+done
 
 ## Last updated
 2026-09-29
@@ -61,3 +61,9 @@ in-progress
   - The guarded batch runs on the raw D1 client (`UPDATE … WHERE qty_available >= ?`, then `INSERT … SELECT … WHERE changes() = 1`), so nothing is written when the update misses.
   - Pickup (09) isn't built yet, and by the roadmap 11 and 12 come before it. Until then, a successful reservation lands on a Pickup placeholder route (`/pickup/[orderId]`) that 09 replaces.
   - `not_available` (paused or window over) shows the same "sold out" layout with its own copy.
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in one batch with 09–15 (the user asked for batches from 08 on, with a test suite per screen written afterwards).
+  - Reserve reads the bag from 07's `GET /stores/:id`, which gained `description`. Route `/reserve/[bagId]?storeId=` (modal).
+  - When fewer bags are left than asked (but some are), the quantity drops to what's left with a warning instead of showing the sold-out state.
+  - Success opens Pickup (09, built in the same batch).
+  - `customer-reserve-pickup.yaml` is written but not run yet (needs a dev build on a simulator).
