@@ -8,7 +8,7 @@ import { useLogout } from '../../../shared/api/use-logout';
 import { LANGUAGE_NAMES, LANGUAGES } from '../../../shared/i18n/languages';
 import { useLanguage } from '../../../shared/i18n/use-language';
 import { useLocation } from '../../../shared/store/location';
-import { usePreferences } from '../../../shared/store/preferences';
+import { Appearance, usePreferences } from '../../../shared/store/preferences';
 import { useSession } from '../../../shared/store/session';
 import {
   Button,
@@ -50,6 +50,9 @@ export function ProfileScreen() {
   const [choosingLanguage, setChoosingLanguage] = useState(false);
   const { language } = useLanguage();
   const setLanguage = usePreferences((s) => s.setLanguage);
+  const [choosingAppearance, setChoosingAppearance] = useState(false);
+  const appearance = usePreferences((s) => s.appearance);
+  const setAppearance = usePreferences((s) => s.setAppearance);
   const tabBarInset = useTabBarInset();
 
   if (!user) return null;
@@ -87,6 +90,12 @@ export function ProfileScreen() {
             label={t('profile.language')}
             value={LANGUAGE_NAMES[language]}
             onPress={() => setChoosingLanguage(true)}
+          />
+          <ListRow
+            icon="moon"
+            label={t('profile.appearance')}
+            value={t(`profile.appearanceValue.${appearance}`)}
+            onPress={() => setChoosingAppearance(true)}
             last={!isCustomer}
           />
           {isCustomer ? (
@@ -147,6 +156,25 @@ export function ProfileScreen() {
           onChange={(next) => {
             setLanguage(next);
             setChoosingLanguage(false);
+          }}
+        />
+      </Sheet>
+
+      <Sheet
+        visible={choosingAppearance}
+        onClose={() => setChoosingAppearance(false)}
+        title={t('profile.appearance')}
+      >
+        <ChoiceList
+          label={t('profile.appearance')}
+          options={Appearance.options.map((a) => ({
+            value: a,
+            label: t(`profile.appearanceValue.${a}`),
+          }))}
+          value={appearance}
+          onChange={(next) => {
+            setAppearance(next);
+            setChoosingAppearance(false);
           }}
         />
       </Sheet>

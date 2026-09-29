@@ -64,6 +64,8 @@ export function MapPicker({ value, onChange, label, radiusKm, style }: Props) {
         ref={ref}
         style={styles.map}
         initialRegion={initialRegion}
+        // Light tiles in both schemes (brief 19); Apple Maps would otherwise follow the phone.
+        userInterfaceStyle="light"
         onPress={(e: MapPressEvent) => emit(toLatLng(e.nativeEvent.coordinate))}
         toolbarEnabled={false}
       >

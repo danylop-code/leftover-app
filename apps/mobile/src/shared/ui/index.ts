@@ -1,6 +1,7 @@
 // The shared UI kit. Screens import from here, never from a component folder.
 export { AddressAutocomplete } from './AddressAutocomplete/AddressAutocomplete';
 export { AppFrame } from './AppFrame/AppFrame';
+export { useScreenOptions } from './AppFrame/use-screen-options';
 export { Badge, type BadgeTone } from './Badge/Badge';
 export { stockTone } from './Badge/stock-tone';
 export { BagCard } from './BagCard/BagCard';

@@ -1,8 +1,15 @@
-import { type ImageStyle, StyleSheet, type TextStyle, type ViewStyle } from 'react-native';
+import {
+  type ImageStyle,
+  StyleSheet,
+  type TextStyle,
+  useColorScheme,
+  type ViewStyle,
+} from 'react-native';
 import { type Direction, directionOf } from '../i18n/languages';
 import { useLanguage } from '../i18n/use-language';
-import { color, logoPalette, map, media } from './colors';
-import { elevation, shadows } from './elevation';
+import { usePreferences } from '../store/preferences';
+import { color, darkColor, darkMap, darkMedia, logoPalette, map, media } from './colors';
+import { darkElevation, darkShadows, elevation, shadows } from './elevation';
 import {
   arabicFontFamily,
   type FontFamily,
@@ -70,18 +77,25 @@ const sheetFor =
     return StyleSheet.create<Record<string, AnyStyle>>(out) as unknown as T;
   };
 
+const palettes = {
+  light: { color, media, map, shadows, elevation },
+  dark: {
+    color: darkColor,
+    media: darkMedia,
+    map: darkMap,
+    shadows: darkShadows,
+    elevation: darkElevation,
+  },
+} satisfies Record<Scheme, Pick<Theme, 'color' | 'media' | 'map' | 'shadows' | 'elevation'>>;
+
 const build = (scheme: Scheme, direction: Direction, script: Script): Theme => {
   const faces = script === 'arabic' ? arabicFontFamily : fontFamily;
   return {
     scheme,
     direction,
     script,
-    color,
-    media,
-    map,
+    ...palettes[scheme],
     logoPalette,
-    shadows,
-    elevation,
     fontFamily: faces,
     typography: typographyFor(faces),
     sheet: sheetFor(direction, script),
@@ -101,10 +115,18 @@ export const themeFor = (scheme: Scheme, language: 'en' | 'ar'): Theme => {
   return theme;
 };
 
-/** The current theme: follows the language now, and the color scheme from brief 19. */
+/** Light or dark: the choice in Profile, or the phone's setting (followed live) on System. */
+export const useScheme = (): Scheme => {
+  const appearance = usePreferences((s) => s.appearance);
+  const system = useColorScheme();
+  if (appearance !== 'system') return appearance;
+  return system === 'dark' ? 'dark' : 'light';
+};
+
+/** The current theme: the color scheme (19) and the language's script and direction (21). */
 export const useTheme = (): Theme => {
   const { language } = useLanguage();
-  return themeFor('light', language);
+  return themeFor(useScheme(), language);
 };
 
 /**

@@ -28,12 +28,12 @@ Affects every screen, the kit, the maps (04/05/17), the status bar, and the web 
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given the phone in dark mode and the preference on System, when the app opens, then every screen uses the dark palette with no light flash first.
-- [ ] Given Dark or Light chosen in Profile, then it wins over the phone setting and survives a restart.
-- [ ] Given the phone switches mode while the app is open (System), then the app follows without a restart.
-- [ ] Given the dark theme, then body text and controls meet WCAG AA contrast (4.5:1 text, 3:1 large text and UI) — checked in a unit test over token pairs.
-- [ ] The parity test checks both the light and the dark token sets against `theme.css`.
-- [ ] No style file reads colors at module load (lint or test guard).
+- [x] Given the phone in dark mode and the preference on System, when the app opens, then every screen uses the dark palette with no light flash first.
+- [x] Given Dark or Light chosen in Profile, then it wins over the phone setting and survives a restart.
+- [x] Given the phone switches mode while the app is open (System), then the app follows without a restart.
+- [x] Given the dark theme, then body text and controls meet WCAG AA contrast (4.5:1 text, 3:1 large text and UI) — checked in a unit test over token pairs.
+- [x] The parity test checks both the light and the dark token sets against `theme.css`.
+- [x] No style file reads colors at module load (lint or test guard).
 
 ### Approach steps
 1. Canvas: dark tokens + dark Components artboard (with the user's approval to publish); port and extend the parity test.
@@ -49,10 +49,14 @@ Affects every screen, the kit, the maps (04/05/17), the status bar, and the web 
 ---
 
 ## Status
-planned
+done (canvas update pending approval)
 
 ## Last updated
 2026-09-30
 
 ## Changelog
 - 2026-09-30 — drafted
+- 2026-09-30 — decisions (recommended options): light map tiles in both schemes (`userInterfaceStyle="light"` on the native map); dark palette designed in code first, proposed for the canvas as `:root[data-theme="dark"]` in `fixtures/design-dark.ts`, which the parity test checks. Publishing it to the canvas still needs the user's OK.
+- 2026-09-30 — changed: `ThemeProvider` wasn't needed. `useTheme()` reads the preference (Zustand) and `useColorScheme()` directly, and `makeStyles` (built in 21) caches one style set per scheme × language. The migration of every `styles.ts` happened in 21.
+- 2026-09-30 — added: Profile → Appearance (System / Light / Dark, a `ChoiceList` sheet), stored with the language in the preferences store; status bar, root and navigator backgrounds follow the scheme; `userInterfaceStyle: automatic` and a dark splash background in `app.json`; web sets `color-scheme`.
+- 2026-09-30 — tests: dark token parity and key parity, WCAG AA pairs (`contrast.test.ts`), a guard that no file imports themed tokens statically or calls `StyleSheet.create` in a `styles.ts`, System/Light/Dark behaviour and persistence, kit components in both schemes, the Profile switch.

@@ -531,7 +531,13 @@
     "languageSheet": {
       "title": "Language"
     },
-    "shopPhotos": "Shop photos"
+    "shopPhotos": "Shop photos",
+    "appearance": "Appearance",
+    "appearanceValue": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "report": {
     "title": "Report a problem",

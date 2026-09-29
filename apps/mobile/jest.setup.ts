@@ -38,6 +38,6 @@ beforeEach(async () => {
   // As the app's bootstrap does: the store only writes once it has loaded.
   await useLocation.persist.rehydrate();
   // English, following the (mocked, English) phone, unless a test chooses otherwise.
-  usePreferences.setState({ language: null });
+  usePreferences.setState({ language: null, appearance: 'system' });
   await i18n.changeLanguage('en');
 });

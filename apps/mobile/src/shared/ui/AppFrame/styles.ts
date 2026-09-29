@@ -6,7 +6,7 @@ const PHONE_WIDTH = 430;
 export const useStyles = makeStyles(({ color, direction, elevation, sheet }) => {
   const styles = sheet({
     // Right-to-left layout for Arabic (brief 21): Yoga mirrors rows and start/end below here.
-    root: { flex: 1, direction },
+    root: { flex: 1, direction, backgroundColor: color.background },
     page: { flex: 1, alignItems: 'center', backgroundColor: color.surfaceSunken, direction },
     phone: {
       flex: 1,
@@ -17,5 +17,7 @@ export const useStyles = makeStyles(({ color, direction, elevation, sheet }) => 
       ...elevation[2],
     },
   });
-  return { styles };
+  // Behind screens during transitions: no white flash in the dark scheme.
+  const screenOptions = { headerShown: false, contentStyle: { backgroundColor: color.background } };
+  return { styles, screenOptions };
 });

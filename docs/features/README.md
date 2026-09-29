@@ -39,6 +39,7 @@ Next (drafted 2026-09-30, for the Oman showcase): 21 → 20 → 19. Localization
 - **Geo:** `haversineKm` lives in `@leftover/shared`. Distance always comes from the location selected in the Zustand store.
 - **Auth:** PBKDF2 (WebCrypto) password hashes, opaque session tokens stored hashed, `Authorization: Bearer`, and the token kept in `expo-secure-store`.
 - **Payment:** pay at the store. The app never handles money.
+- **Theme (19, 21):** `makeStyles((theme) => …)` in every `styles.ts`; the theme is one of light/dark × Latin/Arabic. Colors never come from a static import.
 - **Images (20):** R2 (`IMAGES` binding), uploaded through the Worker, served at `/images/<key>` with immutable caching; the API sends paths, the app resolves them. Category tint / initial stay as placeholder and fallback.
 
 ## Global out of scope (every brief)

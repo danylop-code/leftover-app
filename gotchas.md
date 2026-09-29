@@ -59,3 +59,5 @@
 - React Native's `FormData` takes a file as `{ uri, name, type }`; on web it needs a real `Blob` (`apiUpload` fetches the picked blob: URI first).
 - expo-image in Jest: its `onError` wrapper needs `{ nativeEvent: … }` in `fireEvent`, and `source` comes back as an array. Media and logos are hidden from accessibility, so queries need `includeHiddenElements`.
 - Re-running a seed deletes the seed users: a device signed in as a seed account is signed out. Log in again (Muscat: `aisha@`, Lviv: `olena@`).
+- Expo Go reads `userInterfaceStyle` from the manifest when the project loads: after changing `app.json`, reload the app, or `useColorScheme()` stays on the old value (System looks stuck on light).
+- Colors that aren't styles (icon `color`, `placeholderTextColor`, map pins) must come from `useStyles()`/`useTheme()` too; `styles-guard.test.ts` fails on a static import of themed tokens.

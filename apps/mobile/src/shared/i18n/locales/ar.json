@@ -581,7 +581,13 @@
     "languageSheet": {
       "title": "اللغة"
     },
-    "shopPhotos": "صور المتجر"
+    "shopPhotos": "صور المتجر",
+    "appearance": "المظهر",
+    "appearanceValue": {
+      "system": "حسب النظام",
+      "light": "فاتح",
+      "dark": "داكن"
+    }
   },
   "report": {
     "title": "الإبلاغ عن مشكلة",

@@ -8,20 +8,32 @@ import { deviceLanguage } from '../i18n/languages';
 
 export const PREFERENCES_STORAGE_KEY = 'leftover.preferences';
 
+export const Appearance = z.enum(['system', 'light', 'dark']);
+export type Appearance = z.infer<typeof Appearance>;
+
 // Device-wide display choices (not per account): they apply on the Welcome screen too.
 type PreferencesState = {
   /** Chosen in Profile; null follows the phone's language. */
   language: Language | null;
+  /** Light, dark, or the phone's setting (brief 19). */
+  appearance: Appearance;
   setLanguage: (language: Language) => void;
+  setAppearance: (appearance: Appearance) => void;
 };
 
-const Persisted = z.object({ language: Language.nullable() });
+// Older saved entries have no appearance: they get System.
+const Persisted = z.object({
+  language: Language.nullable(),
+  appearance: Appearance.default('system'),
+});
 
 export const usePreferences = create<PreferencesState>()(
   persist(
     (set) => ({
       language: null,
+      appearance: 'system',
       setLanguage: (language) => set({ language }),
+      setAppearance: (appearance) => set({ appearance }),
     }),
     {
       name: PREFERENCES_STORAGE_KEY,
@@ -29,7 +41,7 @@ export const usePreferences = create<PreferencesState>()(
       storage: createJSONStorage(() => AsyncStorage),
       // Rehydrated by the app bootstrap, which holds the splash until it's done.
       skipHydration: true,
-      partialize: ({ language }) => ({ language }),
+      partialize: ({ language, appearance }) => ({ language, appearance }),
       merge: (stored, current) => {
         const parsed = Persisted.safeParse(stored);
         return parsed.success ? { ...current, ...parsed.data } : current;
