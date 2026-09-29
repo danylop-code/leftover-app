@@ -38,6 +38,7 @@ export const color = {
   toastAction: '#F7C9AE',
   mediaHighlight: 'rgba(255,255,255,.3)',
   mapPinShadow: 'rgba(29,42,34,.25)',
+  transparent: 'transparent',
 } as const;
 
 // Category tints for food-photo placeholders (`--media-bakery`, `--media-bakery-ink`).

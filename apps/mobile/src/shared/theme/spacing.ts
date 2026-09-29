@@ -15,6 +15,12 @@ export const space = {
 // Minimum hit area for every interactive element (`--tap-min`).
 export const tapMin = 48;
 
+/** Pads a control drawn smaller than `tapMin` so its touch area still reaches it. */
+export const hitSlopFor = (drawnSize: number) => {
+  const pad = Math.max(0, (tapMin - drawnSize) / 2);
+  return { top: pad, bottom: pad, left: pad, right: pad };
+};
+
 // Icon sizes from the design's `.ic`, `.ic-16`, `.ic-24`, `.ic-28`, `.ic-40`.
 export const iconSize = { sm: 16, md: 20, lg: 24, xl: 28, xxl: 40 } as const;
 

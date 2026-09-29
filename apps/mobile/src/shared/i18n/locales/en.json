@@ -4,5 +4,29 @@
     "tomorrow": "Tomorrow",
     "window": "{{day}} · {{start}}–{{end}}",
     "km": "{{value}} km"
+  },
+  "ui": {
+    "field": {
+      "optional": "Optional",
+      "counter": "{{value}}/{{max}}"
+    },
+    "stepper": {
+      "decrease": "Fewer",
+      "increase": "More"
+    },
+    "stars": {
+      "star_one": "{{count}} star",
+      "star_other": "{{count}} stars",
+      "outOf": "{{value}} out of 5"
+    },
+    "price": {
+      "was": "{{price}}, was {{original}}"
+    },
+    "ratingBar": "{{name}} {{value}} out of 5",
+    "stock": {
+      "left": "{{count}} left",
+      "soldOut": "Sold out"
+    },
+    "pair": "{{label}}, {{value}}"
   }
 }
