@@ -1,0 +1,37 @@
+# Seeded shop owner adds a bag and sees it live on My bags.
+# Needs: seeded local API and a dev build (app.leftover). Pickup times must be later today.
+appId: app.leftover
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Email"
+- inputText: "crumb@seed.leftover.app"
+- tapOn: "Password"
+- inputText: "leftover24"
+- tapOn: "Log in"
+
+- assertVisible: "My bags"
+- tapOn: "Add bag"
+- tapOn: "Title"
+- inputText: "Evening pastry box"
+- tapOn: "Bakery"
+- tapOn: "Original price"
+- inputText: "300"
+- tapOn: "Sale price"
+- inputText: "99"
+- tapOn: "More bags"
+- tapOn: "From"
+- inputText: "23:00"
+- tapOn: "Until"
+- inputText: "23:45"
+- hideKeyboard
+- scrollUntilVisible:
+    element: "Add bag"
+    direction: DOWN
+- tapOn:
+    text: "Add bag"
+    index: 1
+
+- assertVisible: "Evening pastry box"
+- assertVisible: "2 of 2 left"

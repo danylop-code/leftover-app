@@ -1,6 +1,5 @@
-import { SignedInPlaceholderScreen } from '../../../src/features/auth/screens/SignedInPlaceholderScreen';
+import { StoreOrdersScreen } from '../../../src/features/store-orders/screens/StoreOrdersScreen';
 
-// Placeholder until its feature lands (see SignedInPlaceholderScreen).
 export default function StoreOrdersRoute() {
-  return <SignedInPlaceholderScreen screen="orders" />;
+  return <StoreOrdersScreen />;
 }

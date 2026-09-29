@@ -1,0 +1,44 @@
+# Seeded customer: Location → Discover → shop → Reserve → Pickup code → the shop confirms
+# the code (through the API, as a second device would) → Collected.
+# Needs: seeded local API (`db:seed:local`) on EXPO_PUBLIC_API_URL and a dev build (app.leftover).
+appId: app.leftover
+env:
+  API_URL: http://localhost:8787
+---
+- launchApp:
+    clearState: true
+- tapOn: "I already have an account"
+- tapOn: "Email"
+- inputText: "olena@seed.leftover.app"
+- tapOn: "Password"
+- inputText: "leftover24"
+- tapOn: "Log in"
+
+# Location: pick the demo address, keep 5 km.
+- tapOn: "Search street or place"
+- inputText: "Doroshenka 14"
+- tapOn:
+    text: ".*Doroshenka.*"
+    index: 0
+- tapOn: "Show results"
+
+# Discover → the bakery → its surprise bag → reserve one.
+- assertVisible: "Rescue something tasty"
+- tapOn: "Bakery surprise bag from Crumb.*"
+- assertVisible: "Available today"
+- tapOn: "Bakery surprise bag, .*"
+- tapOn: "Reserve for ₴149"
+
+# Pickup shows the code.
+- assertVisible: "Show this code at the counter"
+- copyTextFrom:
+    text: "\\d{4}"
+- runScript:
+    file: scripts/confirm-code.js
+    env:
+      CODE: ${maestro.copiedText}
+
+# Within one poll interval (15 s) the screen switches to Collected.
+- extendedWaitUntil:
+    visible: "Enjoy your haul!"
+    timeout: 30000
