@@ -24,17 +24,17 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a first-time customer, when registration completes, then the Location screen shows and Discover is unreachable until "Show results".
-- [ ] Given location permission granted, when "use my current location" is tapped, then the pin moves to the device position and the label updates.
-- [ ] Given permission denied, then a banner explains it and search remains usable.
-- [ ] Given the slider, when moved, then the radius label and circle update in 1 km steps within 1–30.
-- [ ] Given a search result is chosen, then the pin moves there, the label updates, and the entry is added to the top of recents (deduped, max 5).
-- [ ] Given "Show results", then the store holds the new lat/lng/radius, and the Discover query key changes so it refetches (no stale distances — see `gotchas.md`).
-- [ ] Given an app restart, then the last location and radius are restored.
-- [ ] Given a partial address ("Dorosh"), when typing pauses, then suggestions from the provider appear, nearest to the current pin first, and choosing one moves the pin and sets the label.
-- [ ] Given the provider fails or times out, then search falls back to on-device geocoding and still works.
-- [ ] Given the provider key, then it never reaches the app (all provider calls go through the API).
-- [ ] Given shop setup (04), then its address field offers the same suggestions.
+- [x] Given a first-time customer, when registration completes, then the Location screen shows and Discover is unreachable until "Show results".
+- [x] Given location permission granted, when "use my current location" is tapped, then the pin moves to the device position and the label updates.
+- [x] Given permission denied, then a banner explains it and search remains usable.
+- [x] Given the slider, when moved, then the radius label and circle update in 1 km steps within 1–30.
+- [x] Given a search result is chosen, then the pin moves there, the label updates, and the entry is added to the top of recents (deduped, max 5).
+- [x] Given "Show results", then the store holds the new lat/lng/radius, and the Discover query key changes so it refetches (no stale distances — see `gotchas.md`).
+- [x] Given an app restart, then the last location and radius are restored.
+- [x] Given a partial address ("Dorosh"), when typing pauses, then suggestions from the provider appear, nearest to the current pin first, and choosing one moves the pin and sets the label.
+- [x] Given the provider fails or times out, then search falls back to on-device geocoding and still works.
+- [x] Given the provider key, then it never reaches the app (all provider calls go through the API).
+- [x] Given shop setup (04), then its address field offers the same suggestions.
 
 ### Approach steps
 1. Write the location store + constants + unit tests.
@@ -51,7 +51,7 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 ---
 
 ## Status
-in-progress
+done
 
 ## Last updated
 2026-09-29
@@ -60,3 +60,12 @@ in-progress
 - 2026-09-29 — created from the design canvas
 - 2026-09-29 — plan amended (not yet frozen): address autocomplete via a hosted provider behind the API, also used by shop setup; hosted geocoding moved from out of scope to in scope
 - 2026-09-29 — provider decided (Photon, no key); `/geo/place/:id` dropped because suggestions carry coordinates; `justRegistered` replaced by the location gate. Plan frozen; work started on `feat/05-location-radius`
+- 2026-09-29 — done. Decisions and deviations:
+  - Location is chosen as a draft (`draft` in the location store, not persisted): LocationSearch and dragging the pin edit it; only "Show results" makes it the search area. Recents are added when a search result or recent is chosen, not for "use my current location" or a dragged pin.
+  - First visit with no location asks for the device position straight away (a denied answer shows the banner); later visits start from the saved area. Back is offered only once a location has been saved. The Discover pill/map button that reopens Location comes with 06.
+  - The location store is rehydrated during bootstrap (the splash waits for it) and cleared on explicit logout, not on an expired token.
+  - `keys.nearby(area)` added now (used by 06) so the "Discover key changes" criterion is tested against the real factory.
+  - Suggestions: debounced 300 ms, min 2 characters; the API gets 5 s before the app falls back to `expo-location` (network error, 5xx, bad body or timeout). The server gives Photon 3 s and dedupes by OSM id as well as by address.
+  - Shop setup: the address field is the shared `AddressAutocomplete`; picking a suggestion fills the address and places the pin. Search-on-submit (and `use-geocode`) is gone.
+  - Kit changes beyond the brief: `Input` gained a `pill` shape; `MapPicker` reframes when the radius changes even after a drag; new `PlaceRow`.
+  - Not in the design: the denied/failed banner, "Finding you…", the "No matches" line, and the empty-sheet hint before a place is chosen.
