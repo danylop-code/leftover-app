@@ -31,7 +31,7 @@ const submit = () => fireEvent.press(screen.getByRole('button', { name: 'Create 
 
 beforeEach(() => {
   request.mockReset();
-  useSession.setState({ status: 'signedOut', token: null, user: null, justRegistered: false });
+  useSession.setState({ status: 'signedOut', token: null, user: null });
 });
 
 describe('RegisterScreen', () => {
@@ -71,7 +71,7 @@ describe('RegisterScreen', () => {
         },
       }),
     );
-    expect(useSession.getState()).toMatchObject({ token: 'tok', justRegistered: true });
+    expect(useSession.getState()).toMatchObject({ token: 'tok' });
   });
 
   it('disables submit while the request is pending', async () => {

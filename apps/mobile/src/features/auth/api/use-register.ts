@@ -12,7 +12,7 @@ export const useRegister = () => {
     mutationFn: (body: RegisterBody) => registerRequest(body),
     onSuccess: async (session) => {
       queryClient.setQueryData(keys.me(), session.user);
-      await signIn(session, { justRegistered: true });
+      await signIn(session);
     },
   });
 };

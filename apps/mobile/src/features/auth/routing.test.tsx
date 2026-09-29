@@ -1,6 +1,8 @@
 import type { Me } from '@leftover/shared';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testing-library';
 import * as SecureStore from 'expo-secure-store';
+import { LOCATION_STORAGE_KEY } from '../../shared/store/location';
 import { useSession } from '../../shared/store/session';
 import { SESSION_STORAGE_KEY } from '../../shared/store/session-storage';
 
@@ -41,10 +43,24 @@ const serve = (route: Route) =>
 const storeSession = (user: Me, token = 'tok') =>
   SecureStore.setItemAsync(SESSION_STORAGE_KEY, JSON.stringify({ token, user }));
 
+// A customer who has already chosen where to look (05), so they land on Discover.
+const storeLocation = () =>
+  AsyncStorage.setItem(
+    LOCATION_STORAGE_KEY,
+    JSON.stringify({
+      state: {
+        selected: { label: 'Rynok Square 1', lat: 49.8419, lng: 24.0315 },
+        radiusKm: 5,
+        recent: [],
+      },
+      version: 1,
+    }),
+  );
+
 const renderApp = () => renderRouter('./app', { initialUrl: '/' });
 
 beforeEach(() => {
-  useSession.setState({ status: 'hydrating', token: null, user: null, justRegistered: false });
+  useSession.setState({ status: 'hydrating', token: null, user: null });
   fetchMock = jest.spyOn(globalThis, 'fetch');
 });
 afterEach(() => fetchMock.mockRestore());
@@ -59,6 +75,7 @@ describe('auth routing', () => {
 
   it('cold-starts a stored customer straight into Discover, without Welcome', async () => {
     await storeSession(customer);
+    await storeLocation();
     serve((url) => (url.endsWith('/me') ? json(200, customer) : undefined));
     renderApp();
     await waitFor(() => expect(screen).toHavePathname('/discover'));
@@ -128,6 +145,7 @@ describe('auth routing', () => {
 
   it('logs out: revokes the token server-side, wipes the device and shows Welcome', async () => {
     await storeSession(customer, 'tok_live');
+    await storeLocation();
     const calls: { url: string; auth: string | null }[] = [];
     serve((url, init) => {
       calls.push({ url, auth: new Headers(init.headers).get('Authorization') });
@@ -150,6 +168,7 @@ describe('auth routing', () => {
 
   it('keeps a customer out of the store group', async () => {
     await storeSession(customer);
+    await storeLocation();
     serve((url) => (url.endsWith('/me') ? json(200, customer) : undefined));
     renderRouter('./app', { initialUrl: '/bags' });
     await waitFor(() => expect(screen).toHavePathname('/discover'));
