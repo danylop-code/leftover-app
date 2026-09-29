@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Expo/Metro is most reliable with a flat node_modules.
+nodeLinker: hoisted
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  unrs-resolver: true
+  workerd: true

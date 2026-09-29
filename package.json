@@ -1,0 +1,22 @@
+{
+  "name": "leftover",
+  "private": true,
+  "packageManager": "pnpm@11.5.2",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "lint": "biome ci .",
+    "format": "biome check --write .",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "test": "pnpm -r test",
+    "test:api": "pnpm --filter @leftover/api test",
+    "test:mobile": "pnpm --filter @leftover/mobile test",
+    "dev:api": "pnpm --filter @leftover/api dev",
+    "dev:mobile": "pnpm --filter @leftover/mobile start"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "typescript": "~6.0.3"
+  }
+}
