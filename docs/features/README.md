@@ -23,9 +23,13 @@ Design: [Leftover App Design canvas](https://claude.ai/artifact/9xNrBDdebCvj6Auj
 | 16 | [report-problem](16-report-problem.md) | 10 | Report, ReportSent | — |
 | 17 | [web-support](17-web-support.md) | 01–16 | — (existing screens in a browser) | — |
 | 18 | [floating-tab-bar](18-floating-tab-bar.md) | 01, 03 | Components (tab bar; canvas update first) | — |
+| 19 | [dark-theme](19-dark-theme.md) | 01, 18 | All (dark token set + dark Components artboard first) | — |
+| 20 | [images](20-images.md) | 04, 11 | StoreDetail, Discover, AddBag (real photos instead of tints) | store-add-bag (optional photo) |
+| 21 | [oman-localization](21-oman-localization.md) | 01–18 | All (Arabic RTL, OMR) | both flows once in Arabic |
 
 Recommended sequence: 01 → 02 → 03 → 04 → 05 → 18 → 06 → 07 → 08 → 11 → 12 → 09 → 10 → 13 → 14 → 15 → 16 → 17.
 (11 and 12 move up so that 09 can show the real "collected" transition. 18 lands before 06, the first real tab screen.)
+Next (drafted 2026-09-30, for the Oman showcase): 21 → 20 → 19. Localization first because it's what the client sees; images next for the demo's look; dark theme last (it touches every style file, so it's cheaper once RTL's logical-properties sweep is done). Each brief opens with the decisions to make before it's frozen.
 
 ## Cross-cutting decisions
 - **Money:** UAH, integer kopiyky (`priceMinor: 14900` = ₴149). Format with `formatMoney` only in UI.
