@@ -47,10 +47,11 @@ Canvas artboards **Main** (Foundations) and **Components**, plus the design's `t
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/01-design-system`
