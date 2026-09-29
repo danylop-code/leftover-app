@@ -6,6 +6,8 @@
     "km": "{{value}} km"
   },
   "ui": {
+    "back": "Back",
+    "close": "Close",
     "field": {
       "optional": "Optional",
       "counter": "{{value}}/{{max}}"
@@ -27,6 +29,15 @@
       "left": "{{count}} left",
       "soldOut": "Sold out"
     },
-    "pair": "{{label}}, {{value}}"
+    "ticket": {
+      "codeLabel": "Code {{digits}}"
+    },
+    "pair": "{{label}}, {{value}}",
+    "bagCard": {
+      "label": "{{title}} from {{store}}, {{window}}, {{price}}"
+    },
+    "orderCard": {
+      "item": "{{title}} × {{qty}}"
+    }
   }
 }

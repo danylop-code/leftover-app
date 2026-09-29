@@ -13,6 +13,7 @@ import {
   Stars,
   Stepper,
   Switch,
+  TabBar,
   Toast,
 } from '.';
 
@@ -48,6 +49,16 @@ const cases: [string, ReactElement][] = [
   ['Stars sm', <Stars key="s2" mode="input" size="sm" value={3} onChange={noop} />],
   ['Stars lg', <Stars key="s3" mode="input" size="lg" value={3} onChange={noop} />],
   ['ListRow', <ListRow key="l" label="Log out" icon="logout" onPress={noop} />],
+  [
+    'TabBar',
+    <TabBar
+      key="t"
+      items={[
+        { key: 'd', label: 'Discover', icon: 'discover', active: true, onPress: noop },
+        { key: 'o', label: 'Orders', icon: 'orders', active: false, onPress: noop },
+      ]}
+    />,
+  ],
   ['Toast', <Toast key="to" message="Bag paused" action={{ label: 'Undo', onPress: noop }} />],
 ];
 
