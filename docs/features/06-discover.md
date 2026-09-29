@@ -1,6 +1,6 @@
 # Feature: discover
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A customer sees today's available bags near their selected location, filters by category, and opens one.
@@ -46,10 +46,11 @@ Artboards **Discover** (location pill with radius, map button, "Rescue something
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — built before 18 (floating tab bar) at the user's request; 18 follows and adjusts Discover's bottom inset. Response is `{ bags: NearbyBag[] }` (bag fields + `store { id, name, timezone }` + `distanceKm`), sorted by distance, then pickup start; the API accepts a radius of 1–30 km like the slider. Tapping a card opens StoreDetail, which 07 builds; until then the card is shown but goes nowhere. Plan frozen; work started on `feat/06-discover`
