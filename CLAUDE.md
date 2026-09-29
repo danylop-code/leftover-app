@@ -13,6 +13,12 @@ Food-rescue marketplace: stores list surplus "bags" at a discount; nearby custom
 ## Commands
 `pnpm lint` · `pnpm format` · `pnpm typecheck` · `pnpm test` · `pnpm test:api` · `pnpm test:mobile` · `pnpm dev:api` · `pnpm dev:mobile`
 
+## Run the app (demo on a computer)
+1. `pnpm --filter @leftover/api db:migrate:local && pnpm --filter @leftover/api db:seed:local` (once; re-run the seed to refresh pickup windows).
+2. `pnpm dev:api` (http://localhost:8787) — keep it running.
+3. `pnpm dev:mobile`, then press `i` (iOS Simulator, iOS 26 device) or `a` (Android emulator: `EXPO_PUBLIC_API_URL=http://10.0.2.2:8787`).
+Demo logins (password `leftover24`): customer `olena@seed.leftover.app`; shops `crumb@`, `kasha@`, `zelena@`, `morning@`, `greenrow@seed.leftover.app`. Web comes with brief 17. Run traps are in `gotchas.md`.
+
 ## Workflow (every feature)
 1. Brief: copy `docs/features/_template.md` → `docs/features/<feature>.md`; fill Plan; mark FROZEN when starting.
 2. Tests red: write tests from the acceptance criteria; confirm they fail.
