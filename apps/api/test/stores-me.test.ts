@@ -15,12 +15,12 @@ const profile = {
 const errorOf = async (res: Response) => ApiError.parse(await res.json()).error;
 
 describe('POST /stores/me', () => {
-  it('creates the owner’s shop: 201 with the store, timezone defaulted', async () => {
+  it('creates the owner’s shop: 201 with the store, timezone defaulted to the market’s', async () => {
     const { token } = await registerUser('store');
     const res = await jsonRequest('/stores/me', 'POST', profile, token);
     expect(res.status).toBe(201);
     const store = Store.parse(await res.json());
-    expect(store).toMatchObject({ ...profile, timezone: 'Europe/Kyiv' });
+    expect(store).toMatchObject({ ...profile, timezone: 'Asia/Muscat' });
   });
 
   it('then GET /me reports the storeId', async () => {

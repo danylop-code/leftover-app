@@ -1,4 +1,4 @@
-import type { AutocompleteQuery, LatLng, PlaceSuggestion } from '@leftover/shared';
+import type { AutocompleteQuery, Language, LatLng, PlaceSuggestion } from '@leftover/shared';
 import { z } from 'zod';
 
 // Photon (https://github.com/komoot/photon): OpenStreetMap search-as-you-type, no key.
@@ -61,6 +61,12 @@ export class ProviderError extends Error {
   }
 }
 
+/**
+ * Photon's `lang`: English names where OSM has them; otherwise `default`, the local names
+ * (Arabic script in Oman). Photon has no Arabic option.
+ */
+export const photonLang = (lang: Language | undefined) => (lang === 'ar' ? 'default' : 'en');
+
 const fetchFeatures = async (url: URL) => {
   let res: globalThis.Response;
   try {
@@ -92,7 +98,7 @@ export const photonAutocomplete = async (
   const url = new URL('/api/', baseUrl);
   url.searchParams.set('q', query.q);
   url.searchParams.set('limit', String(PHOTON_LIMIT));
-  url.searchParams.set('lang', 'en');
+  url.searchParams.set('lang', photonLang(query.lang));
   if (query.lat !== undefined && query.lng !== undefined) {
     url.searchParams.set('lat', String(query.lat));
     url.searchParams.set('lon', String(query.lng));
@@ -104,11 +110,12 @@ export const photonAutocomplete = async (
 export const photonReverse = async (
   baseUrl: string,
   point: LatLng,
+  lang?: Language,
 ): Promise<PlaceSuggestion | null> => {
   const url = new URL('/reverse', baseUrl);
   url.searchParams.set('lat', String(point.lat));
   url.searchParams.set('lon', String(point.lng));
-  url.searchParams.set('lang', 'en');
+  url.searchParams.set('lang', photonLang(lang));
   url.searchParams.set('limit', '1');
   const [nearest] = await fetchFeatures(url);
   return nearest ?? null;

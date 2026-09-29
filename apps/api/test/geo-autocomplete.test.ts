@@ -70,6 +70,17 @@ describe('GET /geo/autocomplete', () => {
     expect(new Headers(init?.headers).get('Authorization')).toBeNull();
   });
 
+  it('asks for English names in English and local-script names in Arabic', async () => {
+    fetchSpy.mockResolvedValue(photon([]));
+    const { token } = await registerUser('customer');
+    await autocomplete({ q: 'Qurum' }, token);
+    await autocomplete({ q: 'Qurum', lang: 'ar' }, token);
+    const langs = fetchSpy.mock.calls.map(([input]) =>
+      new URL(String(input)).searchParams.get('lang'),
+    );
+    expect(langs).toEqual(['en', 'default']);
+  });
+
   it('drops repeated addresses and repeated places', async () => {
     const sameObject = feature(2, [24.0299, 49.8399], { name: 'Doroshenka' });
     fetchSpy.mockResolvedValue(photon([near, duplicate, sameObject]));
@@ -137,6 +148,15 @@ describe('GET /geo/reverse', () => {
     const url = new URL(String(fetchSpy.mock.calls[0]?.[0]));
     expect(url.pathname).toBe('/reverse');
     expect(url.searchParams.get('lon')).toBe(pin.lng);
+    expect(url.searchParams.get('lang')).toBe('en');
+  });
+
+  it('passes Arabic on as local-script names; an unknown language is 400', async () => {
+    fetchSpy.mockResolvedValue(photon([]));
+    const { token } = await registerUser('customer');
+    await reverse({ ...pin, lang: 'ar' }, token);
+    expect(new URL(String(fetchSpy.mock.calls[0]?.[0])).searchParams.get('lang')).toBe('default');
+    expect((await reverse({ ...pin, lang: 'fr' }, token)).status).toBe(400);
   });
 
   it('answers null when nothing is near, 502 when the provider fails, 401 without a token', async () => {

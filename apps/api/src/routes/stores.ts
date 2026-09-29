@@ -1,4 +1,4 @@
-import { StoreDetailQuery, StoreProfileBody, StoreProfilePatch } from '@leftover/shared';
+import { marketFor, StoreDetailQuery, StoreProfileBody, StoreProfilePatch } from '@leftover/shared';
 import { Hono } from 'hono';
 import { requireAuth, requireRole } from '../lib/auth';
 import type { AppEnv } from '../lib/env';
@@ -9,7 +9,10 @@ export const stores = new Hono<AppEnv>()
   .use('/me', requireRole('store'))
   .get('/me', async (c) => c.json(await getMyStore(c.var.db, c.var.user.id)))
   .post('/me', validate('json', StoreProfileBody), async (c) =>
-    c.json(await createMyStore(c.var.db, c.var.user.id, c.req.valid('json')), 201),
+    c.json(
+      await createMyStore(c.var.db, c.var.user.id, c.req.valid('json'), marketFor(c.env.MARKET)),
+      201,
+    ),
   )
   .patch('/me', validate('json', StoreProfilePatch), async (c) =>
     c.json(await updateMyStore(c.var.db, c.var.user.id, c.req.valid('json'))),

@@ -5,6 +5,8 @@
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
+    // Active market (brief 21): currency, default shop time zone. "OM" (Oman) or "UA" (Ukraine).
+    "MARKET": "OM",
     // Address autocomplete provider (brief 05). komoot's public Photon: free, no key, fair use.
     // Self-host Photon (or switch the adapter in src/services/geo) before real traffic.
     "PHOTON_URL": "https://photon.komoot.io",

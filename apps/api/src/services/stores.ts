@@ -1,5 +1,6 @@
 import {
   haversineKm,
+  type Market,
   type Store,
   type StoreDetail,
   type StoreDetailQuery,
@@ -52,9 +53,16 @@ export const createMyStore = async (
   db: Db,
   ownerId: string,
   body: StoreProfileBody,
+  market: Market,
 ): Promise<Store> => {
   if (await findByOwner(db, ownerId)) throw storeExists();
-  const row: StoreRow = { id: newId(), ownerId, ...body, createdAt: now().toISOString() };
+  const row: StoreRow = {
+    id: newId(),
+    ownerId,
+    ...body,
+    timezone: body.timezone ?? market.timezone,
+    createdAt: now().toISOString(),
+  };
   try {
     await db.insert(stores).values(row);
   } catch (e) {
@@ -75,7 +83,16 @@ export const updateMyStore = async (
   const merged = StoreProfileBody.safeParse({ ...toStore(row), ...patch });
   if (!merged.success) throw new ValidationError(fieldsFromZod(merged.error));
   const { name, category, address, lat, lng, opensAt, closesAt, timezone } = merged.data;
-  const next = { name, category, address, lat, lng, opensAt, closesAt, timezone };
+  const next = {
+    name,
+    category,
+    address,
+    lat,
+    lng,
+    opensAt,
+    closesAt,
+    timezone: timezone ?? row.timezone,
+  };
   await db.update(stores).set(next).where(eq(stores.id, row.id));
   return toStore({ ...row, ...next });
 };

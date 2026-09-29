@@ -12,8 +12,8 @@ const valid = {
 };
 
 describe('StoreProfileBody', () => {
-  it('accepts a valid profile and defaults the timezone to Europe/Kyiv', () => {
-    expect(StoreProfileBody.parse(valid).timezone).toBe('Europe/Kyiv');
+  it('accepts a valid profile without a timezone (the API uses the market’s)', () => {
+    expect(StoreProfileBody.parse(valid).timezone).toBeUndefined();
   });
 
   it('trims name and address and enforces their lengths', () => {

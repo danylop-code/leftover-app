@@ -1,7 +1,7 @@
 -- Dev seed: Lviv shops and today's bags. Prices in kopiyky (14900 = ₴149).
 -- Pickup windows are relative to the moment the seed runs (UTC; Kyiv is UTC+2/+3), so re-run it
--- to refresh them: `pnpm --filter @leftover/api db:seed:local`. Idempotent: it removes its own
--- rows (ids starting with `seed-`) first.
+-- to refresh them: `pnpm --filter @leftover/api db:seed:local`. Run it with MARKET = "UA" (prices are
+-- kopiyky). Idempotent: it removes the rows of either seed (ids starting with `seed-`) first.
 -- Demo logins (all share the password `leftover24`): olena@seed.leftover.app (customer),
 -- crumb@ / kasha@ / zelena@ / morning@ / greenrow@seed.leftover.app (shop owners).
 
