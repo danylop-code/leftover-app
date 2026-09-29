@@ -1,5 +1,5 @@
 import { env } from 'cloudflare:test';
-import { Session } from '@leftover/shared';
+import { NearbyResponse, Session } from '@leftover/shared';
 import { describe, expect, it } from 'vitest';
 import seedSql from '../seed/dev.sql?raw';
 import { jsonRequest } from './helpers/auth';
@@ -53,5 +53,31 @@ describe('dev seed demo logins', () => {
     });
     expect(res.status).toBe(200);
     expect(Session.parse(await res.json()).user.role).toBe('customer');
+  });
+});
+
+describe('dev seed on Discover', () => {
+  it('shows the demo bags from vul. Doroshenka 14 within 5 km, nearest first', async () => {
+    await runSql(env.DB, seedSql);
+    const login = await jsonRequest('/auth/login', 'POST', {
+      email: 'olena@seed.leftover.app',
+      password: 'leftover24',
+    });
+    const { token } = Session.parse(await login.json());
+    const res = await jsonRequest(
+      '/bags/nearby?lat=49.8421&lng=24.0224&radiusKm=5',
+      'GET',
+      undefined,
+      token,
+    );
+    const { bags } = NearbyResponse.parse(await res.json());
+    // Sold-out bread, the paused sandwich bag, the past morning bag and Green Row (6 km) are out.
+    expect(bags.map((b) => b.id).filter((id) => id.startsWith('seed-'))).toEqual([
+      'seed-bag-crumb-surprise',
+      'seed-bag-crumb-sweet',
+      'seed-bag-morning-pastry',
+      'seed-bag-kasha-hot',
+      'seed-bag-zelena-groceries',
+    ]);
   });
 });
