@@ -41,3 +41,9 @@
 - The kit's `Switch` is a `Pressable` with the switch role: tests `fireEvent.press` it (`valueChange` does nothing).
 - Clock-dependent screens (Pickup, Orders, bag form) are tested with `fakeNow` (`src/shared/testing/fake-date.ts`), which fakes only `Date` so React Query and the router keep real timers.
 - A new migration isn't in your local D1 until it's applied: a running API then fails with `no such table` (tests migrate their own DB, so they stay green). `pnpm dev:api` now applies pending local migrations on start; after pulling one, restart it and re-run `db:seed:local`.
+- Zustand `persist` writes on every `set`, even before rehydration: the location store ignores writes until it has loaded (`loaded` flag), because the session can call `switchUser` first and would wipe the saved areas. Jest setup rehydrates it like the app does.
+- Don't nest a control (heart, Directions) inside a pressable row: screen readers treat the row as one element. Put it beside the row (`StoreRow`'s `trailing` is for rows without `onPress`).
+- The kit `Button` centres itself (`alignSelf: 'center'`); use `block` to stretch.
+- Expo typed routes (`.expo/types/router.d.ts`) only regenerate while a dev server runs: after adding a route, start `pnpm dev:mobile` once or typecheck fails on the new path.
+- `CI=1 expo start` also turns off file watching: the web page keeps serving the old bundle.
+- Web in automated/background tabs: `document.hidden` is true there, so React Query pauses interval polling (Pickup's 15 s check); a visible tab polls normally.

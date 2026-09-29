@@ -1,6 +1,6 @@
 # Feature: floating-tab-bar
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 The bottom tab bar feels modern: a floating "island" above the content instead of a full-width bar.
@@ -21,11 +21,11 @@ Requested 2026-09-29 after the first simulator demo. It changes the design canva
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given the theme, when compared with the updated `theme.css`, then the new tab bar tokens match (parity test).
-- [ ] Given any tab screen, then the island floats above the content with its inset and radius, clear of the home indicator on iPhones with and without one.
-- [ ] Given a scrolled list, then its last item can scroll fully above the island.
-- [ ] Given a tab press, then it navigates, and the active tab is exposed as `selected` to screen readers; every tab keeps a ≥ `tapMin` hit area.
-- [ ] Given the keyboard is open on Android, then the island is hidden.
+- [x] Given the theme, when compared with the updated `theme.css`, then the new tab bar tokens match (parity test).
+- [x] Given any tab screen, then the island floats above the content with its inset and radius, clear of the home indicator on iPhones with and without one.
+- [x] Given a scrolled list, then its last item can scroll fully above the island.
+- [x] Given a tab press, then it navigates, and the active tab is exposed as `selected` to screen readers; every tab keeps a ≥ `tapMin` hit area.
+- [x] Given the keyboard is open on Android, then the island is hidden.
 
 ### Approach steps
 1. Update the canvas (Components tab bar variant + tokens) and port the tokens.
@@ -41,10 +41,14 @@ Requested 2026-09-29 after the first simulator demo. It changes the design canva
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created: floating "island" tab bar requested after the first demo
+- 2026-09-30 — done on `feat/16-18-report-web-tabbar`. Decisions and deviations:
+  - After the user's review: a compact centred island (56 px, fixed 72 px tabs) instead of full width. Every tab shows icon + label; the active one is filled.
+  - Tokens `--tabbar-*` are in the app and its parity fixture. **The design canvas isn't updated yet:** publishing `theme.css` and the Components artboard was blocked by a permission check; the edited files wait for the user's approval.
+  - A fourth tab, Saved, was added at the same time (see 14).

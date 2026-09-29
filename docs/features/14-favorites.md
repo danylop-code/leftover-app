@@ -49,3 +49,4 @@ done
   - Built in the 08–15 batch. Migration `0001_reviews_favorites`.
   - `FavoriteButton` and `useToggleFavorite` live in `src/shared` (Discover and StoreDetail both use them; features can't import each other). The heart fills at once in every cached list and shop page and rolls back with a toast on failure.
   - The StoreDetail header shows Back and the heart; Share stays hidden (out of scope in 07).
+- 2026-09-30 — a Saved tab (Discover · Saved · Orders · Profile) lists saved shops nearest first, with how many bags they have today (`GET /favorites?lat&lng`); the heart there unsaves at once. It sits beside each row, not inside it, so screen readers can reach it.
