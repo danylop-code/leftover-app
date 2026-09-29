@@ -125,7 +125,7 @@ export function StoreDetailScreen() {
   return (
     <View style={styles.root}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <CategoryMedia category={store.category} variant="hero">
+        <CategoryMedia category={store.category} variant="hero" photo={store.coverUrl}>
           <View style={[styles.heroBar, backPosition(insets.top)]}>
             <IconButton icon="back" variant="filled" label={t('ui.back')} onPress={goBack} />
             <FavoriteButton name={store.name} saved={detail.data.isFavorite} onToggle={setSaved} />
@@ -133,7 +133,7 @@ export function StoreDetailScreen() {
         </CategoryMedia>
         <View style={styles.content}>
           <View style={styles.logo}>
-            <StoreLogo id={store.id} name={store.name} size="xl" />
+            <StoreLogo id={store.id} name={store.name} size="xl" logo={store.logoUrl} />
           </View>
           <View style={styles.intro}>
             <Text style={styles.name} accessibilityRole="header">

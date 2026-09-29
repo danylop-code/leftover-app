@@ -32,7 +32,7 @@ export function ShopBagRow({ bag, onEdit, onToggle }: Props) {
         style={({ pressed }) => [styles.main, pressed && styles.pressed]}
       >
         <View style={!bag.isActive && styles.paused}>
-          <CategoryMedia category={bag.category} variant="small" />
+          <CategoryMedia category={bag.category} variant="small" photo={bag.photoUrl} />
         </View>
         <View style={styles.body}>
           <Text style={styles.title} numberOfLines={SINGLE_LINE}>

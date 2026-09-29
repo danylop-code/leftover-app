@@ -22,8 +22,9 @@ import {
   Sheet,
   useTabBarInset,
 } from '../../../shared/ui';
-import { useMyStats, useUpdateMe } from '../api/use-profile';
+import { useMyShop, useMyStats, useUpdateMe } from '../api/use-profile';
 import { ProfileCard } from '../components/ProfileCard/ProfileCard';
+import { ShopPhotos } from '../components/ShopPhotos/ShopPhotos';
 import { useStyles } from './styles';
 
 /**
@@ -39,6 +40,7 @@ export function ProfileScreen() {
   const place = useLocation((s) => s.selected);
   const radiusKm = useLocation((s) => s.radiusKm);
   const stats = useMyStats(isCustomer);
+  const shop = useMyShop(user?.role === 'store' && Boolean(user.storeId));
   const updateMe = useUpdateMe();
   const logout = useLogout();
   const [editing, setEditing] = useState(false);
@@ -76,6 +78,8 @@ export function ProfileScreen() {
     <Screen scroll bottomInset={tabBarInset} header={<HeaderLarge title={t('profile.title')} />}>
       <View style={styles.content}>
         <ProfileCard user={user} stats={isCustomer ? stats.data : undefined} onEdit={startEdit} />
+
+        {shop.data ? <ShopPhotos store={shop.data} /> : null}
 
         <ListGroup label={t('profile.preferences')}>
           <ListRow

@@ -10,6 +10,7 @@ import { useStyles } from './styles';
 type Props = {
   storeId: string;
   storeName: string;
+  storeLogoUrl?: string | null;
   bagTitle: string;
   qty: number;
   /** Status badge, e.g. <Badge tone="ready" … />. */
@@ -30,7 +31,7 @@ export function OrderCard(props: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.top}>
-        <StoreLogo id={props.storeId} name={props.storeName} />
+        <StoreLogo id={props.storeId} name={props.storeName} logo={props.storeLogoUrl} />
         <View style={styles.topBody}>
           <Text style={styles.store} numberOfLines={SINGLE_LINE}>
             {props.storeName}

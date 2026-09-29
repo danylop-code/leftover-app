@@ -25,6 +25,7 @@ export function MyOrderCard({ order, from, onOpen, onReview }: Props) {
       <OrderCard
         storeId={store.id}
         storeName={store.name}
+        storeLogoUrl={store.logoUrl}
         bagTitle={bag.title}
         qty={order.qty}
         badge={badge}
@@ -68,6 +69,7 @@ export function MyOrderCard({ order, from, onOpen, onReview }: Props) {
     <OrderCard
       storeId={store.id}
       storeName={store.name}
+      storeLogoUrl={store.logoUrl}
       bagTitle={bag.title}
       qty={order.qty}
       badge={badge}

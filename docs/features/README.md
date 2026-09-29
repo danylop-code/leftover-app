@@ -39,6 +39,7 @@ Next (drafted 2026-09-30, for the Oman showcase): 21 → 20 → 19. Localization
 - **Geo:** `haversineKm` lives in `@leftover/shared`. Distance always comes from the location selected in the Zustand store.
 - **Auth:** PBKDF2 (WebCrypto) password hashes, opaque session tokens stored hashed, `Authorization: Bearer`, and the token kept in `expo-secure-store`.
 - **Payment:** pay at the store. The app never handles money.
+- **Images (20):** R2 (`IMAGES` binding), uploaded through the Worker, served at `/images/<key>` with immutable caching; the API sends paths, the app resolves them. Category tint / initial stay as placeholder and fallback.
 
 ## Global out of scope (every brief)
-Payments · push notifications · password reset / email verification · real food photos (category tint placeholders stay) · languages other than English and Arabic · admin UI · rate limiting · web target (until [17](17-web-support.md); demos run on the iOS Simulator / Android emulator via Expo Go until then).
+Payments · push notifications · password reset / email verification · languages other than English and Arabic · admin UI · rate limiting · web target (until [17](17-web-support.md); demos run on the iOS Simulator / Android emulator via Expo Go until then).

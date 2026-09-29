@@ -28,13 +28,13 @@ Requested 2026-09-30 for the showcase. Today every image is a placeholder: categ
 - Global list: see [README](README.md#global-out-of-scope-every-brief) (remove "real food photos" from it when this ships).
 
 ### Acceptance criteria
-- [ ] Given a shop owner picks a bag photo, when saved, then it's uploaded, stored in R2 under a new key, and the bag shows it in My bags, Discover and StoreDetail.
-- [ ] Given a file over 5 MB or not an image (checked by content, not extension), then 400 and nothing is stored.
-- [ ] Given another shop's bag id, then 404.
-- [ ] Given a photo is replaced or deleted, then the old R2 object is deleted.
-- [ ] Given no photo, or a photo that fails to load, then the category placeholder shows (no broken image).
-- [ ] Given `GET /images/:key`, then it's served with immutable cache headers; an unknown key is 404.
-- [ ] Given a slow network, then the form shows upload progress and Save waits for the upload (or offers retry on failure).
+- [x] Given a shop owner picks a bag photo, when saved, then it's uploaded, stored in R2 under a new key, and the bag shows it in My bags, Discover and StoreDetail.
+- [x] Given a file over 5 MB or not an image (checked by content, not extension), then 400 and nothing is stored.
+- [x] Given another shop's bag id, then 404.
+- [x] Given a photo is replaced or deleted, then the old R2 object is deleted.
+- [x] Given no photo, or a photo that fails to load, then the category placeholder shows (no broken image).
+- [x] Given `GET /images/:key`, then it's served with immutable cache headers; an unknown key is 404.
+- [x] Given a slow network, then the form shows upload progress and Save waits for the upload (or offers retry on failure).
 
 ### Approach steps
 1. R2 binding, migration, upload/delete/serve routes + integration tests (R2 in the Vitest pool).
@@ -52,10 +52,15 @@ Requested 2026-09-30 for the showcase. Today every image is a placeholder: categ
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-30
 
 ## Changelog
 - 2026-09-30 — drafted
+- 2026-09-30 — decisions (user): R2, local for now. Uploads through the Worker (multipart `file` field), served by `GET /images/:key` (recommended options).
+- 2026-09-30 — changed: image URLs on the wire are API paths (`/images/<key>`), resolved by the app against its API base URL (`imageUri`), so data is the same locally and deployed. The schema only accepts such paths.
+- 2026-09-30 — changed: shops that already exist (the seeds) set logo and cover in Profile → Shop photos (uploads at once); shop setup uploads them after the shop is created, before routing on. On the bag form the photo uploads after the bag saves; a failed upload keeps the form open with Retry, and saving again never adds the bag twice.
+- 2026-09-30 — added: `db:seed:oman` / `db:seed:local` load CC0/public-domain photos (`seed/images/SOURCES.md`) into the local bucket for the seed bags and shop covers. Deleting a bag deletes its photo. Uploads report progress via XMLHttpRequest (`apiUpload` in `client.ts`).
+- 2026-09-30 — not done: the `store-add-bag` Maestro flow is unchanged (the simulator picker isn't driven reliably; Maestro flows have never been run).

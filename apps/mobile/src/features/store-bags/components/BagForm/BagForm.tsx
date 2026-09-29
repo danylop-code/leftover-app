@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
+import type { UploadFile } from '../../../../shared/api/client';
 import { activeMarket } from '../../../../shared/constants/market';
 import { currencySymbol, formatDiscount } from '../../../../shared/lib/format';
 import { moneyInputText, parseMoneyInput } from '../../../../shared/lib/money-input';
@@ -21,6 +22,7 @@ import {
   Chip,
   Field,
   Input,
+  PhotoField,
   Price,
   Stepper,
   Switch,
@@ -40,6 +42,9 @@ type FieldName =
   | 'qty';
 export type BagFormErrors = Partial<Record<FieldName, string>>;
 
+/** The photo change to apply after saving: a new file, `null` to remove, `undefined` to keep. */
+export type PhotoChange = UploadFile | null | undefined;
+
 type Props = {
   /** The bag being edited; absent when adding. */
   initial?: ShopBag;
@@ -49,8 +54,12 @@ type Props = {
   /** Errors from the API (e.g. `below_reserved`), shown on their fields. */
   serverErrors?: BagFormErrors;
   banner?: string | null;
-  onSave: (body: BagBody) => void;
+  onSave: (body: BagBody, photo: PhotoChange) => void;
   onDelete?: () => void;
+  /** 0–1 while the photo uploads after saving (20). */
+  photoProgress?: number | null;
+  photoError?: string | null;
+  onRetryPhoto?: () => void;
 };
 
 const categories = CategorySchema.options;
@@ -65,6 +74,9 @@ export function BagForm({
   banner,
   onSave,
   onDelete,
+  photoProgress,
+  photoError,
+  onRetryPhoto,
 }: Props) {
   const { styles } = useStyles();
   const { t } = useTranslation();
@@ -81,6 +93,8 @@ export function BagForm({
   const [from, setFrom] = useState(initial ? localTimeOf(initial.pickupStart, timezone) : '');
   const [until, setUntil] = useState(initial ? localTimeOf(initial.pickupEnd, timezone) : '');
   const [isActive, setIsActive] = useState(initial?.isActive ?? true);
+  const [photo, setPhoto] = useState<PhotoChange>(undefined);
+  const shownPhoto = photo === undefined ? (initial?.photoUrl ?? null) : (photo?.uri ?? null);
   const [errors, setErrors] = useState<BagFormErrors>({});
   const shown = { ...errors, ...serverErrors };
 
@@ -127,7 +141,7 @@ export function BagForm({
     if (!next.until && pickupEnd && new Date(pickupEnd).getTime() <= Date.now())
       next.until = t('bagForm.errors.windowPast');
     setErrors(next);
-    if (Object.keys(next).length === 0 && parsed.success) onSave(parsed.data);
+    if (Object.keys(next).length === 0 && parsed.success) onSave(parsed.data, photo);
   };
 
   return (
@@ -145,6 +159,17 @@ export function BagForm({
       >
         <Textarea value={description} onChangeText={setDescription} />
       </Field>
+      <PhotoField
+        label={t('bagForm.photo')}
+        preview={{ shape: 'media', category: category ?? 'other' }}
+        value={shownPhoto}
+        onPick={setPhoto}
+        onRemove={() => setPhoto(null)}
+        progress={photoProgress}
+        error={photoError}
+        onRetry={onRetryPhoto}
+        help={t('bagForm.photoHelp')}
+      />
       <Field label={t('bagForm.category')} error={shown.category}>
         <View style={styles.chips}>
           {categories.map((c) => (
@@ -232,7 +257,7 @@ export function BagForm({
         <Button
           block
           label={initial ? t('bagForm.save') : t('bagForm.saveNew')}
-          loading={saving}
+          loading={saving || (photoProgress !== null && photoProgress !== undefined)}
           onPress={submit}
         />
         {onDelete ? (

@@ -1,4 +1,4 @@
-import { Me, MeStats, type UpdateMeBody } from '@leftover/shared';
+import { Me, MeStats, Store, type UpdateMeBody } from '@leftover/shared';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '../../../shared/api/client';
 import { keys } from '../../../shared/api/keys';
@@ -24,3 +24,11 @@ export const useUpdateMe = () => {
     },
   });
 };
+
+/** The shop owner's own shop, for its photos (20). */
+export const useMyShop = (enabled: boolean) =>
+  useQuery({
+    queryKey: keys.myStore(),
+    queryFn: ({ signal }) => apiRequest('/stores/me', { schema: Store, signal }),
+    enabled,
+  });

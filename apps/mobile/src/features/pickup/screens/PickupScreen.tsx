@@ -166,7 +166,7 @@ export function PickupScreen() {
           }
           footer={
             <View style={styles.storeRow}>
-              <StoreLogo id={store.id} name={store.name} />
+              <StoreLogo id={store.id} name={store.name} logo={store.logoUrl} />
               <View style={styles.storeText}>
                 <Text style={styles.storeName}>{store.name}</Text>
                 <Text style={styles.caption}>

@@ -1,8 +1,15 @@
-import { type Category, type LatLng, type Place, StoreProfileBody } from '@leftover/shared';
+import {
+  type Category,
+  type LatLng,
+  type Place,
+  type Store,
+  StoreProfileBody,
+} from '@leftover/shared';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { ApiError, NetworkError } from '../../../shared/api/client';
+import { ApiError, NetworkError, type UploadFile } from '../../../shared/api/client';
+import { useImageUpload } from '../../../shared/api/use-image-upload';
 import { useLogout } from '../../../shared/api/use-logout';
 import { DEFAULT_MAP_CENTER } from '../../../shared/constants/map';
 import {
@@ -14,6 +21,7 @@ import {
   IconButton,
   Input,
   MapPicker,
+  PhotoField,
   Screen,
   TimeField,
 } from '../../../shared/ui';
@@ -41,6 +49,13 @@ export function ShopSetupScreen() {
   const [closesAt, setClosesAt] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [banner, setBanner] = useState<string | null>(null);
+  // Optional photos (20), uploaded once the shop exists; routing waits until they're done.
+  const [logo, setLogo] = useState<UploadFile | null>(null);
+  const [cover, setCover] = useState<UploadFile | null>(null);
+  const [created, setCreated] = useState<Store | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const logoUpload = useImageUpload();
+  const coverUpload = useImageUpload();
 
   const pinPlaced = pinStatus === 'found' || pinStatus === 'moved';
 
@@ -85,11 +100,38 @@ export function ShopSetupScreen() {
     return parsed.success && pinPlaced ? parsed.data : null;
   };
 
+  /** Uploads whatever photos are still pending, then enters the shop. */
+  const finish = async (store: Store) => {
+    setPhotoError(null);
+    try {
+      if (logo) {
+        await logoUpload.mutateAsync({ target: { kind: 'logo' }, file: logo });
+        setLogo(null);
+      }
+      if (cover) {
+        await coverUpload.mutateAsync({ target: { kind: 'cover' }, file: cover });
+        setCover(null);
+      }
+    } catch {
+      setPhotoError(t('ui.photo.failed'));
+      return;
+    }
+    await createStore.enterShop(store);
+  };
+
   const submit = () => {
+    if (created) {
+      finish(created);
+      return;
+    }
     const body = validate();
     if (!body) return;
     setBanner(null);
     createStore.mutate(body, {
+      onSuccess: (store) => {
+        setCreated(store);
+        finish(store);
+      },
       onError: (error) => {
         if (error instanceof ApiError && error.code === 'store_exists') return;
         setBanner(error instanceof NetworkError ? t('errors.network') : t('errors.generic'));
@@ -171,10 +213,29 @@ export function ShopSetupScreen() {
               </View>
             </View>
           </View>
+          <PhotoField
+            label={t('shopSetup.logo')}
+            preview={{ shape: 'logo', id: 'new', name: name || '?' }}
+            value={logo?.uri ?? null}
+            onPick={setLogo}
+            onRemove={() => setLogo(null)}
+            progress={logoUpload.progress}
+          />
+          <PhotoField
+            label={t('shopSetup.cover')}
+            preview={{ shape: 'cover', category: category ?? 'other' }}
+            value={cover?.uri ?? null}
+            onPick={setCover}
+            onRemove={() => setCover(null)}
+            progress={coverUpload.progress}
+            error={photoError}
+            onRetry={created ? () => finish(created) : undefined}
+            help={t('shopSetup.photosHelp')}
+          />
           <Button
             block
             label={t('shopSetup.submit')}
-            loading={createStore.isPending}
+            loading={createStore.isPending || logoUpload.isPending || coverUpload.isPending}
             onPress={submit}
           />
         </View>

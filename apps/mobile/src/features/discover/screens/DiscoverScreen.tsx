@@ -163,6 +163,8 @@ export function DiscoverScreen() {
             category={item.category}
             storeId={item.store.id}
             storeName={item.store.name}
+            photoUrl={item.photoUrl}
+            storeLogoUrl={item.store.logoUrl}
             pickupStart={item.pickupStart}
             pickupEnd={item.pickupEnd}
             timezone={item.store.timezone}

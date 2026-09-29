@@ -54,3 +54,8 @@
 - `Intl` in Arabic gives Arabic-Indic digits unless `-u-nu-latn` is honoured; Hermes may ignore it, so date parts go through `westernDigits`. Hermes may also lack `Intl.PluralRules`: `src/shared/i18n/plural-rules.ts` fills it for en/ar.
 - A Zustand `setState` inside a synchronous `act(() => …)` may not re-render a subscribed hook in Jest; use `await act(async () => …)`.
 - `EXPO_PUBLIC_*` values are inlined at bundle time; after changing `EXPO_PUBLIC_MARKET` restart Metro with `--clear`. Jest reads it at call time (`jest.env.ts` sets `UA` for the older suites).
+- Images (20): the API sends `/images/<key>` paths, not full URLs; resolve with `imageUri` (`client.ts`) or pass them to the kit (`Photo`, `CategoryMedia photo`, `StoreLogo logo`), which does. The local bucket lives in `apps/api/.wrangler/state` with D1; `wrangler r2 object put … --local` writes to it (see `seed/load-images.mjs`).
+- Replacing an image writes the new object, updates the row, then deletes the old object. Keep that order: a failure leaves an orphan object, never a row pointing at nothing.
+- React Native's `FormData` takes a file as `{ uri, name, type }`; on web it needs a real `Blob` (`apiUpload` fetches the picked blob: URI first).
+- expo-image in Jest: its `onError` wrapper needs `{ nativeEvent: … }` in `fireEvent`, and `source` comes back as an array. Media and logos are hidden from accessibility, so queries need `includeHiddenElements`.
+- Re-running a seed deletes the seed users: a device signed in as a seed account is signed out. Log in again (Muscat: `aisha@`, Lviv: `olena@`).

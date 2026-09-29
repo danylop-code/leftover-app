@@ -27,7 +27,7 @@ const kasha = bag({
   title: 'Hot meal bag',
   category: 'meals',
   qtyAvailable: 1,
-  store: { id: 's2', name: 'Kasha Kitchen', timezone: 'Europe/Kyiv' },
+  store: { id: 's2', name: 'Kasha Kitchen', timezone: 'Europe/Kyiv', logoUrl: null },
   distanceKm: 1.4,
 });
 

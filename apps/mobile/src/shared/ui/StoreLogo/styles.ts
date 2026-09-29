@@ -4,7 +4,7 @@ export const sizes = { md: 44, lg: 64, xl: 80 } as const;
 
 export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
   const styles = sheet({
-    root: { alignItems: 'center', justifyContent: 'center' },
+    root: { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
     md: { width: sizes.md, height: sizes.md, borderRadius: sizes.md / 2 },
     lg: { width: sizes.lg, height: sizes.lg, borderRadius: sizes.lg / 2 },
     // StoreDetail: 80 px, ringed in the page background where it overlaps the hero.

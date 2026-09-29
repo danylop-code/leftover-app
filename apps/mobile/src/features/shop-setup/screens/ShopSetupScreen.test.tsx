@@ -134,6 +134,8 @@ describe('ShopSetupScreen', () => {
       opensAt: '08:00',
       closesAt: '20:00',
       timezone: 'Europe/Kyiv',
+      logoUrl: null,
+      coverUrl: null,
     });
     renderWithProviders(<ShopSetupScreen />);
     await fillBasics();

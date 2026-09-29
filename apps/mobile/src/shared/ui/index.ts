@@ -28,6 +28,8 @@ export { ListGroup } from './ListRow/ListGroup';
 export { ListRow } from './ListRow/ListRow';
 export { MapPicker } from './MapPicker/MapPicker';
 export { OrderCard } from './OrderCard/OrderCard';
+export { Photo } from './Photo/Photo';
+export { PhotoField } from './PhotoField/PhotoField';
 export { PlaceRow } from './PlaceRow/PlaceRow';
 export { Price } from './Price/Price';
 export { ProgressBar } from './ProgressBar/ProgressBar';

@@ -13,7 +13,7 @@ jest.mock('../../../shared/api/client', () => ({
 const request = apiRequest as jest.Mock;
 
 const shop = (id: string, name: string, bagsAvailable: number, distanceKm: number): SavedShop => ({
-  store: { id, name, category: 'bakery', address: 'Street 1' },
+  store: { id, name, category: 'bakery', address: 'Street 1', logoUrl: null },
   distanceKm,
   rating: null,
   bagsAvailable,

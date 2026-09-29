@@ -85,7 +85,11 @@ export function ReviewScreen() {
       <View style={styles.content}>
         {order.data ? (
           <View style={styles.bag}>
-            <StoreLogo id={order.data.store.id} name={order.data.store.name} />
+            <StoreLogo
+              id={order.data.store.id}
+              name={order.data.store.name}
+              logo={order.data.store.logoUrl}
+            />
             <View>
               <Text style={styles.store}>{order.data.store.name}</Text>
               <Text style={styles.caption}>

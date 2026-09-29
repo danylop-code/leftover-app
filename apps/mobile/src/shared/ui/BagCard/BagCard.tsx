@@ -18,6 +18,9 @@ type Props = {
   category: Category;
   storeId: string;
   storeName: string;
+  /** The bag's photo and the shop's logo (20); placeholders when null. */
+  photoUrl?: string | null;
+  storeLogoUrl?: string | null;
   pickupStart: string;
   pickupEnd: string;
   timezone: string;
@@ -54,14 +57,14 @@ export function BagCard(props: Props) {
         onPress={props.onPress}
         style={({ pressed }) => [styles.clip, pressed && styles.pressed]}
       >
-        <CategoryMedia category={props.category}>
+        <CategoryMedia category={props.category} photo={props.photoUrl}>
           <View style={styles.stock}>
             <Badge tone={stockTone(props.qtyAvailable)} label={stock} />
           </View>
         </CategoryMedia>
         <View style={styles.body}>
           <View style={styles.logo}>
-            <StoreLogo id={props.storeId} name={props.storeName} ring />
+            <StoreLogo id={props.storeId} name={props.storeName} logo={props.storeLogoUrl} ring />
           </View>
           <Text style={styles.store} numberOfLines={SINGLE_LINE}>
             {props.storeName}

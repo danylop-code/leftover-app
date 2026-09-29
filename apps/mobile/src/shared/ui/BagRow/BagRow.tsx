@@ -10,6 +10,8 @@ import { useStyles } from './styles';
 type Props = {
   title: string;
   category: Category;
+  /** The bag's photo (20); the category placeholder when null. */
+  photoUrl?: string | null;
   /** Usually the pickup window, e.g. "Today · 18:00–19:30". */
   meta: string;
   priceMinor: number;
@@ -28,7 +30,7 @@ export function BagRow(props: Props) {
   const { metaIconColor, styles } = useStyles();
   const inner = (
     <>
-      <CategoryMedia category={props.category} variant="row" />
+      <CategoryMedia category={props.category} variant="row" photo={props.photoUrl} />
       <View style={styles.body}>
         <View style={styles.titleRow}>
           <Text style={styles.title} numberOfLines={SINGLE_LINE}>

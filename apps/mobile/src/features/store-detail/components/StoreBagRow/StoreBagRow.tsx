@@ -16,6 +16,7 @@ export function StoreBagRow({ bag, store, onReserve }: Props) {
     <BagRow
       title={bag.title}
       category={bag.category}
+      photoUrl={bag.photoUrl}
       meta={soldOut ? t('storeDetail.backTomorrow') : window}
       priceMinor={bag.priceMinor}
       originalPriceMinor={bag.originalPriceMinor}

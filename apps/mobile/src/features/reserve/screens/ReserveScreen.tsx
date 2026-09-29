@@ -177,7 +177,7 @@ export function ReserveScreen() {
         {notice ? <Banner tone="warning" title={notice} /> : null}
 
         <View style={[styles.summary, out && styles.dimmed]}>
-          <CategoryMedia category={bag.category} variant="tile" />
+          <CategoryMedia category={bag.category} variant="tile" photo={bag.photoUrl} />
           <View style={styles.summaryBody}>
             <Text style={styles.store}>{store.name}</Text>
             <Text style={styles.bagTitle} accessibilityRole="header">
@@ -219,6 +219,7 @@ export function ReserveScreen() {
                   key={other.id}
                   title={other.title}
                   category={other.category}
+                  photoUrl={other.photoUrl}
                   meta={formatTimeRange(other.pickupStart, other.pickupEnd, store.timezone)}
                   priceMinor={other.priceMinor}
                   originalPriceMinor={other.originalPriceMinor}

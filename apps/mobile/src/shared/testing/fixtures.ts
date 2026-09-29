@@ -37,6 +37,8 @@ export const crumbStore: StoreDetail['store'] = {
   opensAt: '08:00',
   closesAt: '20:00',
   timezone: 'Europe/Kyiv',
+  logoUrl: null,
+  coverUrl: null,
 };
 
 export const nearbyBag = (over: Partial<NearbyBag> & Pick<NearbyBag, 'id'>): NearbyBag => ({
@@ -47,7 +49,8 @@ export const nearbyBag = (over: Partial<NearbyBag> & Pick<NearbyBag, 'id'>): Nea
   qtyAvailable: 3,
   pickupStart: '2026-09-29T15:00:00.000Z',
   pickupEnd: '2026-09-29T16:30:00.000Z',
-  store: { id: 's1', name: 'Crumb & Co. Bakery', timezone: 'Europe/Kyiv' },
+  photoUrl: null,
+  store: { id: 's1', name: 'Crumb & Co. Bakery', timezone: 'Europe/Kyiv', logoUrl: null },
   distanceKm: 0.8,
   rating: null,
   isFavorite: false,
@@ -69,6 +72,7 @@ export const storeBag = (
   qtyAvailable,
   pickupStart: '2026-09-29T15:00:00.000Z',
   pickupEnd: '2026-09-29T16:30:00.000Z',
+  photoUrl: null,
 });
 
 export const storeDetail = (over: Partial<StoreDetail> = {}): StoreDetail => ({
@@ -106,6 +110,7 @@ export const orderDetail = (over: Partial<OrderDetail> = {}): OrderDetail => ({
     category: 'bakery',
     pickupStart: '2026-09-29T15:00:00.000Z',
     pickupEnd: '2026-09-29T16:30:00.000Z',
+    photoUrl: null,
   },
   store: {
     id: 's1',
@@ -114,6 +119,7 @@ export const orderDetail = (over: Partial<OrderDetail> = {}): OrderDetail => ({
     lat: 49.8393,
     lng: 24.0325,
     timezone: 'Europe/Kyiv',
+    logoUrl: null,
   },
   rating: null,
   ...over,
@@ -131,6 +137,7 @@ export const shopBag = (over: Partial<ShopBag> & Pick<ShopBag, 'id'>): ShopBag =
   pickupStart: '2026-09-29T15:00:00.000Z',
   pickupEnd: '2026-09-29T16:30:00.000Z',
   isActive: true,
+  photoUrl: null,
   reservedCount: 2,
   ...over,
 });

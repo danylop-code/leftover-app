@@ -25,6 +25,7 @@ const upcoming = orderDetail({
     category: 'meals',
     pickupStart: '2026-09-30T09:30:00.000Z',
     pickupEnd: '2026-09-30T10:30:00.000Z',
+    photoUrl: null,
   },
   store: { ...orderDetail().store, id: 's2', name: 'Kasha Kitchen' },
 });

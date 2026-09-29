@@ -120,6 +120,7 @@ export function SavedScreen() {
               <StoreRow
                 storeId={item.store.id}
                 name={item.store.name}
+                logoUrl={item.store.logoUrl}
                 meta={meta(item)}
                 onPress={() =>
                   router.push({ pathname: '/store/[id]', params: { id: item.store.id } })

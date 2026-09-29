@@ -65,6 +65,17 @@
       "done": "Done",
       "none": "not set",
       "label": "{{label}}, {{value}}"
+    },
+    "photo": {
+      "add": "Add photo",
+      "change": "Change photo",
+      "remove": "Remove",
+      "camera": "Take a photo",
+      "library": "Choose from library",
+      "uploading": "Uploading photo",
+      "failed": "The photo didn’t upload. Check your connection and retry.",
+      "retry": "Retry",
+      "denied": "Allow photo access for Leftover in Settings to add one."
     }
   },
   "app": {
@@ -158,7 +169,10 @@
       "pin": "Pick your address from the suggestions, or drag the pin to your shop.",
       "time": "Use HH:mm, e.g. 08:00.",
       "closesAfterOpens": "Closing time must be after opening time."
-    }
+    },
+    "logo": "Logo",
+    "cover": "Cover photo",
+    "photosHelp": "Optional. You can add these later in Profile."
   },
   "location": {
     "title": "Where should we look?",
@@ -458,7 +472,9 @@
       "hasReservations": "This bag has reservations. Pause it instead.",
       "hasOrders": "This bag has past orders. Pause it instead.",
       "notFound": "This bag no longer exists."
-    }
+    },
+    "photo": "Photo",
+    "photoHelp": "Optional. A real photo sells better than the placeholder."
   },
   "storeOrders": {
     "title": "Today’s orders",
@@ -514,7 +530,8 @@
     "report": "Report a problem",
     "languageSheet": {
       "title": "Language"
-    }
+    },
+    "shopPhotos": "Shop photos"
   },
   "report": {
     "title": "Report a problem",

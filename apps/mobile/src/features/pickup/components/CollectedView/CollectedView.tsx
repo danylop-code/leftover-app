@@ -44,7 +44,7 @@ export function CollectedView({ order, onRate, onDone }: Props) {
       </View>
 
       <View style={styles.summary}>
-        <StoreLogo id={store.id} name={store.name} />
+        <StoreLogo id={store.id} name={store.name} logo={store.logoUrl} />
         <View style={styles.summaryBody}>
           <Text style={styles.summaryTitle}>{bag.title}</Text>
           <Text style={styles.summaryCaption}>

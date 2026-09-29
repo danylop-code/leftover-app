@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
 import { ApiError, NetworkError } from '../../../shared/api/client';
+import { useImageUpload } from '../../../shared/api/use-image-upload';
 import {
   Button,
   EmptyBagArt,
@@ -15,7 +16,7 @@ import {
 } from '../../../shared/ui';
 import { useDeleteBag, useSaveBag } from '../api/use-bag-mutations';
 import { useShopBags } from '../api/use-shop-bags';
-import { BagForm, type BagFormErrors } from '../components/BagForm/BagForm';
+import { BagForm, type BagFormErrors, type PhotoChange } from '../components/BagForm/BagForm';
 import { useStyles } from './styles';
 
 /** AddBag artboard, for adding (`/bag/new`) and editing (`/bag/[id]`) a bag. */
@@ -30,6 +31,11 @@ export function BagFormScreen() {
   const [serverErrors, setServerErrors] = useState<BagFormErrors>({});
   const [banner, setBanner] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const upload = useImageUpload();
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  // A new bag that saved but whose photo didn't upload: saving again updates it, never adds twice.
+  const [savedId, setSavedId] = useState<string | undefined>(undefined);
+  const [pendingPhoto, setPendingPhoto] = useState<PhotoChange>(undefined);
 
   const close = () => (router.canGoBack() ? router.back() : router.replace('/bags'));
   const editing = id ? bags.data?.bags.find((b) => b.id === id) : undefined;
@@ -63,10 +69,41 @@ export function BagFormScreen() {
     setBanner(error instanceof NetworkError ? t('errors.network') : t('errors.generic'));
   };
 
-  const submit = (body: BagBody) => {
+  /** Applies the photo change to a saved bag; the form stays open with Retry if it fails. */
+  const sendPhoto = (bagId: string, photo: PhotoChange) => {
+    if (photo === undefined) return close();
+    setPhotoError(null);
+    upload.mutate(
+      { target: { kind: 'bagPhoto', bagId }, file: photo },
+      {
+        onSuccess: () => {
+          setPendingPhoto(undefined);
+          close();
+        },
+        onError: () => setPhotoError(t('ui.photo.failed')),
+      },
+    );
+  };
+
+  const submit = (body: BagBody, photo: PhotoChange) => {
     setServerErrors({});
     setBanner(null);
-    save.mutate({ id, body }, { onSuccess: close, onError: showError });
+    setPendingPhoto(photo);
+    save.mutate(
+      { id: id ?? savedId, body },
+      {
+        onSuccess: (bag) => {
+          setSavedId(bag.id);
+          sendPhoto(bag.id, photo);
+        },
+        onError: showError,
+      },
+    );
+  };
+
+  const retryPhoto = () => {
+    const bagId = id ?? savedId;
+    if (bagId) sendPhoto(bagId, pendingPhoto);
   };
 
   const deleteBag = () => {
@@ -121,6 +158,9 @@ export function BagFormScreen() {
         banner={banner}
         onSave={submit}
         onDelete={id ? () => setConfirmDelete(true) : undefined}
+        photoProgress={upload.progress}
+        photoError={photoError}
+        onRetryPhoto={retryPhoto}
       />
       <Sheet
         visible={confirmDelete}

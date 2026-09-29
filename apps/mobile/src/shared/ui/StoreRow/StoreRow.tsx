@@ -8,6 +8,7 @@ import { useStyles } from './styles';
 type Props = {
   storeId: string;
   name: string;
+  logoUrl?: string | null;
   meta?: string;
   onPress?: () => void;
   /**
@@ -18,11 +19,11 @@ type Props = {
 };
 
 /** Store summary row (`.store-row`): logo, name, meta, chevron. */
-export function StoreRow({ storeId, name, meta, onPress, trailing }: Props) {
+export function StoreRow({ storeId, name, logoUrl, meta, onPress, trailing }: Props) {
   const { chevronColor, styles } = useStyles();
   const inner = (
     <>
-      <StoreLogo id={storeId} name={name} />
+      <StoreLogo id={storeId} name={name} logo={logoUrl} />
       <View style={styles.body}>
         <Text style={styles.name} numberOfLines={SINGLE_LINE}>
           {name}
