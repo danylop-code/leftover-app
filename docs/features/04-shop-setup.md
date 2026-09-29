@@ -44,10 +44,11 @@ A newly registered shop owner describes their shop once, so its bags can appear 
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/04-shop-setup`
