@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
+import { useLogout } from '../../../shared/api/use-logout';
 import { useSession } from '../../../shared/store/session';
 import { Button, HeaderLarge, Screen } from '../../../shared/ui';
-import { useLogout } from '../api/use-logout';
 import { styles } from './styles';
 
 const titles = {
