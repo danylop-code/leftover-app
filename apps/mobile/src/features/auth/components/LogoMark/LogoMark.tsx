@@ -6,7 +6,7 @@ type Props = { size: number };
 export function LogoMark({ size }: Props) {
   const { handle, body, smile, leaf } = mark;
   return (
-    <Svg width={size} height={size} viewBox={mark.viewBox} accessible={false}>
+    <Svg width={size} height={size} viewBox={mark.viewBox}>
       <Path
         d={handle.d}
         fill="none"

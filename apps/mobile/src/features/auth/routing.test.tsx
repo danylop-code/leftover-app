@@ -54,11 +54,15 @@ const storeLocation = () =>
     LOCATION_STORAGE_KEY,
     JSON.stringify({
       state: {
-        selected: { label: 'Rynok Square 1', lat: 49.8419, lng: 24.0315 },
-        radiusKm: 5,
-        recent: [],
+        byUser: {
+          [customer.id]: {
+            selected: { label: 'Rynok Square 1', lat: 49.8419, lng: 24.0315 },
+            radiusKm: 5,
+            recent: [],
+          },
+        },
       },
-      version: 1,
+      version: 2,
     }),
   );
 

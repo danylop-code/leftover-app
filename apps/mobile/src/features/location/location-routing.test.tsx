@@ -34,7 +34,10 @@ const start = async (initialUrl = '/', location?: { selected: Place; radiusKm: n
   if (location) {
     await AsyncStorage.setItem(
       LOCATION_STORAGE_KEY,
-      JSON.stringify({ state: { ...location, recent: [] }, version: 1 }),
+      JSON.stringify({
+        state: { byUser: { [customer.id]: { ...location, recent: [] } } },
+        version: 2,
+      }),
     );
   }
   renderRouter('./app', { initialUrl });
@@ -76,7 +79,7 @@ describe('location routing', () => {
     expect(useLocation.getState()).toMatchObject({ selected: dorosh, radiusKm: 12 });
   });
 
-  it('forgets the location on logout, so the next account starts at Location', async () => {
+  it('keeps the location through logout: the same account goes straight to Discover again', async () => {
     await start('/profile', { selected: dorosh, radiusKm: 12 });
     await waitFor(() => expect(screen).toHavePathname('/profile'));
     fireEvent.press(await screen.findByRole('button', { name: 'Log out' }));
@@ -87,6 +90,20 @@ describe('location routing', () => {
     await waitFor(() => expect(screen).toHavePathname('/welcome'));
     expect(useLocation.getState().selected).toBeNull();
     const stored = JSON.parse((await AsyncStorage.getItem(LOCATION_STORAGE_KEY)) ?? '{}');
-    expect(stored.state.selected).toBeNull();
+    expect(stored.state.byUser[customer.id]).toMatchObject({ selected: dorosh, radiusKm: 12 });
+
+    await act(async () => {
+      await useSession.getState().signIn({ token: 'tok', user: customer });
+    });
+    expect(useLocation.getState()).toMatchObject({ selected: dorosh, radiusKm: 12 });
+  });
+
+  it('gives another account on the same device a fresh start at Location', async () => {
+    await start('/', { selected: dorosh, radiusKm: 12 });
+    await waitFor(() => expect(screen).toHavePathname('/discover'));
+    await act(async () => {
+      await useSession.getState().signIn({ token: 'tok2', user: { ...customer, id: 'u9' } });
+    });
+    expect(useLocation.getState().selected).toBeNull();
   });
 });

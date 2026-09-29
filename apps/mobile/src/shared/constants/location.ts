@@ -11,6 +11,6 @@ export const SAME_SPOT_DEGREES = 0.0001;
 // Address autocomplete: wait for typing to pause, and give the API this long before falling
 // back to on-device geocoding.
 export const SUGGEST_DEBOUNCE_MS = 300;
-export const SUGGEST_TIMEOUT_MS = 5000;
+export const SUGGEST_TIMEOUT_MS = 8000;
 // On-device fallback results shown (each needs a reverse-geocode for its label).
 export const DEVICE_SUGGESTION_LIMIT = 3;

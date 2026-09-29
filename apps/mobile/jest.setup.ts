@@ -24,4 +24,6 @@ beforeEach(async () => {
   expoLocationMock.__reset();
   await AsyncStorage.clear();
   useLocation.setState(useLocation.getInitialState(), true);
+  // As the app's bootstrap does: the store only writes once it has loaded.
+  await useLocation.persist.rehydrate();
 });

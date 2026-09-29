@@ -14,6 +14,7 @@ import {
   Screen,
   Segmented,
   Skeleton,
+  useTabBarInset,
 } from '../../../shared/ui';
 import { useMyOrders } from '../api/use-my-orders';
 import { MyOrderCard } from '../components/MyOrderCard/MyOrderCard';
@@ -27,6 +28,7 @@ export function OrdersScreen() {
   const from = useLocation((s) => s.selected) ?? DEFAULT_MAP_CENTER;
   const orders = useMyOrders(scope);
   const [pulling, setPulling] = useState(false);
+  const tabBarInset = useTabBarInset();
 
   const refresh = async () => {
     setPulling(true);
@@ -108,7 +110,7 @@ export function OrdersScreen() {
       <FlatList
         data={orders.data.orders}
         keyExtractor={(o) => o.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list, { paddingBottom: tabBarInset }]}
         renderItem={({ item }) => (
           <MyOrderCard
             order={item}
@@ -130,6 +132,7 @@ export function OrdersScreen() {
   return (
     <Screen
       padded={false}
+      bottomInset={orders.data && orders.data.orders.length > 0 ? 0 : tabBarInset}
       header={
         <View>
           <HeaderLarge title={t('orders.title')} />

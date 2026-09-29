@@ -87,7 +87,8 @@ describe('location store', () => {
     expect(nearbyKey()).not.toEqual(moved);
   });
 
-  it('persists the area and recents (not the draft) and restores them on restart', async () => {
+  it('remembers each account’s area and recents, not the draft, and restores them on restart', async () => {
+    state().switchUser('u1');
     state().addRecent(rynok);
     state().startDraft();
     state().setDraftPlace(dorosh);
@@ -96,33 +97,71 @@ describe('location store', () => {
     await Promise.resolve();
 
     const raw = (await AsyncStorage.getItem(LOCATION_STORAGE_KEY)) ?? '{}';
-    expect(JSON.parse(raw).state).toEqual({ selected: dorosh, radiusKm: 9, recent: [rynok] });
+    expect(JSON.parse(raw).state).toEqual({
+      byUser: { u1: { selected: dorosh, radiusKm: 9, recent: [rynok] } },
+    });
 
-    // Restart: memory starts empty (resetting it also writes, so put the saved entry back).
-    useLocation.setState({ selected: null, radiusKm: RADIUS_DEFAULT_KM, recent: [] });
-    await AsyncStorage.setItem(LOCATION_STORAGE_KEY, raw);
-    await useLocation.persist.rehydrate();
-    expect(state()).toMatchObject({ selected: dorosh, radiusKm: 9, recent: [rynok] });
+    // Restart: a fresh copy of the store (not yet loaded) and of its storage. The session signs
+    // in first; that must not overwrite the saved areas before they load.
+    let fresh = useLocation;
+    let freshStorage = AsyncStorage;
+    jest.isolateModules(() => {
+      fresh = require('./location').useLocation;
+      const storage = require('@react-native-async-storage/async-storage');
+      freshStorage = storage.default ?? storage;
+    });
+    await freshStorage.setItem(LOCATION_STORAGE_KEY, raw);
+    fresh.getState().switchUser('u1');
+    await fresh.persist.rehydrate();
+    expect(fresh.getState()).toMatchObject({ selected: dorosh, radiusKm: 9, recent: [rynok] });
+    expect(JSON.parse((await freshStorage.getItem(LOCATION_STORAGE_KEY)) ?? '{}').state).toEqual(
+      JSON.parse(raw).state,
+    );
   });
 
-  it('ignores an unreadable stored entry', async () => {
+  it('restores the area whichever loads first: the session or the saved areas', async () => {
     await AsyncStorage.setItem(
       LOCATION_STORAGE_KEY,
-      JSON.stringify({ state: { selected: { lat: 'x' }, radiusKm: 99 }, version: 1 }),
+      JSON.stringify({
+        state: { byUser: { u1: { selected: rynok, radiusKm: 7, recent: [] } } },
+        version: 2,
+      }),
     );
     await useLocation.persist.rehydrate();
-    expect(state()).toMatchObject({ selected: null, radiusKm: RADIUS_DEFAULT_KM, recent: [] });
+    expect(state().selected).toBeNull();
+    state().switchUser('u1');
+    expect(state()).toMatchObject({ selected: rynok, radiusKm: 7 });
   });
 
-  it('clear() forgets everything on this device', async () => {
-    useLocation.setState({ selected: rynok, radiusKm: 12, recent: [rynok] });
-    state().clear();
-    await Promise.resolve();
+  it('keeps an area through sign-out, and gives another account a fresh start', () => {
+    state().switchUser('u1');
+    state().startDraft();
+    state().setDraftPlace(rynok);
+    state().commitDraft();
+
+    state().switchUser(null);
+    expect(state().selected).toBeNull();
+
+    state().switchUser('u2');
     expect(state()).toMatchObject({ selected: null, radiusKm: RADIUS_DEFAULT_KM, recent: [] });
-    expect(JSON.parse((await AsyncStorage.getItem(LOCATION_STORAGE_KEY)) ?? '{}').state).toEqual({
-      selected: null,
-      radiusKm: RADIUS_DEFAULT_KM,
-      recent: [],
-    });
+    state().switchUser('u1');
+    expect(state().selected).toEqual(rynok);
+  });
+
+  it('ignores an unreadable stored entry, and drops the old device-wide one', async () => {
+    await AsyncStorage.setItem(
+      LOCATION_STORAGE_KEY,
+      JSON.stringify({ state: { byUser: { u1: { selected: { lat: 'x' } } } }, version: 2 }),
+    );
+    await useLocation.persist.rehydrate();
+    state().switchUser('u1');
+    expect(state().selected).toBeNull();
+
+    await AsyncStorage.setItem(
+      LOCATION_STORAGE_KEY,
+      JSON.stringify({ state: { selected: rynok, radiusKm: 5, recent: [] }, version: 1 }),
+    );
+    await useLocation.persist.rehydrate();
+    expect(state().byUser).toEqual({});
   });
 });

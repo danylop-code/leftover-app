@@ -13,7 +13,8 @@
     "test:api": "pnpm --filter @leftover/api test",
     "test:mobile": "pnpm --filter @leftover/mobile test",
     "dev:api": "pnpm --filter @leftover/api dev",
-    "dev:mobile": "pnpm --filter @leftover/mobile start"
+    "dev:mobile": "pnpm --filter @leftover/mobile start",
+    "dev:web": "pnpm --filter @leftover/mobile web"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",

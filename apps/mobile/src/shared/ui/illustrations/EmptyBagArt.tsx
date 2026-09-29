@@ -6,7 +6,7 @@ export function EmptyBagArt() {
   const { colors, bag } = art;
   const line = { fill: 'none', stroke: colors.ink, strokeWidth: art.stroke } as const;
   return (
-    <Svg width={art.size} height={art.size} viewBox={art.viewBox} accessible={false}>
+    <Svg width={art.size} height={art.size} viewBox={art.viewBox}>
       <Path d={art.handle} {...line} strokeLinecap="round" />
       <Rect
         x={bag.x}

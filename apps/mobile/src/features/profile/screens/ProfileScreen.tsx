@@ -16,6 +16,7 @@ import {
   ListRow,
   Screen,
   Sheet,
+  useTabBarInset,
 } from '../../../shared/ui';
 import { useMyStats, useUpdateMe } from '../api/use-profile';
 import { ProfileCard } from '../components/ProfileCard/ProfileCard';
@@ -23,8 +24,7 @@ import { styles } from './styles';
 
 /**
  * Settings artboard (the Profile tab) for both roles. Customers also see their impact and
- * pickup area; shops don't. Notifications and Report a problem aren't shown yet (no push in
- * the MVP; reporting is brief 16).
+ * pickup area; shops don't. Notifications isn't shown (no push in the MVP).
  */
 export function ProfileScreen() {
   const { t } = useTranslation();
@@ -40,6 +40,7 @@ export function ProfileScreen() {
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState<string | null>(null);
   const [confirmLogout, setConfirmLogout] = useState(false);
+  const tabBarInset = useTabBarInset();
 
   if (!user) return null;
 
@@ -64,7 +65,7 @@ export function ProfileScreen() {
   const version = Constants.expoConfig?.version ?? '';
 
   return (
-    <Screen scroll header={<HeaderLarge title={t('profile.title')} />}>
+    <Screen scroll bottomInset={tabBarInset} header={<HeaderLarge title={t('profile.title')} />}>
       <View style={styles.content}>
         <ProfileCard user={user} stats={isCustomer ? stats.data : undefined} onEdit={startEdit} />
 
@@ -91,6 +92,7 @@ export function ProfileScreen() {
         </ListGroup>
 
         <ListGroup label={t('profile.help')}>
+          <ListRow icon="flag" label={t('profile.report')} onPress={() => router.push('/report')} />
           <ListRow
             icon="logout"
             label={t('profile.logout')}

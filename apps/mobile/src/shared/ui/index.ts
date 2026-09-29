@@ -1,5 +1,6 @@
 // The shared UI kit. Screens import from here, never from a component folder.
 export { AddressAutocomplete } from './AddressAutocomplete/AddressAutocomplete';
+export { AppFrame } from './AppFrame/AppFrame';
 export { Badge, type BadgeTone } from './Badge/Badge';
 export { stockTone } from './Badge/stock-tone';
 export { BagCard } from './BagCard/BagCard';
@@ -45,6 +46,7 @@ export { Switch } from './Switch/Switch';
 export { RoleTabs } from './TabBar/RoleTabs';
 export { RouterTabBar } from './TabBar/RouterTabBar';
 export { TabBar, type TabItem } from './TabBar/TabBar';
+export { useTabBarInset } from './TabBar/use-tab-bar-inset';
 export { Text } from './Text/Text';
 export { Ticket } from './Ticket/Ticket';
 export { Toast } from './Toast/Toast';

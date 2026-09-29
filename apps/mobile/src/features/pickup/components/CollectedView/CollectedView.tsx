@@ -46,7 +46,7 @@ export function CollectedView({ order, onRate, onDone }: Props) {
         <StoreLogo id={store.id} name={store.name} />
         <View style={styles.summaryBody}>
           <Text style={styles.summaryTitle}>{bag.title}</Text>
-          <Text style={styles.caption}>
+          <Text style={styles.summaryCaption}>
             {t('pickup.collected.code', {
               code: order.code,
               day: formatDay(collectedAt, store.timezone),

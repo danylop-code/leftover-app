@@ -1,7 +1,8 @@
-import { Pressable, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Platform, Pressable, Text, View } from 'react-native';
+import { useKeyboardVisible } from '../../lib/use-keyboard-visible';
 import { Icon, type IconName } from '../icons';
-import { MIN_BOTTOM_PADDING, styles, tint } from './styles';
+import { styles, tint } from './styles';
+import { useTabBarBottom } from './use-tab-bar-inset';
 
 export type TabItem = {
   key: string;
@@ -13,29 +14,36 @@ export type TabItem = {
 
 type Props = { items: readonly TabItem[] };
 
-/** Bottom tab bar (`.tabbar`). Customer: Discover · Orders · Profile; store: Bags · Orders · Profile. */
+/**
+ * The floating tab bar (`.tabbar`): a compact centred island above the home indicator; the
+ * active tab is filled. Customer: Discover · Orders · Profile; store: Bags · Orders ·
+ * Profile. Hidden while the Android keyboard is open (it would ride up on top of it).
+ */
 export function TabBar({ items }: Props) {
-  const insets = useSafeAreaInsets();
+  const bottom = useTabBarBottom();
+  const keyboard = useKeyboardVisible();
+  if (keyboard && Platform.OS === 'android') return null;
   return (
-    <View
-      style={[styles.bar, { paddingBottom: Math.max(insets.bottom, MIN_BOTTOM_PADDING) }]}
-      accessibilityRole="tablist"
-    >
-      {items.map((item) => (
-        <Pressable
-          key={item.key}
-          accessibilityRole="tab"
-          accessibilityLabel={item.label}
-          accessibilityState={{ selected: item.active }}
-          onPress={item.onPress}
-          style={styles.tab}
-        >
-          <View style={[styles.pill, item.active && styles.pillActive]}>
+    <View style={[styles.dock, { bottom }]} pointerEvents="box-none" testID="tab-bar">
+      <View style={styles.island} accessibilityRole="tablist">
+        {items.map((item) => (
+          <Pressable
+            key={item.key}
+            accessibilityRole="tab"
+            accessibilityLabel={item.label}
+            accessibilityState={{ selected: item.active }}
+            onPress={item.onPress}
+            style={({ pressed }) => [
+              styles.tab,
+              item.active && styles.tabActive,
+              pressed && !item.active && styles.pressed,
+            ]}
+          >
             <Icon name={item.icon} size="lg" color={item.active ? tint.active : tint.inactive} />
-          </View>
-          <Text style={[styles.label, item.active && styles.labelActive]}>{item.label}</Text>
-        </Pressable>
-      ))}
+            <Text style={[styles.label, item.active && styles.labelActive]}>{item.label}</Text>
+          </Pressable>
+        ))}
+      </View>
     </View>
   );
 }

@@ -116,7 +116,8 @@
     "discover": "Discover",
     "orders": "Orders",
     "profile": "Profile",
-    "bags": "Bags"
+    "bags": "Bags",
+    "saved": "Saved"
   },
   "categories": {
     "bakery": "Bakery",
@@ -504,6 +505,49 @@
       "field": "First name",
       "save": "Save",
       "error": "Enter your first name (up to 40 characters)."
+    },
+    "report": "Report a problem"
+  },
+  "report": {
+    "title": "Report a problem",
+    "intro": "Tell us what went wrong. We’ll reply by email.",
+    "subject": "Subject",
+    "subjects": {
+      "order": "Problem with an order",
+      "closed": "Shop was closed",
+      "app": "App isn’t working",
+      "payment": "Payment question",
+      "other": "Something else"
+    },
+    "order": "Which order?",
+    "noOrder": "Not about an order",
+    "orderOption": "{{store}} · {{title}} · {{day}}",
+    "message": "Message",
+    "messageHelp": "At least 10 characters",
+    "messageError": "Use 10–500 characters.",
+    "send": "Send report",
+    "failed": "Couldn’t send your report. Try again.",
+    "sent": {
+      "title": "Thanks — we’ve got it",
+      "text": "Our team will reply to {{email}}. Reference {{reference}}.",
+      "back": "Back to profile",
+      "again": "Report something else"
+    }
+  },
+  "saved": {
+    "title": "Saved",
+    "meta": "{{category}} · {{distance}}",
+    "bags_one": "{{count}} bag today",
+    "bags_other": "{{count}} bags today",
+    "noBags": "No bags right now",
+    "empty": {
+      "title": "No saved shops yet",
+      "text": "Tap the heart on a bag or a shop to keep it here.",
+      "action": "Find food nearby"
+    },
+    "error": {
+      "title": "Couldn’t load your saved shops",
+      "retry": "Try again"
     }
   }
 }

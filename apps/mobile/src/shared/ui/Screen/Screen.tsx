@@ -12,6 +12,8 @@ type Props = {
   scroll?: boolean;
   padded?: boolean;
   edges?: Edge[];
+  /** Extra space under the content, e.g. `useTabBarInset()` on tab screens. */
+  bottomInset?: number;
 };
 
 const defaultEdges: Edge[] = ['top'];
@@ -24,19 +26,21 @@ export function Screen({
   scroll,
   padded = true,
   edges = defaultEdges,
+  bottomInset = 0,
 }: Props) {
+  const inset = bottomInset ? { paddingBottom: bottomInset } : null;
   return (
     <SafeAreaView style={styles.root} edges={edges}>
       {header}
       {scroll ? (
         <ScrollView
-          contentContainerStyle={[styles.scroll, padded && styles.padded]}
+          contentContainerStyle={[styles.scroll, padded && styles.padded, inset]}
           keyboardShouldPersistTaps="handled"
         >
           {children}
         </ScrollView>
       ) : (
-        <View style={[styles.root, padded && styles.padded]}>{children}</View>
+        <View style={[styles.root, padded && styles.padded, inset]}>{children}</View>
       )}
       {footer}
     </SafeAreaView>

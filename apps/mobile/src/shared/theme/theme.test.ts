@@ -8,6 +8,7 @@ import {
   radius,
   shadows,
   space,
+  tabBar,
   tapMin,
   typography,
 } from '.';
@@ -31,7 +32,7 @@ const prefixed = (prefix: string) =>
 describe('theme parity with the design theme.css :root', () => {
   it('reads every token in the fixture', () => {
     // Guards the regex: a new or reshaped token in theme.css must show up here.
-    expect(tokens).toHaveLength(75);
+    expect(tokens).toHaveLength(81);
   });
 
   it.each(prefixed('color'))('color.$key', ({ key, value }) => {
@@ -48,6 +49,10 @@ describe('theme parity with the design theme.css :root', () => {
 
   it.each(prefixed('space'))('space[$key]', ({ key, value }) => {
     expect(space[Number(key) as keyof typeof space]).toBe(px(value));
+  });
+
+  it.each(prefixed('tabbar'))('tabBar.$key', ({ key, value }) => {
+    expect(tabBar[key as keyof typeof tabBar]).toBe(px(value));
   });
 
   it.each(prefixed('radius'))('radius.$key', ({ key, value }) => {

@@ -14,6 +14,9 @@ export const keys = {
   storeDetailAll: () => ['stores', 'detail'] as const,
   /** StoreDetail; the location is included because the distance depends on it. */
   storeDetail: (p: { id: string; lat: number; lng: number }) => ['stores', 'detail', p] as const,
+  savedAll: () => ['favorites'] as const,
+  /** Saved tab; the location is included because distances depend on it. */
+  saved: (p: { lat: number; lng: number }) => ['favorites', p] as const,
   addressSuggestions: (p: { q: string; near: { lat: number; lng: number } | null }) =>
     ['geo', 'autocomplete', p] as const,
   ordersAll: () => ['orders'] as const,

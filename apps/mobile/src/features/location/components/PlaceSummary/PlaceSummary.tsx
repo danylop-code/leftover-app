@@ -14,17 +14,19 @@ type Props = {
 /** The sheet's chosen place (`.loc-pin` + label + Change). */
 export function PlaceSummary({ place, locating, onChange }: Props) {
   const { t } = useTranslation();
-  const title = locating ? t('location.locating') : (place?.label ?? t('location.noPlace'));
+  // Once there's a place, show it even while a position is still being found.
+  const finding = locating && !place;
+  const title = finding ? t('location.locating') : (place?.label ?? t('location.noPlace'));
   return (
     <View style={styles.root}>
       <View style={styles.pin}>
         <Icon name="pin" color={pinColor} />
       </View>
       <View style={styles.text} accessible accessibilityLiveRegion="polite">
-        <Text style={place && !locating ? styles.label : styles.hint} numberOfLines={SINGLE_LINE}>
+        <Text style={place ? styles.label : styles.hint} numberOfLines={SINGLE_LINE}>
           {title}
         </Text>
-        {place?.secondary && !locating ? (
+        {place?.secondary ? (
           <Text style={styles.secondary} numberOfLines={SINGLE_LINE}>
             {place.secondary}
           </Text>

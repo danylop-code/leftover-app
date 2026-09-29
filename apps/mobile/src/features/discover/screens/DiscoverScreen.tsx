@@ -21,6 +21,7 @@ import {
   OfflineArt,
   Screen,
   Toast,
+  useTabBarInset,
 } from '../../../shared/ui';
 import { useNearbyBags } from '../api/use-nearby-bags';
 import { BagCardSkeleton } from '../components/BagCardSkeleton/BagCardSkeleton';
@@ -48,6 +49,7 @@ export function DiscoverScreen() {
   );
 
   const toggleFavorite = useToggleFavorite();
+  const tabBarInset = useTabBarInset();
   const [toast, showToast] = useToast();
 
   const openLocation = () => router.push('/location');
@@ -152,7 +154,7 @@ export function DiscoverScreen() {
         testID="discover-list"
         data={nearby.data}
         keyExtractor={(bag) => bag.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list, { paddingBottom: tabBarInset }]}
         ListHeaderComponent={sectionHeader(t('discover.count', { count: nearby.data.length }))}
         renderItem={({ item }) => (
           <BagCard
@@ -187,6 +189,7 @@ export function DiscoverScreen() {
   return (
     <Screen
       padded={false}
+      bottomInset={nearby.data && nearby.data.length > 0 ? 0 : tabBarInset}
       header={
         <View>
           <View style={styles.top}>
@@ -206,27 +209,29 @@ export function DiscoverScreen() {
           <Text style={styles.title} accessibilityRole="header">
             {t('discover.title')}
           </Text>
-          <ChipRow accessibilityLabel={t('discover.categories')}>
-            <Chip
-              label={t('discover.all')}
-              selected={category === null}
-              onPress={() => setCategory(null)}
-            />
-            {DISCOVER_CATEGORIES.map((c) => (
+          <View style={styles.chips}>
+            <ChipRow accessibilityLabel={t('discover.categories')}>
               <Chip
-                key={c}
-                label={t(`categories.${c}`)}
-                selected={category === c}
-                onPress={() => setCategory(c)}
+                label={t('discover.all')}
+                selected={category === null}
+                onPress={() => setCategory(null)}
               />
-            ))}
-          </ChipRow>
+              {DISCOVER_CATEGORIES.map((c) => (
+                <Chip
+                  key={c}
+                  label={t(`categories.${c}`)}
+                  selected={category === c}
+                  onPress={() => setCategory(c)}
+                />
+              ))}
+            </ChipRow>
+          </View>
         </View>
       }
     >
       {body()}
       {toast ? (
-        <View style={styles.toast}>
+        <View style={[styles.toast, { bottom: tabBarInset }]}>
           <Toast message={toast.message} tone={toast.tone} />
         </View>
       ) : null}

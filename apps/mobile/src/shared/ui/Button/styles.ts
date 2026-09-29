@@ -13,7 +13,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: space[2],
-    alignSelf: 'flex-start',
+    // Standalone buttons centre (design language); `block` stretches, rows align them anyway.
+    alignSelf: 'center',
   },
   sm: { height: size.sm, paddingHorizontal: space[4] },
   block: { alignSelf: 'stretch' },
