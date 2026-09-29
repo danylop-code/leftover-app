@@ -1,6 +1,6 @@
 # Feature: reserve
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A customer reserves one or more bags, never oversells, and gets a pickup code.
@@ -48,10 +48,16 @@ Artboards **Reserve** (bag summary, description, quantity stepper with "3 left",
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/08-reserve`. Decisions:
+  - Reserve reads the bag from 07's `GET /stores/:id` (already cached when coming from StoreDetail), which gains each bag's `description`; no separate bag endpoint. Route `/reserve/[bagId]?storeId=`, shown as a modal.
+  - Code uniqueness: among the store's `reserved` orders created in the last 24 hours (`CODE_WINDOW_HOURS`), so codes free up as days pass; 12 matches codes in the same window.
+  - The guarded batch runs on the raw D1 client (`UPDATE … WHERE qty_available >= ?`, then `INSERT … SELECT … WHERE changes() = 1`), so nothing is written when the update misses.
+  - Pickup (09) isn't built yet, and by the roadmap 11 and 12 come before it. Until then, a successful reservation lands on a Pickup placeholder route (`/pickup/[orderId]`) that 09 replaces.
+  - `not_available` (paused or window over) shows the same "sold out" layout with its own copy.
