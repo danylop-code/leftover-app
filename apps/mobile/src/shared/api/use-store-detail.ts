@@ -1,7 +1,7 @@
 import { type LatLng, StoreDetail } from '@leftover/shared';
 import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '../../../shared/api/client';
-import { keys } from '../../../shared/api/keys';
+import { apiRequest } from './client';
+import { keys } from './keys';
 
 /**
  * A shop with today's bags; `from` is the customer's selected location, so the distance is

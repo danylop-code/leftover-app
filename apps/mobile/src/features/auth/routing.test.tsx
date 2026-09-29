@@ -36,7 +36,11 @@ let fetchMock: jest.SpyInstance;
 const serve = (route: Route) =>
   fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
     // Discover (06) loads bags on arrival; these tests only care about routing.
-    const res = url.includes('/bags/nearby') ? json(200, { bags: [] }) : route(url, init);
+    const res = url.includes('/bags/nearby')
+      ? json(200, { bags: [] })
+      : url.endsWith('/me/stats')
+        ? json(200, { bagsRescued: 0, savedMinor: 0 })
+        : route(url, init);
     if (!res) throw new Error(`unexpected request ${init.method ?? 'GET'} ${url}`);
     return res;
   });
@@ -157,8 +161,10 @@ describe('auth routing', () => {
     // Customers log out from Profile (a placeholder until 15).
     renderRouter('./app', { initialUrl: '/profile' });
     await waitFor(() => expect(screen).toHavePathname('/profile'));
+    fireEvent.press(await screen.findByRole('button', { name: 'Log out' }));
+    // Confirm in the sheet (its button is the last "Log out").
     await act(async () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Log out' }));
+      fireEvent.press(screen.getAllByRole('button', { name: 'Log out' }).at(-1) as never);
     });
     await waitFor(() => expect(screen).toHavePathname('/welcome'));
     expect(calls).toContainEqual({

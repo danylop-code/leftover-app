@@ -19,3 +19,6 @@ export const art = {
 
 // DiscoverError: the wifi-off glyph at 64 px with a 1.6 stroke, in danger.
 export const offline = { size: 64, stroke: 1.6, color: color.danger } as const;
+
+// PickupCollected: a 56 px check with a 2.4 stroke, in success.
+export const success = { size: 56, stroke: 2.4, color: color.success } as const;

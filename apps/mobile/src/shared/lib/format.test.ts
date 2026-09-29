@@ -1,4 +1,14 @@
-import { formatDiscount, formatDistance, formatMoney, formatWindow } from './format';
+import {
+  dayKind,
+  formatDate,
+  formatDay,
+  formatDiscount,
+  formatDistance,
+  formatMoney,
+  formatTime,
+  formatTimeRange,
+  formatWindow,
+} from './format';
 
 describe('formatMoney', () => {
   it('formats whole hryvnias without decimals', () => {
@@ -90,5 +100,23 @@ describe('formatWindow', () => {
     expect(formatWindow('2026-10-25T16:00:00Z', '2026-10-25T17:00:00Z', kyiv, beforeShift)).toBe(
       'Tomorrow · 18:00–19:00',
     );
+  });
+});
+
+describe('day and time helpers', () => {
+  const now = new Date('2026-09-29T14:00:00Z');
+  it('names the day relative to now in the store’s zone', () => {
+    expect(dayKind('2026-09-29T15:00:00Z', 'Europe/Kyiv', now)).toBe('today');
+    expect(dayKind('2026-09-30T15:00:00Z', 'Europe/Kyiv', now)).toBe('tomorrow');
+    expect(dayKind('2026-10-02T15:00:00Z', 'Europe/Kyiv', now)).toBe('other');
+    expect(formatDay('2026-10-02T15:00:00Z', 'Europe/Kyiv', now)).toBe('Fri, 2 Oct');
+  });
+
+  it('formats times and ranges in the zone', () => {
+    expect(formatTimeRange('2026-09-29T15:00:00Z', '2026-09-29T16:30:00Z', 'Europe/Kyiv')).toBe(
+      '18:00–19:30',
+    );
+    expect(formatTime('2026-09-29T13:40:00Z', 'Europe/Kyiv')).toBe('16:40');
+    expect(formatDate(now, 'Europe/Kyiv')).toBe('Tue, 29 Sep');
   });
 });

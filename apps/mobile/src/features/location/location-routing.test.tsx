@@ -44,6 +44,7 @@ beforeEach(() => {
   useSession.setState({ status: 'hydrating', token: null, user: null });
   fetchMock = jest.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
     if (String(url).endsWith('/auth/logout')) return new Response(null, { status: 204 });
+    if (String(url).endsWith('/me/stats')) return json(200, { bagsRescued: 0, savedMinor: 0 });
     if (String(url).endsWith('/me')) return json(200, customer);
     if (String(url).includes('/bags/nearby')) return json(200, { bags: [] });
     throw new Error(`unexpected ${init?.method ?? 'GET'} ${String(url)}`);
@@ -78,8 +79,10 @@ describe('location routing', () => {
   it('forgets the location on logout, so the next account starts at Location', async () => {
     await start('/profile', { selected: dorosh, radiusKm: 12 });
     await waitFor(() => expect(screen).toHavePathname('/profile'));
+    fireEvent.press(await screen.findByRole('button', { name: 'Log out' }));
+    // Confirm in the sheet (its button is the last "Log out").
     await act(async () => {
-      fireEvent.press(screen.getByRole('button', { name: 'Log out' }));
+      fireEvent.press(screen.getAllByRole('button', { name: 'Log out' }).at(-1) as never);
     });
     await waitFor(() => expect(screen).toHavePathname('/welcome'));
     expect(useLocation.getState().selected).toBeNull();

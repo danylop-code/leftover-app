@@ -8,17 +8,25 @@ type Props = {
   size?: keyof typeof iconSize;
   color?: string;
   strokeWidth?: number;
+  /** Fills the shape too (the saved heart). */
+  fill?: string;
 };
 
 /** Decorative stroke icon. Give the pressable around it the accessible label. */
-export function Icon({ name, size = 'md', color = palette.textPrimary, strokeWidth }: Props) {
+export function Icon({
+  name,
+  size = 'md',
+  color = palette.textPrimary,
+  strokeWidth,
+  fill = 'none',
+}: Props) {
   const px = iconSize[size];
   return (
     <Svg
       width={px}
       height={px}
       viewBox={ICON_VIEWBOX}
-      fill="none"
+      fill={fill}
       stroke={color}
       strokeWidth={strokeWidth ?? ICON_STROKE_WIDTH}
       strokeLinecap="round"
