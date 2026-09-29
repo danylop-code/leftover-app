@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FlatList, Text, View } from 'react-native';
 import { NetworkError } from '../../../shared/api/client';
+import { useToggleFavorite } from '../../../shared/api/use-toggle-favorite';
 import { DISCOVER_CATEGORIES, DISCOVER_SKELETON_CARDS } from '../../../shared/constants/discover';
 import { DEFAULT_MAP_CENTER } from '../../../shared/constants/map';
+import { useToast } from '../../../shared/lib/use-toast';
 import { useLocation } from '../../../shared/store/location';
 import {
   BagCard,
@@ -14,9 +16,11 @@ import {
   ChipRow,
   EmptyBagArt,
   EmptyState,
+  FavoriteButton,
   IconButton,
   OfflineArt,
   Screen,
+  Toast,
 } from '../../../shared/ui';
 import { useNearbyBags } from '../api/use-nearby-bags';
 import { BagCardSkeleton } from '../components/BagCardSkeleton/BagCardSkeleton';
@@ -43,7 +47,15 @@ export function DiscoverScreen() {
     selected !== null,
   );
 
+  const toggleFavorite = useToggleFavorite();
+  const [toast, showToast] = useToast();
+
   const openLocation = () => router.push('/location');
+  const setSaved = (bag: NearbyBag) =>
+    toggleFavorite.mutate(
+      { storeId: bag.store.id, save: !bag.isFavorite },
+      { onError: () => showToast({ message: t('ui.favorite.failed'), tone: 'error' }) },
+    );
   const openBag = (bag: NearbyBag) =>
     router.push({ pathname: '/store/[id]', params: { id: bag.store.id } });
 
@@ -155,7 +167,15 @@ export function DiscoverScreen() {
             priceMinor={item.priceMinor}
             originalPriceMinor={item.originalPriceMinor}
             distanceKm={item.distanceKm}
+            rating={item.rating?.average ?? null}
             onPress={() => openBag(item)}
+            favorite={
+              <FavoriteButton
+                name={item.store.name}
+                saved={item.isFavorite}
+                onToggle={() => setSaved(item)}
+              />
+            }
           />
         )}
         refreshing={pulling}
@@ -205,6 +225,11 @@ export function DiscoverScreen() {
       }
     >
       {body()}
+      {toast ? (
+        <View style={styles.toast}>
+          <Toast message={toast.message} tone={toast.tone} />
+        </View>
+      ) : null}
     </Screen>
   );
 }

@@ -1,4 +1,4 @@
-import type { Place, StoreDetail } from '@leftover/shared';
+import type { Place } from '@leftover/shared';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { act, fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import type { ReactNode } from 'react';
@@ -6,6 +6,7 @@ import { Linking, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApiError, apiRequest, NetworkError } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
+import { storeDetail } from '../../../shared/testing/fixtures';
 import { createTestQueryClient, testSafeArea } from '../../../shared/testing/render';
 import { StoreDetailScreen } from './StoreDetailScreen';
 
@@ -17,39 +18,7 @@ const request = apiRequest as jest.Mock;
 
 const home: Place = { label: 'vul. Doroshenka 14', lat: 49.8421, lng: 24.0224 };
 
-const bag = (id: string, title: string, qtyAvailable: number, priceMinor = 14900) => ({
-  id,
-  title,
-  category: 'bakery' as const,
-  priceMinor,
-  originalPriceMinor: 45000,
-  qtyAvailable,
-  pickupStart: '2026-09-29T15:00:00.000Z',
-  pickupEnd: '2026-09-29T16:30:00.000Z',
-});
-
-const crumb: StoreDetail = {
-  store: {
-    id: 's1',
-    name: 'Crumb & Co. Bakery',
-    category: 'bakery',
-    address: 'vul. Doroshenka 32',
-    lat: 49.8393,
-    lng: 24.0325,
-    opensAt: '08:00',
-    closesAt: '20:00',
-    timezone: 'Europe/Kyiv',
-  },
-  distanceKm: 0.8,
-  openStatus: 'open',
-  bags: [
-    bag('b1', 'Bakery surprise bag', 3),
-    bag('b2', 'Sweet box', 2, 10900),
-    bag('b3', 'Bread-only bag', 0, 6900),
-  ],
-  counts: { available: 2, total: 3 },
-  rating: null,
-};
+const crumb = storeDetail();
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
   <SafeAreaProvider initialMetrics={testSafeArea}>
@@ -60,7 +29,11 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 // Opened from Discover, so Back returns there.
 const open = async () => {
   renderRouter(
-    { discover: () => <Text>Discover screen</Text>, 'store/[id]': StoreDetailScreen },
+    {
+      discover: () => <Text>Discover screen</Text>,
+      'store/[id]': StoreDetailScreen,
+      'reserve/[bagId]': () => <Text>Reserve screen</Text>,
+    },
     { initialUrl: '/discover', wrapper: Wrapper },
   );
   const { router } = jest.requireActual('expo-router');
@@ -116,7 +89,14 @@ describe('StoreDetailScreen', () => {
   });
 
   it('shows the average and count once rated', async () => {
-    request.mockResolvedValue({ ...crumb, rating: { average: 4.7, count: 128 } });
+    request.mockResolvedValue({
+      ...crumb,
+      rating: {
+        average: 4.7,
+        count: 128,
+        aspects: { quality: 4.8, variety: null, freshness: 4.9, ease: 4.6 },
+      },
+    });
     await open();
     expect(await screen.findByText('Ratings')).toBeOnTheScreen();
     expect(screen.getAllByText('128 ratings').length).toBeGreaterThan(0);
@@ -147,5 +127,57 @@ describe('StoreDetailScreen', () => {
     expect(await screen.findByText('Couldn’t load this shop')).toBeOnTheScreen();
     fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
     expect(await screen.findByText('Crumb & Co. Bakery')).toBeOnTheScreen();
+  });
+
+  it('shows per-aspect bars and recent reviews once rated', async () => {
+    request.mockResolvedValue({
+      ...crumb,
+      rating: {
+        average: 4.7,
+        count: 3,
+        aspects: { quality: 4.8, variety: null, freshness: 4.9, ease: null },
+      },
+      recentReviews: [
+        {
+          id: 'r1',
+          authorName: 'Mariana',
+          overall: 5,
+          text: 'Lovely value.',
+          createdAt: '2026-09-27T10:00:00.000Z',
+        },
+      ],
+    });
+    await open();
+    expect(await screen.findByLabelText('Quality 4.8 out of 5')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Freshness 4.9 out of 5')).toBeOnTheScreen();
+    expect(screen.queryByText('Variety')).toBeNull();
+    expect(screen.getByText('Recent reviews')).toBeOnTheScreen();
+    expect(screen.getByText('Mariana')).toBeOnTheScreen();
+    expect(screen.getByText('Lovely value.')).toBeOnTheScreen();
+  });
+
+  it('opens Reserve for an available bag', async () => {
+    request.mockResolvedValue(crumb);
+    await open();
+    fireEvent.press(await screen.findByRole('button', { name: /^Sweet box/ }));
+    expect(await screen.findByText('Reserve screen')).toBeOnTheScreen();
+    expect(screen).toHavePathname('/reserve/b2');
+    expect(screen).toHaveSearchParams({ bagId: 'b2', storeId: 's1' });
+  });
+
+  it('saves the shop with the heart in the header', async () => {
+    let saved = false;
+    request.mockImplementation(async (path: string, options: { method?: string }) => {
+      if (path.startsWith('/favorites/')) {
+        saved = options.method === 'PUT';
+        return undefined;
+      }
+      return { ...crumb, isFavorite: saved };
+    });
+    await open();
+    await act(async () => {
+      fireEvent.press(await screen.findByRole('button', { name: 'Save Crumb & Co. Bakery' }));
+    });
+    expect(await screen.findByRole('button', { name: 'Unsave Crumb & Co. Bakery' })).toBeSelected();
   });
 });

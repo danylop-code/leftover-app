@@ -40,4 +40,10 @@ export const styles = StyleSheet.create({
     color: color.textSecondary,
   },
   centered: { flex: 1, justifyContent: 'center' },
+  toast: {
+    position: 'absolute',
+    left: layout.screenMargin,
+    right: layout.screenMargin,
+    bottom: space[4],
+  },
 });

@@ -1,6 +1,5 @@
-import { SignedInPlaceholderScreen } from '../../../src/features/auth/screens/SignedInPlaceholderScreen';
+import { ProfileScreen } from '../../../src/features/profile/screens/ProfileScreen';
 
-// Placeholder until its feature lands (see SignedInPlaceholderScreen).
 export default function ProfileRoute() {
-  return <SignedInPlaceholderScreen screen="profile" />;
+  return <ProfileScreen />;
 }
