@@ -30,7 +30,7 @@ import { AddressCard } from '../components/AddressCard/AddressCard';
 import { RatingsCard } from '../components/RatingsCard/RatingsCard';
 import { ReviewCard } from '../components/ReviewCard/ReviewCard';
 import { StoreBagRow } from '../components/StoreBagRow/StoreBagRow';
-import { backPosition, STAR_SIZE, styles } from './styles';
+import { backPosition, STAR_SIZE, useStyles } from './styles';
 
 const statusKey: Record<OpenStatus, 'openToday' | 'opensLater' | 'opensTomorrow'> = {
   open: 'openToday',
@@ -43,6 +43,7 @@ const statusKey: Record<OpenStatus, 'openToday' | 'opensLater' | 'opensTomorrow'
  * today's bags (sold-out ones dimmed). Ratings appear once the shop has some (13).
  */
 export function StoreDetailScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();

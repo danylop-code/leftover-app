@@ -16,10 +16,11 @@ import {
 import { useDeleteBag, useSaveBag } from '../api/use-bag-mutations';
 import { useShopBags } from '../api/use-shop-bags';
 import { BagForm, type BagFormErrors } from '../components/BagForm/BagForm';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 /** AddBag artboard, for adding (`/bag/new`) and editing (`/bag/[id]`) a bag. */
 export function BagFormScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id?: string }>();

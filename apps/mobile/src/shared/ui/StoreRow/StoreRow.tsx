@@ -3,7 +3,7 @@ import { Pressable, Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../constants/ui';
 import { Icon } from '../icons';
 import { StoreLogo } from '../StoreLogo/StoreLogo';
-import { chevronColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   storeId: string;
@@ -19,6 +19,7 @@ type Props = {
 
 /** Store summary row (`.store-row`): logo, name, meta, chevron. */
 export function StoreRow({ storeId, name, meta, onPress, trailing }: Props) {
+  const { chevronColor, styles } = useStyles();
   const inner = (
     <>
       <StoreLogo id={storeId} name={name} />

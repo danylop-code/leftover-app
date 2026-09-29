@@ -1,10 +1,11 @@
 import Svg from 'react-native-svg';
 import { ICON_VIEWBOX, icons } from '../icons/glyphs';
 import { ShapeList } from '../icons/ShapeList';
-import { offline } from './styles';
+import { useStyles } from './styles';
 
 /** The large crossed-out wifi glyph on error states (`.empty-art.is-danger`). */
 export function OfflineArt() {
+  const { offline } = useStyles();
   return (
     <Svg
       width={offline.size}

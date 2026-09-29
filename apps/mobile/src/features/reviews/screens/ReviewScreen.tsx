@@ -19,7 +19,7 @@ import {
   Textarea,
 } from '../../../shared/ui';
 import { useSubmitReview } from '../api/use-submit-review';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Aspects = Partial<Record<ReviewAspect, number>>;
 
@@ -32,6 +32,7 @@ const isStarValue = (v: string | undefined): v is (typeof STAR_VALUES)[number] =
  * from Collected (with the tapped stars preselected) or from a past order.
  */
 export function ReviewScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ orderId: string; overall?: string }>();

@@ -26,7 +26,7 @@ import {
 import { useNearbyBags } from '../api/use-nearby-bags';
 import { BagCardSkeleton } from '../components/BagCardSkeleton/BagCardSkeleton';
 import { LocationPill } from '../components/LocationPill/LocationPill';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 const skeletons = Array.from({ length: DISCOVER_SKELETON_CARDS }, (_, i) => i);
 
@@ -35,6 +35,7 @@ const skeletons = Array.from({ length: DISCOVER_SKELETON_CARDS }, (_, i) => i);
  * loading (DiscoverLoading), empty (DiscoverEmpty) and error (DiscoverError) states.
  */
 export function DiscoverScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const selected = useLocation((s) => s.selected);

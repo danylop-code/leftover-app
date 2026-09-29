@@ -1,10 +1,11 @@
 import { View } from 'react-native';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { value: number; label: string };
 
 /** Thin progress track (`.progress`); `value` is 0–1. */
 export function ProgressBar({ value, label }: Props) {
+  const { styles } = useStyles();
   const clamped = Math.min(1, Math.max(0, value));
   const percent = Math.round(clamped * 100);
   return (

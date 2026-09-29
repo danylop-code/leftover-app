@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import { useAddressSuggestions } from '../../api/use-address-suggestions';
 import { Input } from '../Field/Input';
 import { PlaceRow } from '../PlaceRow/PlaceRow';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   value: string;
@@ -23,6 +23,7 @@ type Props = {
  * lays out the same suggestions as a full screen.
  */
 export function AddressAutocomplete({ value, onChangeText, onSelect, near, placeholder }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const [chosen, setChosen] = useState<string | null>(null);
   // Closed once a suggestion is chosen, until the text changes again (no search for it).

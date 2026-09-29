@@ -32,7 +32,7 @@ import {
   stockTone,
 } from '../../../shared/ui';
 import { useCreateOrder } from '../api/use-create-order';
-import { clockColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Failure = 'soldOut' | 'notAvailable';
 
@@ -42,6 +42,7 @@ type Failure = 'soldOut' | 'notAvailable';
  * available bags are offered instead.
  */
 export function ReserveScreen() {
+  const { clockColor, styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const { bagId, storeId } = useLocalSearchParams<{ bagId: string; storeId: string }>();

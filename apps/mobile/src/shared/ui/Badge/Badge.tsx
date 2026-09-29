@@ -1,12 +1,13 @@
 import { Text, View } from 'react-native';
-import { styles, tones } from './styles';
+import { useStyles } from './styles';
 
-export type BadgeTone = keyof typeof tones;
+export type BadgeTone = keyof ReturnType<typeof useStyles>['tones'];
 
 type Props = { label: string; tone: BadgeTone; onSunken?: boolean };
 
 /** Status/stock pill. Stock tones (stock, low, out) carry a dot. */
 export function Badge({ label, tone, onSunken }: Props) {
+  const { styles, tones } = useStyles();
   const { bg, fg, dot } = tones[tone];
   return (
     <View style={[styles.base, { backgroundColor: bg }, onSunken && styles.onSunken]}>

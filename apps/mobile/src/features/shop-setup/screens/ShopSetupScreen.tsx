@@ -19,7 +19,7 @@ import {
 } from '../../../shared/ui';
 import { useCreateStore } from '../api/use-create-store';
 import { CategoryPicker } from '../components/CategoryPicker/CategoryPicker';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type FieldName = 'name' | 'category' | 'address' | 'opensAt' | 'closesAt' | 'pin';
 type Errors = Partial<Record<FieldName, string>>;
@@ -27,6 +27,7 @@ type PinStatus = 'none' | 'found' | 'moved';
 
 /** Not in the design: built from the kit after Register when the role is shop (brief 04). */
 export function ShopSetupScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const createStore = useCreateStore();
   const logout = useLogout();

@@ -7,7 +7,9 @@
     "range": "{{start}}–{{end}}",
     "minutes": "{{minutes}} min",
     "hours": "{{hours}} h",
-    "hoursMinutes": "{{hours}} h {{minutes}} min"
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "discount": "−{{pct}}%",
+    "longDay": "{{weekday}}, {{day}} {{month}}"
   },
   "ui": {
     "back": "Back",
@@ -447,7 +449,7 @@
       "title": "Use 3–60 characters.",
       "description": "Keep it under 200 characters.",
       "category": "Pick a category.",
-      "price": "Enter an amount, e.g. 149.",
+      "price": "Enter an amount, e.g. {{example}}.",
       "saleBelow": "The sale price must be below the original price.",
       "time": "Use HH:mm, e.g. 18:00.",
       "windowLength": "Make the window at least 30 minutes.",
@@ -493,7 +495,6 @@
     "saved": "saved so far",
     "preferences": "Preferences",
     "language": "Language",
-    "languageValue": "English",
     "pickupArea": "Pickup area",
     "pickupAreaValue": "{{label}} · {{km}} km",
     "help": "Help",
@@ -510,7 +511,10 @@
       "save": "Save",
       "error": "Enter your first name (up to 40 characters)."
     },
-    "report": "Report a problem"
+    "report": "Report a problem",
+    "languageSheet": {
+      "title": "Language"
+    }
   },
   "report": {
     "title": "Report a problem",
@@ -552,6 +556,20 @@
     "error": {
       "title": "Couldn’t load your saved shops",
       "retry": "Try again"
+    }
+  },
+  "money": {
+    "amount": {
+      "OMR": "OMR {{amount}}",
+      "UAH": "₴{{amount}}"
+    },
+    "symbol": {
+      "OMR": "OMR",
+      "UAH": "₴"
+    },
+    "example": {
+      "OMR": "1.500",
+      "UAH": "149"
     }
   }
 }

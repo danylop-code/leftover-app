@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { formatDay, formatDistance, formatTime, formatWindow } from '../../../../shared/lib/format';
 import { Badge, Button, OrderCard, Stars } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   order: OrderDetail;
@@ -14,6 +14,7 @@ type Props = {
 
 /** One order on My orders: current ones lead to the code; past ones to a review. */
 export function MyOrderCard({ order, from, onOpen, onReview }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const { store, bag, displayStatus } = order;
   const totalMinor = order.unitPriceMinor * order.qty;

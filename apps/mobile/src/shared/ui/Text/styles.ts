@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
-import { typography } from '../../theme';
+import { makeStyles } from '../../theme';
 
-export const styles = StyleSheet.create(typography);
+export const useStyles = makeStyles(({ typography, sheet }) => {
+  const styles = sheet(typography);
+  return { styles };
+});

@@ -1,10 +1,11 @@
 import { Text, View } from 'react-native';
-import { styles, tones } from './styles';
+import { useStyles } from './styles';
 
-type Props = { value: string; label: string; tone?: keyof typeof tones };
+type Props = { value: string; label: string; tone?: keyof ReturnType<typeof useStyles>['tones'] };
 
-/** A number over a caption on a tinted tile ("2 bags live now", "₴3,480 saved so far"). */
+/** A number over a caption on a tinted tile ("2 bags live now", "OMR 12.500 saved so far"). */
 export function StatTile({ value, label, tone = 'primary' }: Props) {
+  const { styles, tones } = useStyles();
   const t = tones[tone];
   return (
     <View

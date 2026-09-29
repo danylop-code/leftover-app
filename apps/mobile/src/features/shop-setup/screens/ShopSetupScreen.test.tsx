@@ -95,7 +95,7 @@ describe('ShopSetupScreen', () => {
     await pickAddress();
     expect(request).toHaveBeenCalledWith(
       '/geo/autocomplete',
-      expect.objectContaining({ query: { q: 'Dorosh', lat: 49.8397, lng: 24.0297 } }),
+      expect.objectContaining({ query: { q: 'Dorosh', lat: 49.8397, lng: 24.0297, lang: 'en' } }),
     );
     expect(screen.getByLabelText('Address')).toHaveProp('value', 'vul. Doroshenka 32');
     expect(marker()).toHaveProp('coordinate', { latitude: 49.8393, longitude: 24.0325 });
@@ -122,6 +122,7 @@ describe('ShopSetupScreen', () => {
     expect(saveCalls()[0]?.[1].body).toMatchObject({ lat: 49.84, lng: 24.03 });
   });
 
+  // No timezone in the body: the API gives a new shop the market's (brief 21).
   it('saves the profile and records the new shop on the session', async () => {
     serve({
       id: 's1',
@@ -151,7 +152,6 @@ describe('ShopSetupScreen', () => {
           lng: 24.0325,
           opensAt: '08:00',
           closesAt: '20:00',
-          timezone: 'Europe/Kyiv',
         },
       }),
     );

@@ -5,10 +5,10 @@ import { Platform, Pressable, Text } from 'react-native';
 import { dateForTime, timeOfDate } from '../../lib/time-of-day';
 import { Button } from '../Button/Button';
 import { useFieldContext } from '../Field/field-context';
-import { iconColor, inputStyles } from '../Field/styles';
+import { useStyles as useFieldStyles } from '../Field/styles';
 import { Icon } from '../icons';
 import { Sheet } from '../Sheet/Sheet';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   /** `HH:mm`, or '' when not chosen yet. */
@@ -22,6 +22,8 @@ type Props = {
  * <Field>, which gives it its label and error state.
  */
 export function TimeField({ value, onChange }: Props) {
+  const { styles } = useStyles();
+  const { iconColor, inputStyles } = useFieldStyles();
   const { t } = useTranslation();
   const { label, invalid } = useFieldContext();
   const [open, setOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { Pressable, View } from 'react-native';
-import { styles, switchHitSlop } from './styles';
+import { switchHitSlop, useStyles } from './styles';
 
 type Props = {
   value: boolean;
@@ -9,6 +9,7 @@ type Props = {
 };
 
 export function Switch({ value, onValueChange, label, disabled }: Props) {
+  const { styles } = useStyles();
   return (
     <Pressable
       accessibilityRole="switch"

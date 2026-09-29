@@ -15,9 +15,9 @@ Food-rescue marketplace: stores list surplus "bags" at a discount; nearby custom
 
 ## Run the app (demo on a computer)
 1. `pnpm dev:api` (http://localhost:8787) — applies pending local migrations, then serves; keep it running.
-2. `pnpm --filter @leftover/api db:seed:local` — once, then again to refresh pickup windows or after pulling a new migration.
+2. `pnpm --filter @leftover/api db:seed:oman` — once, then again to refresh pickup windows or after pulling a new migration. (The market is Oman by default; for the Lviv seed set `MARKET` in `apps/api/wrangler.jsonc` and `EXPO_PUBLIC_MARKET` to `UA` and run `db:seed:local`.)
 3. `pnpm dev:mobile`, then press `i` (iOS Simulator, iOS 26 device) or `a` (Android emulator: `EXPO_PUBLIC_API_URL=http://10.0.2.2:8787`).
-Demo logins (password `leftover24`): customer `olena@seed.leftover.app`; shops `crumb@`, `kasha@`, `zelena@`, `morning@`, `greenrow@seed.leftover.app`. Web: `pnpm dev:web` (Chrome; the API allows `localhost:8081`). Run traps are in `gotchas.md`.
+Demo logins (password `leftover24`) — Muscat seed: customer `aisha@seed.leftover.app`; shops `qurum@`, `khuwair@`, `shatti@`, `qahwa@`, `ruwi@seed.leftover.app`. Lviv seed: customer `olena@`; shops `crumb@`, `kasha@`, `zelena@`, `morning@`, `greenrow@seed.leftover.app`. Language: Profile → Language (English / العربية). Web: `pnpm dev:web` (Chrome; the API allows `localhost:8081`). Run traps are in `gotchas.md`.
 
 ## Workflow (every feature)
 1. Brief: copy `docs/features/_template.md` → `docs/features/<feature>.md`; fill Plan; mark FROZEN when starting.

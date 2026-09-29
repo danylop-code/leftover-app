@@ -2,6 +2,7 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import { Text } from 'react-native';
 import { apiRequest } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
+import { usePreferences } from '../../../shared/store/preferences';
 import { useSession } from '../../../shared/store/session';
 import { customer, shopOwnerUser } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
@@ -50,6 +51,19 @@ describe('ProfileScreen', () => {
     expect(screen.getByRole('button', { name: 'Pickup area, Lviv · 5 km' })).toBeOnTheScreen();
     expect(screen.queryByText('Notifications')).toBeNull();
     expect(screen.getByText('English')).toBeOnTheScreen();
+  });
+
+  it('switches to Arabic from Language and back to English, remembering the choice', async () => {
+    useSession.setState({ status: 'signedIn', token: 'tok', user: customer });
+    await open();
+    fireEvent.press(screen.getByRole('button', { name: 'Language, English' }));
+    fireEvent.press(await screen.findByRole('radio', { name: 'العربية' }));
+    expect(await screen.findByText('الحساب')).toBeOnTheScreen();
+    expect(usePreferences.getState().language).toBe('ar');
+    fireEvent.press(screen.getByRole('button', { name: 'اللغة، العربية' }));
+    fireEvent.press(await screen.findByRole('radio', { name: 'English' }));
+    expect(await screen.findByText('Profile')).toBeOnTheScreen();
+    expect(usePreferences.getState().language).toBe('en');
   });
 
   it('Pickup area opens Location, and the row follows the new choice', async () => {

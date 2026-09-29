@@ -11,7 +11,7 @@ import { Icon } from '../icons';
 import { Price } from '../Price/Price';
 import { Star } from '../Stars/Star';
 import { StoreLogo } from '../StoreLogo/StoreLogo';
-import { metaIconColor, STAR_SIZE, styles } from './styles';
+import { STAR_SIZE, useStyles } from './styles';
 
 type Props = {
   title: string;
@@ -34,6 +34,7 @@ type Props = {
 
 /** Discover card (`.bag-card`): the whole card is one tap target; the save button sits on top. */
 export function BagCard(props: Props) {
+  const { metaIconColor, styles } = useStyles();
   const { t } = useTranslation();
   const window = formatWindow(props.pickupStart, props.pickupEnd, props.timezone);
   const stock =

@@ -1,6 +1,8 @@
-import { StyleSheet } from 'react-native';
-import { color } from '../../theme';
+import { makeStyles } from '../../theme';
 
-export const styles = StyleSheet.create({
-  block: { backgroundColor: color.surfaceSunken, borderRadius: 6 },
+export const useStyles = makeStyles(({ color, sheet }) => {
+  const styles = sheet({
+    block: { backgroundColor: color.surfaceSunken, borderRadius: 6 },
+  });
+  return { styles };
 });

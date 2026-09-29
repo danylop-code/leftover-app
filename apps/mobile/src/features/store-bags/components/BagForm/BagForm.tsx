@@ -10,8 +10,8 @@ import {
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
-import { CURRENCY_SYMBOL } from '../../../../shared/constants/money';
-import { formatDiscount } from '../../../../shared/lib/format';
+import { activeMarket } from '../../../../shared/constants/market';
+import { currencySymbol, formatDiscount } from '../../../../shared/lib/format';
 import { moneyInputText, parseMoneyInput } from '../../../../shared/lib/money-input';
 import { isoAtLocalTime, localTimeOf } from '../../../../shared/lib/zoned-time';
 import {
@@ -27,7 +27,7 @@ import {
   Textarea,
   TimeField,
 } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type FieldName =
   | 'title'
@@ -66,6 +66,7 @@ export function BagForm({
   onSave,
   onDelete,
 }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const [title, setTitle] = useState(initial?.title ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
@@ -92,8 +93,11 @@ export function BagForm({
     const next: BagFormErrors = {};
     if (!TimeOfDay.safeParse(from).success) next.from = t('bagForm.errors.time');
     if (!TimeOfDay.safeParse(until).success) next.until = t('bagForm.errors.time');
-    if (originalMinor === null) next.originalPrice = t('bagForm.errors.price');
-    if (saleMinor === null) next.salePrice = t('bagForm.errors.price');
+    const priceError = t('bagForm.errors.price', {
+      example: t(`money.example.${activeMarket().currency.code}`),
+    });
+    if (originalMinor === null) next.originalPrice = priceError;
+    if (saleMinor === null) next.salePrice = priceError;
     const today = new Date();
     const pickupStart = next.from ? '' : isoAtLocalTime(from, today, timezone);
     const pickupEnd = next.until ? '' : isoAtLocalTime(until, today, timezone);
@@ -158,7 +162,7 @@ export function BagForm({
           <View style={styles.half}>
             <Field label={t('bagForm.originalPrice')} error={shown.originalPrice}>
               <Input
-                prefix={CURRENCY_SYMBOL}
+                prefix={currencySymbol()}
                 value={original}
                 onChangeText={setOriginal}
                 keyboardType="decimal-pad"
@@ -168,7 +172,7 @@ export function BagForm({
           <View style={styles.half}>
             <Field label={t('bagForm.salePrice')} error={shown.salePrice}>
               <Input
-                prefix={CURRENCY_SYMBOL}
+                prefix={currencySymbol()}
                 value={sale}
                 onChangeText={setSale}
                 keyboardType="decimal-pad"

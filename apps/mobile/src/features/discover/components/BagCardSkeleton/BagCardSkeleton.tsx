@@ -1,11 +1,12 @@
 import { View } from 'react-native';
 import { Skeleton } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { compact?: boolean };
 
 /** DiscoverLoading's placeholder card; `compact` is the shorter second card. */
 export function BagCardSkeleton({ compact }: Props) {
+  const { styles } = useStyles();
   return (
     <View
       style={styles.card}

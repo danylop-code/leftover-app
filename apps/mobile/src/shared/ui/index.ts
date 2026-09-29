@@ -11,6 +11,7 @@ export { Button } from './Button/Button';
 export { CategoryMedia } from './CategoryMedia/CategoryMedia';
 export { Chip } from './Chip/Chip';
 export { ChipRow } from './Chip/ChipRow';
+export { ChoiceList } from './ChoiceList/ChoiceList';
 export { EmptyState } from './EmptyState/EmptyState';
 export { FavoriteButton } from './FavoriteButton/FavoriteButton';
 export { Field } from './Field/Field';

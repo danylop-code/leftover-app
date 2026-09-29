@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { formatMoney, formatTime, formatTimeRange } from '../../../../shared/lib/format';
 import { Badge } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { order: StoreOrder; timezone: string; last?: boolean };
 
 /** A line in "To collect": who, what, when, status and amount. */
 export function StoreOrderRow({ order, timezone, last }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const done = order.displayStatus === 'collected';
   const badge = done ? (

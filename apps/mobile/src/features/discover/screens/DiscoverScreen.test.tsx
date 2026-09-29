@@ -8,7 +8,7 @@ import { ApiError, apiRequest, NetworkError } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
 import { nearbyBag } from '../../../shared/testing/fixtures';
 import { createTestQueryClient, testSafeArea } from '../../../shared/testing/render';
-import { tones } from '../../../shared/ui/Badge/styles';
+import { color } from '../../../shared/theme';
 import { DiscoverScreen } from './DiscoverScreen';
 
 jest.mock('../../../shared/api/client', () => ({
@@ -93,8 +93,8 @@ describe('DiscoverScreen', () => {
   it('marks a last-bag stock in the low-stock style', async () => {
     serve([crumb, kasha]);
     open();
-    expect(await screen.findByText('1 left')).toHaveStyle({ color: tones.low.fg });
-    expect(screen.getByText('3 left')).toHaveStyle({ color: tones.stock.fg });
+    expect(await screen.findByText('1 left')).toHaveStyle({ color: color.accentPressed });
+    expect(screen.getByText('3 left')).toHaveStyle({ color: color.textPrimary });
   });
 
   it('filters by category, and the count follows the filter', async () => {

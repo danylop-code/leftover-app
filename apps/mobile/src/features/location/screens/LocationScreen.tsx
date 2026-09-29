@@ -11,13 +11,14 @@ import { Banner, Button, Icon, IconButton, MapPicker } from '../../../shared/ui'
 import { PlaceSummary } from '../components/PlaceSummary/PlaceSummary';
 import { RadiusField } from '../components/RadiusField/RadiusField';
 import { useCurrentPosition } from '../hooks/use-current-position';
-import { locateColor, searchIconColor, sheetPadding, styles, topPadding } from './styles';
+import { sheetPadding, topPadding, useStyles } from './styles';
 
 /**
  * Location artboard: full-screen map with the pin and radius circle, a search pill, and the
  * "Where should we look?" sheet. Edits a draft; "Show results" makes it the search area.
  */
 export function LocationScreen() {
+  const { locateColor, searchIconColor, styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();

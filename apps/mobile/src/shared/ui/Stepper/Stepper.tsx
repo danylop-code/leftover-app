@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { Icon, type IconName } from '../icons';
-import { buttonHitSlop, iconColor, styles } from './styles';
+import { buttonHitSlop, useStyles } from './styles';
 
 type Props = {
   value: number;
@@ -15,6 +15,7 @@ type Props = {
 type StepProps = { icon: IconName; label: string; disabled: boolean; onPress: () => void };
 
 function StepButton({ icon, label, disabled, onPress }: StepProps) {
+  const { iconColor, styles } = useStyles();
   return (
     <Pressable
       accessibilityRole="button"
@@ -32,6 +33,7 @@ function StepButton({ icon, label, disabled, onPress }: StepProps) {
 
 /** Integer stepper; each button disables at its bound so the value never leaves [min, max]. */
 export function Stepper({ value, min, max, onChange, decreaseLabel, increaseLabel }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const atMin = value <= min;
   const atMax = value >= max;

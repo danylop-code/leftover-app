@@ -2,6 +2,7 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import { Text } from 'react-native';
 import { ApiError, apiRequest, NetworkError } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
+import { usePreferences } from '../../../shared/store/preferences';
 import { storeBag, storeDetail } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
 import { ReserveScreen } from './ReserveScreen';
@@ -56,6 +57,35 @@ describe('ReserveScreen', () => {
     more();
     expect(screen.getByText('You save ₴602')).toBeOnTheScreen();
     expect(submitButton()).toHaveAccessibleName('Reserve for ₴298');
+  });
+
+  describe('in Oman, in Arabic (brief 21)', () => {
+    beforeEach(() => {
+      process.env.EXPO_PUBLIC_MARKET = 'OM';
+      usePreferences.getState().setLanguage('ar');
+    });
+    afterEach(() => {
+      process.env.EXPO_PUBLIC_MARKET = 'UA';
+    });
+
+    it('totals 2 × OMR 1.500 (was 4.000) as 3.000 and saves 5.000, in Arabic', async () => {
+      const bag = {
+        ...storeBag('b1', 'Bakery surprise bag', 3),
+        priceMinor: 1500,
+        originalPriceMinor: 4000,
+      };
+      serve(storeDetail({ bags: [bag] }));
+      renderRouter(
+        { 'reserve/[bagId]': ReserveScreen },
+        { initialUrl: '/reserve/b1?storeId=s1', ...routerProviders() },
+      );
+      expect(await screen.findByText('احجز كيسًا')).toBeOnTheScreen();
+      await screen.findByText('Bakery surprise bag');
+      fireEvent.press(screen.getByRole('button', { name: 'أكياس أكثر' }));
+      expect(screen.getByText('توفّر 5.000 ر.ع.')).toBeOnTheScreen();
+      expect(screen.getByRole('button', { name: 'احجز مقابل 3.000 ر.ع.' })).toBeOnTheScreen();
+      expect(screen.getByText('ادفع في المتجر')).toBeOnTheScreen();
+    });
   });
 
   it('caps the quantity at what’s left (3), or at 5 per order', async () => {

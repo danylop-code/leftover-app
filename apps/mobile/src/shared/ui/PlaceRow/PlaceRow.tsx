@@ -4,7 +4,7 @@ import { SINGLE_LINE } from '../../constants/ui';
 import { formatDistance } from '../../lib/format';
 import { splitMatch } from '../../lib/highlight';
 import { Icon } from '../icons';
-import { iconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   place: Place;
@@ -19,6 +19,7 @@ type Props = {
 
 /** An address in a list (LocationSearch, address autocomplete): label, locality, distance. */
 export function PlaceRow({ place, onPress, icon = 'pin', query = '', distanceKm, last }: Props) {
+  const { iconColor, styles } = useStyles();
   const distance = distanceKm === undefined ? undefined : formatDistance(distanceKm);
   const name = [place.label, place.secondary, distance].filter(Boolean).join(', ');
   return (

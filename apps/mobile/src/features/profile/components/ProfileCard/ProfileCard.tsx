@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../../../shared/constants/ui';
 import { formatMoney } from '../../../../shared/lib/format';
 import { IconButton, StatTile } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { user: Me; stats?: MeStats; onEdit: () => void };
 
@@ -12,6 +12,7 @@ const initials = (name: string) => name.trim().charAt(0).toUpperCase();
 
 /** Who's signed in, and (for customers) their impact so far. */
 export function ProfileCard({ user, stats, onEdit }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.card}>

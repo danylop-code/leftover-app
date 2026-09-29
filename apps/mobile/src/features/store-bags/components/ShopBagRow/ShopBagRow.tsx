@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../../../shared/constants/ui';
 import { Badge, CategoryMedia, Price, Switch, stockTone } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { bag: ShopBag; onEdit: () => void; onToggle: (isActive: boolean) => void };
 
 /** A bag on My bags: tap to edit, switch to pause or resume. */
 export function ShopBagRow({ bag, onEdit, onToggle }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const soldOut = bag.qtyAvailable <= 0;
   const badge = !bag.isActive ? (

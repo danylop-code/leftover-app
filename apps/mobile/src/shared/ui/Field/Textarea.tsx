@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { TextInput, type TextInputProps } from 'react-native';
 import { useFieldContext } from './field-context';
-import { inputStyles, placeholderColor } from './styles';
+import { useStyles } from './styles';
 
 type Props = Omit<TextInputProps, 'style' | 'multiline'>;
 
 /** Multi-line input; pair with <Field count maxCount> for the counter. */
 export function Textarea({ onFocus, onBlur, ...rest }: Props) {
+  const { inputStyles, placeholderColor } = useStyles();
   const { label, invalid } = useFieldContext();
   const [focused, setFocused] = useState(false);
   return (

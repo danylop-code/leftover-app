@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { CODE_LENGTH } from '../../../../shared/constants/orders';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   value: string;
@@ -23,6 +23,7 @@ const digitsOnly = (text: string) => text.replace(/\D/g, '');
  * goes back, and pasting a whole code fills them all.
  */
 export function CodeInput({ value, onChange, invalid }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const refs = useRef<(TextInput | null)[]>([]);
 

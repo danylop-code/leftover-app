@@ -5,7 +5,7 @@ import { SINGLE_LINE } from '../../constants/ui';
 import { CategoryMedia } from '../CategoryMedia/CategoryMedia';
 import { Icon } from '../icons';
 import { Price } from '../Price/Price';
-import { metaIconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   title: string;
@@ -25,6 +25,7 @@ type Props = {
 
 /** Compact bag row (`.bag-row`, media 88). Sold-out rows are dimmed and not pressable. */
 export function BagRow(props: Props) {
+  const { metaIconColor, styles } = useStyles();
   const inner = (
     <>
       <CategoryMedia category={props.category} variant="row" />

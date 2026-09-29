@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../../../shared/constants/ui';
 import { Icon } from '../../../../shared/ui';
-import { chevronColor, pinColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { label: string; radiusKm: number; onPress: () => void };
 
 /** `.loc-pill`: where Discover looks, and how far. Opens Location. */
 export function LocationPill({ label, radiusKm, onPress }: Props) {
+  const { chevronColor, pinColor, styles } = useStyles();
   const { t } = useTranslation();
   const km = t('format.km', { value: radiusKm });
   return (

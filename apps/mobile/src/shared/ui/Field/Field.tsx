@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Icon } from '../icons';
 import { FieldContext } from './field-context';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   label: string;
@@ -17,6 +17,7 @@ type Props = {
 
 /** Label + control + help/error line + optional character counter. The error replaces the help. */
 export function Field({ label, children, help, error, optional, count, maxCount }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const invalid = Boolean(error);
   const over = count !== undefined && maxCount !== undefined && count > maxCount;

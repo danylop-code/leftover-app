@@ -1,9 +1,10 @@
 import { Pressable, Text } from 'react-native';
-import { chipHitSlop, styles } from './styles';
+import { chipHitSlop, useStyles } from './styles';
 
 type Props = { label: string; selected?: boolean; onPress?: () => void };
 
 export function Chip({ label, selected = false, onPress }: Props) {
+  const { styles } = useStyles();
   return (
     <Pressable
       accessibilityRole="button"

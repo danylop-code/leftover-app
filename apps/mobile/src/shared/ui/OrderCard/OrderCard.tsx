@@ -5,7 +5,7 @@ import { SINGLE_LINE } from '../../constants/ui';
 import { formatMoney } from '../../lib/format';
 import { Icon } from '../icons';
 import { StoreLogo } from '../StoreLogo/StoreLogo';
-import { metaIconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   storeId: string;
@@ -25,6 +25,7 @@ type Props = {
 
 /** Order summary card (`.order-card`) for Orders current and past. */
 export function OrderCard(props: Props) {
+  const { metaIconColor, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.card}>

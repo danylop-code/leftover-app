@@ -9,7 +9,7 @@ import MapView, {
 } from 'react-native-maps';
 import { METERS_PER_KM } from '../../constants/map';
 import { regionFor } from './map-region';
-import { circle, pinColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   value: LatLng;
@@ -31,6 +31,7 @@ const toLatLng = (c: { latitude: number; longitude: number }): LatLng => ({
  * from outside (e.g. after geocoding). Native only — brief 17 adds a web sibling.
  */
 export function MapPicker({ value, onChange, label, radiusKm, style }: Props) {
+  const { circle, pinColor, styles } = useStyles();
   const ref = useRef<MapView>(null);
   const initialRegion = useRef(regionFor(value, radiusKm)).current;
   const lastEmitted = useRef<LatLng | null>(null);

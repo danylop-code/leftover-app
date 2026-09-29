@@ -1,8 +1,9 @@
 import Svg, { Circle, Path, Rect } from 'react-native-svg';
-import { art } from './styles';
+import { useStyles } from './styles';
 
 /** The smiling bag with a leaf (`.empty-art` on DiscoverEmpty and the other empty states). */
 export function EmptyBagArt() {
+  const { art } = useStyles();
   const { colors, bag } = art;
   const line = { fill: 'none', stroke: colors.ink, strokeWidth: art.stroke } as const;
   return (

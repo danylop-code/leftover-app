@@ -40,7 +40,13 @@
           "isAndroidBackgroundLocationEnabled": false
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-localization",
+        {
+          "supportsRTL": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

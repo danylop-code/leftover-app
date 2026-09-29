@@ -22,13 +22,14 @@ import {
   useTabBarInset,
 } from '../../../shared/ui';
 import { useSavedShops } from '../api/use-saved-shops';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 /**
  * The Saved tab (not in the design): shops the customer hearted, nearest first, with how many
  * bags they have on offer. Tap to open the shop; the heart unsaves.
  */
 export function SavedScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const from = useLocation((s) => s.selected) ?? DEFAULT_MAP_CENTER;

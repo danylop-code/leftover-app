@@ -33,13 +33,13 @@ Requested 2026-09-30: this showcase is for a client in Oman. English stays avail
 - Global list: see [README](README.md#global-out-of-scope-every-brief) (update "languages other than English" when this ships).
 
 ### Acceptance criteria
-- [ ] Given OMR, then 1500 baisa shows as "OMR 1.500" (English) / "1.500 ر.ع." (Arabic), and entering "1.5" in a price field saves 1500.
-- [ ] Given a sale of OMR 1.500 from 4.000 × 2, then the total is OMR 3.000 and "You save OMR 5.000", computed in integer baisa.
-- [ ] Given the language set to Arabic, then every screen is right-to-left with Arabic text, Arabic fonts, and mirrored back arrows; no English strings remain (key-parity test).
-- [ ] Given Arabic, when switching back to English in Profile, then the app returns to English left-to-right after the reload, and the choice survives a restart.
-- [ ] Given a fresh install on a phone set to Arabic, then the app starts in Arabic.
-- [ ] Given the Muscat seed, then Discover near Qurum shows the demo bags with OMR prices and times in `Asia/Muscat`.
-- [ ] Given Arabic plural rules, then counts like "2 bags" / "11 bags" use the correct Arabic forms.
+- [x] Given OMR, then 1500 baisa shows as "OMR 1.500" (English) / "1.500 ر.ع." (Arabic), and entering "1.5" in a price field saves 1500.
+- [x] Given a sale of OMR 1.500 from 4.000 × 2, then the total is OMR 3.000 and "You save OMR 5.000", computed in integer baisa.
+- [x] Given the language set to Arabic, then every screen is right-to-left with Arabic text, Arabic fonts, and mirrored back arrows; no English strings remain (key-parity test).
+- [x] Given Arabic, when switching back to English in Profile, then the app returns to English left-to-right after the reload, and the choice survives a restart.
+- [x] Given a fresh install on a phone set to Arabic, then the app starts in Arabic.
+- [x] Given the Muscat seed, then Discover near Qurum shows the demo bags with OMR prices and times in `Asia/Muscat`.
+- [x] Given Arabic plural rules, then counts like "2 bags" / "11 bags" use the correct Arabic forms.
 
 ### Approach steps
 1. Currency config + money formatting/parsing for 3 decimals, with unit tests (English first).
@@ -57,10 +57,16 @@ Requested 2026-09-30: this showcase is for a client in Oman. English stays avail
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-30
 
 ## Changelog
 - 2026-09-30 — drafted
+- 2026-09-30 — decisions (recommended options, user OK'd continuing): one market per deployment (`MARKET` in `wrangler.jsonc`, `EXPO_PUBLIC_MARKET` in the app, both default `OM`); Western digits; currency follows the language ("OMR 1.500" / "1.500 ر.ع."); IBM Plex Sans Arabic.
+- 2026-09-30 — changed: RTL comes from the root view's `direction` plus expo-router's `LocaleProvider`, not `I18nManager.forceRTL` + reload. The reload doesn't work in Expo Go (the demo runtime); this switches instantly, and on web too. `expo-localization` is configured with `supportsRTL: false` so a dev build never double-flips. `makeStyles`' `sheet()` adds `writingDirection`, mirrors explicit `textAlign` and drops `letterSpacing` in Arabic; styles use `start`/`end`.
+- 2026-09-30 — changed: IBM Plex Sans Arabic for display too. Noto Kufi Arabic was tried: on the iOS Simulator it lost the dots above letters and its tall metrics overlapped the line above.
+- 2026-09-30 — added (needed for fonts per language, reused by 19): a runtime theme — `useTheme()`, `makeStyles((theme) => …)`; every `styles.ts` migrated. `ChoiceList` moved from the report feature into the kit (Profile's language picker uses it).
+- 2026-09-30 — added: `Intl.PluralRules` fallback for en/ar (Hermes may not ship it); `lang` on `/geo/autocomplete` and `/geo/reverse` (Photon `default` = local names for Arabic); new shops get the market's time zone when the body has none.
+- 2026-09-30 — note: `ar.json` is a first draft by the developer; have a native speaker review it before the client sees it. Maestro flows not run in Arabic (they have never been run; see 17/18 notes).

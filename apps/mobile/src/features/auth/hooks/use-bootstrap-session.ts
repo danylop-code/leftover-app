@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from '../../../shared/store/location';
+import { usePreferences } from '../../../shared/store/preferences';
 import { useSession } from '../../../shared/store/session';
 import { useMe } from '../api/use-me';
 
 /**
- * Restores the stored session and search location on launch (no network needed to route),
+ * Restores the stored session, search location and display preferences (language) on launch
+ * (no network needed to route),
  * then refreshes the user from GET /me. An expired or revoked token gets 401 there, which
  * signs out. Returns true once both have been read.
  */
@@ -20,7 +22,10 @@ export const useBootstrapSession = () => {
   }, [hydrate]);
 
   useEffect(() => {
-    Promise.resolve(useLocation.persist.rehydrate()).finally(() => setLocationReady(true));
+    Promise.allSettled([
+      useLocation.persist.rehydrate(),
+      usePreferences.persist.rehydrate(),
+    ]).finally(() => setLocationReady(true));
   }, []);
 
   useEffect(() => {

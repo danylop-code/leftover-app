@@ -1,0 +1,629 @@
+{
+  "format": {
+    "today": "اليوم",
+    "tomorrow": "غدًا",
+    "window": "{{day}} · {{start}}–{{end}}",
+    "km": "{{value}} كم",
+    "range": "{{start}}–{{end}}",
+    "minutes": "{{minutes}} د",
+    "hours": "{{hours}} س",
+    "hoursMinutes": "{{hours}} س {{minutes}} د",
+    "discount": "‪−{{pct}}%‬",
+    "longDay": "{{weekday}}، {{day}} {{month}}"
+  },
+  "ui": {
+    "back": "رجوع",
+    "close": "إغلاق",
+    "field": {
+      "optional": "اختياري",
+      "counter": "{{value}}/{{max}}"
+    },
+    "stepper": {
+      "decrease": "أقل",
+      "increase": "أكثر"
+    },
+    "stars": {
+      "star_zero": "{{count}} نجمة",
+      "star_one": "نجمة واحدة",
+      "star_two": "نجمتان",
+      "star_few": "{{count}} نجوم",
+      "star_many": "{{count}} نجمة",
+      "star_other": "{{count}} نجمة",
+      "outOf": "{{value}} من 5"
+    },
+    "price": {
+      "was": "{{price}}، بدلًا من {{original}}"
+    },
+    "ratingBar": "{{name}} {{value}} من 5",
+    "stock": {
+      "left": "متبقٍ {{count}}",
+      "soldOut": "نفدت الكمية"
+    },
+    "ticket": {
+      "codeLabel": "الرمز {{digits}}"
+    },
+    "pair": "{{label}}، {{value}}",
+    "bagCard": {
+      "label": "{{title}} من {{store}}، {{window}}، {{price}}"
+    },
+    "orderCard": {
+      "item": "{{title}} × {{qty}}"
+    },
+    "status": {
+      "reserved": "محجوز",
+      "ready": "جاهز الآن",
+      "missed": "فات الموعد",
+      "collected": "تم الاستلام",
+      "cancelled": "ملغى"
+    },
+    "favorite": {
+      "save": "حفظ {{name}}",
+      "unsave": "إلغاء حفظ {{name}}",
+      "failed": "تعذّر تحديث متاجرك المحفوظة. حاول مرة أخرى."
+    },
+    "sheet": {
+      "cancel": "ليس الآن"
+    },
+    "time": {
+      "choose": "اختر وقتًا",
+      "done": "تم",
+      "none": "غير محدد",
+      "label": "{{label}}، {{value}}"
+    }
+  },
+  "app": {
+    "name": "leftover"
+  },
+  "errors": {
+    "network": "تعذّر الاتصال. تحقّق من اتصالك وحاول مرة أخرى.",
+    "generic": "حدث خطأ ما. حاول مرة أخرى."
+  },
+  "auth": {
+    "welcome": {
+      "title": "الطعام الجيد يستحق فرصة ثانية.",
+      "body": "احصل على أكياس مفاجآت من فائض اليوم من المتاجر القريبة منك — بسعر أقل بكثير من المعتاد.",
+      "getStarted": "ابدأ الآن",
+      "haveAccount": "لدي حساب بالفعل"
+    },
+    "register": {
+      "title": "انضم إلى Leftover",
+      "subtitle": "أولًا — كيف ستستخدمه؟",
+      "roleLegend": "أنا",
+      "customer": "أنا عميل",
+      "customerHint": "أبحث عن أكياس قريبة",
+      "store": "أدير متجرًا",
+      "storeHint": "أبيع الفائض لدي",
+      "firstName": "الاسم الأول",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "8 أحرف على الأقل",
+      "submit": "إنشاء حساب",
+      "haveAccount": "لديك حساب؟",
+      "login": "تسجيل الدخول"
+    },
+    "login": {
+      "title": "مرحبًا بعودتك",
+      "subtitle": "سجّل الدخول لرؤية طلباتك ومتاجرك المحفوظة.",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "تسجيل الدخول",
+      "newHere": "جديد على Leftover؟",
+      "createAccount": "أنشئ حسابًا",
+      "invalid": "البريد الإلكتروني أو كلمة المرور غير صحيحة."
+    },
+    "showPassword": "إظهار كلمة المرور",
+    "hidePassword": "إخفاء كلمة المرور",
+    "errors": {
+      "email": "أدخل بريدًا إلكترونيًا صالحًا.",
+      "emailTaken": "يوجد حساب بهذا البريد الإلكتروني بالفعل.",
+      "passwordTooShort": "استخدم 8 أحرف على الأقل.",
+      "passwordRequired": "أدخل كلمة المرور.",
+      "firstNameRequired": "أدخل اسمك الأول.",
+      "firstNameTooLong": "استخدم 40 حرفًا أو أقل.",
+      "invalid": "تحقّق من هذا الحقل."
+    }
+  },
+  "tabs": {
+    "discover": "اكتشف",
+    "orders": "الطلبات",
+    "profile": "الحساب",
+    "bags": "الأكياس",
+    "saved": "المحفوظة"
+  },
+  "categories": {
+    "bakery": "مخبوزات",
+    "meals": "وجبات",
+    "groceries": "بقالة",
+    "cafe": "مقهى",
+    "produce": "خضار وفواكه",
+    "other": "أخرى"
+  },
+  "shopSetup": {
+    "title": "أعدّ متجرك",
+    "subtitle": "أخبر العملاء أين يجدونك. يمكنك تغيير ذلك لاحقًا.",
+    "name": "اسم المتجر",
+    "category": "الفئة",
+    "address": "العنوان",
+    "addressPlaceholder": "الشارع والرقم، المدينة",
+    "addressHelp": "ابدأ الكتابة واختر عنوانك، ثم اسحب الدبوس لضبط الموقع.",
+    "found": "وُضع الدبوس على عنوانك — اسحبه لضبط الموقع.",
+    "moved": "تم تحريك الدبوس. يبقى العنوان الذي كتبته كما هو.",
+    "map": "موقع المتجر على الخريطة",
+    "hours": "ساعات العمل",
+    "opensAt": "يفتح الساعة",
+    "closesAt": "يغلق الساعة",
+    "submit": "حفظ ومتابعة",
+    "logout": "تسجيل الخروج",
+    "errors": {
+      "name": "أدخل اسم متجرك (2–60 حرفًا).",
+      "category": "اختر فئة.",
+      "address": "أدخل عنوان الشارع (3–120 حرفًا).",
+      "pin": "اختر عنوانك من الاقتراحات، أو اسحب الدبوس إلى متجرك.",
+      "time": "استخدم الصيغة HH:mm، مثل 08:00.",
+      "closesAfterOpens": "يجب أن يكون وقت الإغلاق بعد وقت الفتح."
+    }
+  },
+  "location": {
+    "title": "أين نبحث؟",
+    "search": "ابحث عن شارع أو مكان",
+    "useCurrent": "استخدم موقعي الحالي",
+    "locating": "جارٍ تحديد موقعك…",
+    "change": "تغيير",
+    "map": "منطقة البحث على الخريطة",
+    "noPlace": "ابحث، أو انقر على الخريطة لاختيار موقع.",
+    "droppedPin": "دبوس مُسقط",
+    "radius": "نطاق البحث",
+    "showResults": "عرض النتائج",
+    "denied": {
+      "title": "الوصول إلى الموقع متوقف",
+      "text": "ابحث عن شارع أو مكان بدلًا من ذلك، أو اسمح لـ Leftover بالوصول إلى الموقع من الإعدادات."
+    },
+    "failed": {
+      "title": "تعذّر تحديد موقعك",
+      "text": "حاول مرة أخرى، أو ابحث عن شارع أو مكان."
+    },
+    "searchScreen": {
+      "field": "ابحث عن عنوان",
+      "clear": "مسح",
+      "suggestions": "اقتراحات",
+      "recent": "الأخيرة",
+      "searching": "جارٍ البحث…",
+      "noResults": "لا توجد نتائج. جرّب اسم شارع أو مكان."
+    }
+  },
+  "discover": {
+    "title": "أنقذ شيئًا لذيذًا",
+    "pickupNear": "الاستلام بالقرب من",
+    "pill": "الاستلام بالقرب من {{label}}، {{km}} كم. تغيير الموقع",
+    "mapView": "عرض الخريطة",
+    "categories": "الفئات",
+    "all": "الكل",
+    "section": "للاستلام اليوم",
+    "count_zero": "لا أكياس",
+    "count_one": "كيس واحد",
+    "count_two": "كيسان",
+    "count_few": "{{count}} أكياس",
+    "count_many": "{{count}} كيسًا",
+    "count_other": "{{count}} كيس",
+    "finding": "جارٍ البحث عن أكياس…",
+    "loading": "جارٍ تحميل الأكياس القريبة منك",
+    "empty": {
+      "title": "لا شيء قريب الآن",
+      "text": "لا توجد أكياس ضمن {{km}} كم بعد. تضيف المتاجر أكياسًا طوال اليوم — جرّب منطقة أوسع.",
+      "textFiltered": "لا توجد أكياس {{noun}} ضمن {{km}} كم بعد. تضيف المتاجر أكياسًا طوال اليوم — جرّب منطقة أوسع.",
+      "changeLocation": "تغيير الموقع",
+      "showAll": "عرض كل الفئات"
+    },
+    "error": {
+      "title": "تعذّر تحميل الأكياس",
+      "offline": "يبدو أنك غير متصل. تحقّق من اتصالك وحاول مرة أخرى.",
+      "server": "حدث خطأ من جهتنا. حاول مرة أخرى بعد قليل.",
+      "retry": "حاول مرة أخرى"
+    },
+    "noun": {
+      "bakery": "مخبوزات",
+      "meals": "وجبات",
+      "groceries": "بقالة",
+      "cafe": "مقهى",
+      "produce": "خضار وفواكه",
+      "other": "أخرى"
+    }
+  },
+  "storeDetail": {
+    "openToday": "مفتوح اليوم {{opens}}–{{closes}}",
+    "opensLater": "مغلق الآن · يفتح الساعة {{opens}}",
+    "opensTomorrow": "مغلق الآن · يفتح غدًا الساعة {{opens}}",
+    "ratingCount_zero": "لا تقييمات",
+    "ratingCount_one": "تقييم واحد",
+    "ratingCount_two": "تقييمان",
+    "ratingCount_few": "{{count}} تقييمات",
+    "ratingCount_many": "{{count}} تقييمًا",
+    "ratingCount_other": "{{count}} تقييم",
+    "away": "على بُعد {{distance}}",
+    "directions": "الاتجاهات",
+    "available": "متاح اليوم",
+    "counts": "{{available}} من {{total}}",
+    "backTomorrow": "يعود غدًا",
+    "bagLabel": "{{title}}، {{window}}، {{stock}}، {{price}}",
+    "soldOutLabel": "{{title}}. نفدت الكمية · يعود غدًا",
+    "noBags": "لا أكياس اليوم. تضيف المتاجر أكياسًا طوال اليوم — عُد لاحقًا.",
+    "ratings": "التقييمات",
+    "notFound": {
+      "title": "هذا المتجر غير متاح",
+      "text": "ربما توقف عن استخدام Leftover. ارجع واختر كيسًا آخر.",
+      "back": "رجوع"
+    },
+    "error": {
+      "title": "تعذّر تحميل هذا المتجر",
+      "offline": "يبدو أنك غير متصل. تحقّق من اتصالك وحاول مرة أخرى.",
+      "server": "حدث خطأ من جهتنا. حاول مرة أخرى بعد قليل.",
+      "retry": "حاول مرة أخرى"
+    },
+    "recentReviews": "أحدث المراجعات",
+    "reviewAgo": "{{ago}}",
+    "aspects": {
+      "quality": "الجودة",
+      "variety": "التنوع",
+      "freshness": "الطزاجة",
+      "ease": "سهولة الاستلام"
+    }
+  },
+  "reserve": {
+    "title": "احجز كيسًا",
+    "quantity": "الكمية",
+    "fewer": "أكياس أقل",
+    "more": "أكياس أكثر",
+    "pickupToday": "الاستلام اليوم",
+    "pickupTomorrow": "الاستلام غدًا",
+    "pickupOn": "الاستلام {{date}}",
+    "where": "{{address}} · {{distance}}",
+    "payTitle": "ادفع في المتجر",
+    "payText": "لا حاجة إلى بطاقة الآن. ادفع نقدًا أو بالبطاقة عند الاستلام.",
+    "total": "المجموع",
+    "save": "توفّر {{amount}}",
+    "submit": "احجز مقابل {{amount}}",
+    "soldOut": {
+      "title": "نفد للتو",
+      "text": "أخذ شخص آخر الكيس الأخير قبل لحظة. لم يُحجز شيء.",
+      "button": "نفدت الكمية",
+      "others": "لا يزال متاحًا هنا",
+      "nearby": "عرض أكياس أخرى قريبة"
+    },
+    "notAvailable": {
+      "title": "لم يعد متاحًا",
+      "text": "أوقف المتجر هذا الكيس مؤقتًا أو انتهى وقت استلامه. لم يُحجز شيء."
+    },
+    "fewerLeft_zero": "لم يتبقَّ شيء الآن.",
+    "fewerLeft_one": "تبقّى كيس واحد فقط الآن — اختر عددًا أقل وحاول مرة أخرى.",
+    "fewerLeft_two": "تبقّى كيسان فقط الآن — اختر عددًا أقل وحاول مرة أخرى.",
+    "fewerLeft_few": "تبقّت {{count}} أكياس فقط الآن — اختر عددًا أقل وحاول مرة أخرى.",
+    "fewerLeft_many": "تبقّى {{count}} كيسًا فقط الآن — اختر عددًا أقل وحاول مرة أخرى.",
+    "fewerLeft_other": "تبقّى {{count}} كيس فقط الآن — اختر عددًا أقل وحاول مرة أخرى.",
+    "missing": {
+      "title": "هذا الكيس غير متاح",
+      "text": "ربما نفد أو أُزيل. ارجع واختر كيسًا آخر."
+    }
+  },
+  "pickup": {
+    "title": "طلب الاستلام",
+    "order": "الطلب {{number}}",
+    "band": "أظهر هذا الرمز عند المحاسب",
+    "summary": "{{qty}} × {{title}} · ادفع {{amount}} في المتجر",
+    "where": "{{address}} · {{distance}}",
+    "opensIn": "يبدأ الاستلام بعد",
+    "readyNow": "جاهز الآن",
+    "readyUntil": "حتى {{time}}",
+    "ended": "انتهى وقت الاستلام",
+    "endedText": "فاتك هذا الحجز. لم يُخصم أي مبلغ.",
+    "progress": "الوقت المتبقي حتى الاستلام",
+    "cancel": "إلغاء الحجز",
+    "cancelNote": "تغيّرت خططك؟ الإلغاء يتيح الكيس لشخص آخر.",
+    "cancelSheet": {
+      "title": "إلغاء هذا الحجز؟",
+      "text": "سيعود الكيس للبيع لشخص آخر. لا يمكن التراجع عن ذلك.",
+      "confirm": "إلغاء الحجز"
+    },
+    "cancelled": {
+      "title": "تم إلغاء الحجز",
+      "text": "ألغيت الحجز الساعة {{time}}. عاد الكيس للبيع."
+    },
+    "cancelFailed": "تعذّر الإلغاء. ربما تم الاستلام أو انتهى الوقت.",
+    "collected": {
+      "title": "بالهناء والعافية!",
+      "text_zero": "استلمت {{count}} كيس من {{store}} الساعة {{time}}.",
+      "text_one": "استلمت كيسًا واحدًا من {{store}} الساعة {{time}}.",
+      "text_two": "استلمت كيسين من {{store}} الساعة {{time}}.",
+      "text_few": "استلمت {{count}} أكياس من {{store}} الساعة {{time}}.",
+      "text_many": "استلمت {{count}} كيسًا من {{store}} الساعة {{time}}.",
+      "text_other": "استلمت {{count}} كيس من {{store}} الساعة {{time}}.",
+      "saved": "وفّرت {{amount}}",
+      "code": "الرمز {{code}} · {{day}}",
+      "rateTitle": "كيف كان الكيس؟",
+      "rateHint": "تقييمك يساعد المتجر والمنقذين الآخرين.",
+      "rateLabel": "قيّم الكيس",
+      "leaveReview": "اكتب مراجعة",
+      "rated": "شكرًا — لقد قيّمت هذا الكيس",
+      "backToDiscover": "العودة إلى اكتشف"
+    },
+    "error": {
+      "title": "تعذّر تحميل هذا الطلب",
+      "notFound": "لم نعثر على هذا الطلب.",
+      "retry": "حاول مرة أخرى",
+      "back": "رجوع"
+    }
+  },
+  "orders": {
+    "title": "طلباتي",
+    "current": "الحالية",
+    "past": "السابقة",
+    "payAtStore": "ادفع في المتجر",
+    "showCode": "أظهر الرمز",
+    "view": "عرض",
+    "leaveReview": "اكتب مراجعة",
+    "youRated": "تقييمك",
+    "cancelledAt": "ألغيت الساعة {{time}}",
+    "missed": "انتهى وقت الاستلام",
+    "pastMeta": "{{store}} · {{day}}",
+    "empty": {
+      "title": "لم تحجز أي كيس بعد",
+      "text": "احجز كيس مفاجآت وسيظهر رمز الاستلام هنا.",
+      "action": "ابحث عن طعام قريب"
+    },
+    "emptyPast": {
+      "title": "لا شيء هنا بعد",
+      "text": "تظهر هنا الطلبات المستلمة والملغاة والفائتة خلال آخر 60 يومًا."
+    },
+    "error": {
+      "title": "تعذّر تحميل طلباتك",
+      "retry": "حاول مرة أخرى"
+    }
+  },
+  "review": {
+    "title": "قيّم الكيس",
+    "subtitle": "{{title}} · {{day}}",
+    "overall": "كيف كان بشكل عام؟",
+    "overallLabel": "التقييم العام",
+    "words": {
+      "1": "مخيّب للآمال",
+      "2": "ليس جيدًا",
+      "3": "مقبول",
+      "4": "جيد جدًا",
+      "5": "رائع"
+    },
+    "details": "قيّم التفاصيل",
+    "aspects": {
+      "quality": "الجودة",
+      "variety": "التنوع",
+      "freshness": "الطزاجة",
+      "ease": "سهولة الاستلام"
+    },
+    "text": "هل من إضافة؟",
+    "textPlaceholder": "ماذا كان في الداخل؟ أي نصائح للمتجر؟",
+    "submit": "إرسال المراجعة",
+    "pickOverall": "اختر عدد النجوم للإرسال.",
+    "failed": "تعذّر إرسال مراجعتك. حاول مرة أخرى.",
+    "already": "لقد راجعت هذا الكيس بالفعل."
+  },
+  "relative": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "days_zero": "اليوم",
+    "days_one": "قبل يوم",
+    "days_two": "قبل يومين",
+    "days_few": "قبل {{count}} أيام",
+    "days_many": "قبل {{count}} يومًا",
+    "days_other": "قبل {{count}} يوم",
+    "weeks_zero": "هذا الأسبوع",
+    "weeks_one": "قبل أسبوع",
+    "weeks_two": "قبل أسبوعين",
+    "weeks_few": "قبل {{count}} أسابيع",
+    "weeks_many": "قبل {{count}} أسبوعًا",
+    "weeks_other": "قبل {{count}} أسبوع",
+    "months_zero": "هذا الشهر",
+    "months_one": "قبل شهر",
+    "months_two": "قبل شهرين",
+    "months_few": "قبل {{count}} أشهر",
+    "months_many": "قبل {{count}} شهرًا",
+    "months_other": "قبل {{count}} شهر"
+  },
+  "storeBags": {
+    "title": "أكياسي",
+    "liveNow_zero": "كيس معروض الآن",
+    "liveNow_one": "كيس معروض الآن",
+    "liveNow_two": "كيس معروض الآن",
+    "liveNow_few": "أكياس معروضة الآن",
+    "liveNow_many": "كيسًا معروضًا الآن",
+    "liveNow_other": "كيس معروض الآن",
+    "reservedToday": "محجوزة اليوم",
+    "leftOf": "متبقٍ {{available}} من {{total}}",
+    "paused": "متوقفة مؤقتًا · {{count}}",
+    "live": "{{title}} معروض",
+    "pausedLabel": "{{title}} متوقف مؤقتًا",
+    "add": "أضف كيسًا",
+    "pausedToast": "تم إيقاف {{title}} مؤقتًا",
+    "resumedToast": "{{title}} معروض مجددًا",
+    "undo": "تراجع",
+    "toggleFailed": "تعذّر تحديث {{title}}. حاول مرة أخرى.",
+    "empty": {
+      "title": "لا أكياس بعد",
+      "text": "أضف أول كيس مفاجآت — يستغرق ذلك دقيقة تقريبًا. يُعرض فور الحفظ.",
+      "action": "أضف كيسًا"
+    },
+    "error": {
+      "title": "تعذّر تحميل أكياسك",
+      "retry": "حاول مرة أخرى"
+    }
+  },
+  "bagForm": {
+    "addTitle": "إضافة كيس",
+    "editTitle": "تعديل الكيس",
+    "title": "العنوان",
+    "description": "الوصف",
+    "descriptionHelp": "اجعله قصيرًا وصادقًا",
+    "category": "الفئة",
+    "originalPrice": "السعر الأصلي",
+    "salePrice": "سعر البيع",
+    "shownAs": "يُعرض كـ",
+    "qty": "أكياس اليوم",
+    "reserved_zero": "لا حجوزات بعد",
+    "reserved_one": "كيس واحد محجوز بالفعل",
+    "reserved_two": "كيسان محجوزان بالفعل",
+    "reserved_few": "{{count}} أكياس محجوزة بالفعل",
+    "reserved_many": "{{count}} كيسًا محجوزًا بالفعل",
+    "reserved_other": "{{count}} كيس محجوز بالفعل",
+    "window": "وقت الاستلام",
+    "from": "من",
+    "until": "حتى",
+    "windowHelp": "30 دقيقة على الأقل تمنح الناس وقتًا للوصول.",
+    "live": "اعرضه للعملاء",
+    "liveHelp": "أوقف التشغيل لإيقاف هذا الكيس مؤقتًا",
+    "saveNew": "أضف كيسًا",
+    "save": "حفظ التغييرات",
+    "delete": "حذف الكيس",
+    "deleteSheet": {
+      "title": "حذف هذا الكيس؟",
+      "text": "سيختفي من اكتشف فورًا. لا يمكن التراجع عن ذلك.",
+      "confirm": "حذف الكيس"
+    },
+    "errors": {
+      "title": "استخدم 3–60 حرفًا.",
+      "description": "اجعله أقل من 200 حرف.",
+      "category": "اختر فئة.",
+      "price": "أدخل مبلغًا، مثل {{example}}.",
+      "saleBelow": "يجب أن يكون سعر البيع أقل من السعر الأصلي.",
+      "time": "استخدم الصيغة HH:mm، مثل 18:00.",
+      "windowLength": "اجعل وقت الاستلام 30 دقيقة على الأقل.",
+      "windowPast": "يجب أن ينتهي وقت الاستلام لاحقًا اليوم.",
+      "belowReserved_zero": "لا يمكنك عرض عدد أقل من المحجوز.",
+      "belowReserved_one": "هناك كيس واحد محجوز بالفعل — لا يمكنك عرض عدد أقل.",
+      "belowReserved_two": "هناك كيسان محجوزان بالفعل — لا يمكنك عرض عدد أقل.",
+      "belowReserved_few": "هناك {{count}} أكياس محجوزة بالفعل — لا يمكنك عرض عدد أقل.",
+      "belowReserved_many": "هناك {{count}} كيسًا محجوزًا بالفعل — لا يمكنك عرض عدد أقل.",
+      "belowReserved_other": "هناك {{count}} كيس محجوز بالفعل — لا يمكنك عرض عدد أقل.",
+      "hasReservations": "على هذا الكيس حجوزات. أوقفه مؤقتًا بدلًا من ذلك.",
+      "hasOrders": "لهذا الكيس طلبات سابقة. أوقفه مؤقتًا بدلًا من ذلك.",
+      "notFound": "هذا الكيس لم يعد موجودًا."
+    }
+  },
+  "storeOrders": {
+    "title": "طلبات اليوم",
+    "enterCode": "أدخل رمز الاستلام",
+    "enterCodeHelp": "اطلب من العميل رمزه المكوّن من 4 أرقام.",
+    "codeLegend": "رمز الاستلام",
+    "digit": "الرقم {{n}}",
+    "confirm": "تأكيد الاستلام",
+    "notFound": "لا يوجد طلب اليوم يطابق {{code}}. تحقّق من الرمز وحاول مرة أخرى.",
+    "success": {
+      "title": "الرمز {{code}} — كل شيء سليم",
+      "handOver": "سلّم",
+      "items": "{{qty}} × {{title}}",
+      "to": "إلى {{name}}",
+      "payment": "استلم المبلغ",
+      "next": "الرمز التالي"
+    },
+    "toCollect": "للاستلام",
+    "counts": "{{toCollect}} من {{total}}",
+    "collectedAt": "استُلم {{time}}",
+    "item": "{{qty}} × {{title}} · {{window}}",
+    "itemCollected": "{{qty}} × {{title}}",
+    "empty": "لا طلبات لليوم بعد. تظهر هنا عندما يحجز العملاء.",
+    "error": {
+      "title": "تعذّر تحميل طلبات اليوم",
+      "retry": "حاول مرة أخرى"
+    }
+  },
+  "profile": {
+    "title": "الحساب",
+    "edit": "تعديل الحساب",
+    "bagsRescued_zero": "كيس تم إنقاذه",
+    "bagsRescued_one": "كيس تم إنقاذه",
+    "bagsRescued_two": "كيس تم إنقاذه",
+    "bagsRescued_few": "أكياس تم إنقاذها",
+    "bagsRescued_many": "كيسًا تم إنقاذه",
+    "bagsRescued_other": "كيس تم إنقاذه",
+    "saved": "وفّرتها حتى الآن",
+    "preferences": "التفضيلات",
+    "language": "اللغة",
+    "pickupArea": "منطقة الاستلام",
+    "pickupAreaValue": "{{label}} · {{km}} كم",
+    "help": "المساعدة",
+    "logout": "تسجيل الخروج",
+    "version": "Leftover {{version}}",
+    "logoutSheet": {
+      "title": "تسجيل الخروج؟",
+      "text": "ستحتاج إلى بريدك الإلكتروني وكلمة المرور لتسجيل الدخول مجددًا.",
+      "confirm": "تسجيل الخروج"
+    },
+    "editSheet": {
+      "title": "اسمك",
+      "field": "الاسم الأول",
+      "save": "حفظ",
+      "error": "أدخل اسمك الأول (حتى 40 حرفًا)."
+    },
+    "report": "الإبلاغ عن مشكلة",
+    "languageSheet": {
+      "title": "اللغة"
+    }
+  },
+  "report": {
+    "title": "الإبلاغ عن مشكلة",
+    "intro": "أخبرنا بما حدث. سنرد عليك عبر البريد الإلكتروني.",
+    "subject": "الموضوع",
+    "subjects": {
+      "order": "مشكلة في طلب",
+      "closed": "كان المتجر مغلقًا",
+      "app": "التطبيق لا يعمل",
+      "payment": "سؤال عن الدفع",
+      "other": "شيء آخر"
+    },
+    "order": "أي طلب؟",
+    "noOrder": "لا يتعلق بطلب",
+    "orderOption": "{{store}} · {{title}} · {{day}}",
+    "message": "الرسالة",
+    "messageHelp": "10 أحرف على الأقل",
+    "messageError": "استخدم 10–500 حرف.",
+    "send": "إرسال البلاغ",
+    "failed": "تعذّر إرسال بلاغك. حاول مرة أخرى.",
+    "sent": {
+      "title": "شكرًا — وصلنا بلاغك",
+      "text": "سيرد فريقنا على {{email}}. رقم المرجع {{reference}}.",
+      "back": "العودة إلى الحساب",
+      "again": "الإبلاغ عن شيء آخر"
+    }
+  },
+  "saved": {
+    "title": "المحفوظة",
+    "meta": "{{category}} · {{distance}}",
+    "bags_zero": "لا أكياس اليوم",
+    "bags_one": "كيس واحد اليوم",
+    "bags_two": "كيسان اليوم",
+    "bags_few": "{{count}} أكياس اليوم",
+    "bags_many": "{{count}} كيسًا اليوم",
+    "bags_other": "{{count}} كيس اليوم",
+    "noBags": "لا أكياس الآن",
+    "empty": {
+      "title": "لا متاجر محفوظة بعد",
+      "text": "انقر على القلب في كيس أو متجر للاحتفاظ به هنا.",
+      "action": "ابحث عن طعام قريب"
+    },
+    "error": {
+      "title": "تعذّر تحميل متاجرك المحفوظة",
+      "retry": "حاول مرة أخرى"
+    }
+  },
+  "money": {
+    "amount": {
+      "OMR": "{{amount}} ر.ع.",
+      "UAH": "{{amount}} ₴"
+    },
+    "symbol": {
+      "OMR": "ر.ع.",
+      "UAH": "₴"
+    },
+    "example": {
+      "OMR": "1.500",
+      "UAH": "149"
+    }
+  }
+}

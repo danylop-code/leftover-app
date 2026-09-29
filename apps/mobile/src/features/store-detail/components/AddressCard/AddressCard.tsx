@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { formatDistance } from '../../../../shared/lib/format';
 import { Button, Icon } from '../../../../shared/ui';
-import { pinColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { address: string; distanceKm: number; onDirections: () => void };
 
 /** Where the shop is, how far from the selected location, and a Directions button. */
 export function AddressCard({ address, distanceKm, onDirections }: Props) {
+  const { pinColor, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.card}>

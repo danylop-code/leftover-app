@@ -2,11 +2,11 @@ import type { Category } from '@leftover/shared';
 import type { ReactNode } from 'react';
 import { type StyleProp, View, type ViewStyle } from 'react-native';
 import Svg from 'react-native-svg';
-import { media } from '../../theme';
+import { useTheme } from '../../theme';
 import { ART_VIEWBOX, categoryArt, ICON_STROKE_WIDTH } from '../icons/glyphs';
 import { ShapeList } from '../icons/ShapeList';
 import { mediaTint } from './media-tint';
-import { styles, variants } from './styles';
+import { useStyles, variants } from './styles';
 
 type Props = {
   category: Category;
@@ -19,6 +19,8 @@ type Props = {
 
 /** Tinted food-photo placeholder with the category glyph (`.media-*`). */
 export function CategoryMedia({ category, variant = 'card', children, style }: Props) {
+  const { styles } = useStyles();
+  const { media } = useTheme();
   const tint = mediaTint[category];
   const size = variants[variant];
   const art = size.art;

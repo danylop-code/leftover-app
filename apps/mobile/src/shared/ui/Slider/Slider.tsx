@@ -5,8 +5,9 @@ import {
   PanResponder,
   View,
 } from 'react-native';
+import { useTheme } from '../../theme';
 import { fraction, snap, valueAt } from './slider-math';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   value: number;
@@ -22,14 +23,18 @@ const actions = [{ name: 'increment' }, { name: 'decrement' }] as const;
 
 /** Range slider (`.range`): drag or tap the track; screen readers adjust by one step. */
 export function Slider({ value, min, max, step = 1, onChange, label, valueText }: Props) {
+  const { styles } = useStyles();
+  const rtl = useTheme().direction === 'rtl';
   const [width, setWidth] = useState(0);
   // PanResponder is created once; read the latest props through a ref.
-  const latest = useRef({ width, min, max, step, onChange, value });
-  latest.current = { width, min, max, step, onChange, value };
+  const latest = useRef({ width, min, max, step, onChange, value, rtl });
+  latest.current = { width, min, max, step, onChange, value, rtl };
 
   const emit = (x: number) => {
     const l = latest.current;
-    const next = valueAt(x, l.width, l.min, l.max, l.step);
+    // Touches report physical x; right-to-left, the track starts at the right edge.
+    const along = l.rtl ? l.width - x : x;
+    const next = valueAt(along, l.width, l.min, l.max, l.step);
     if (next !== l.value) l.onChange(next);
   };
 
@@ -63,7 +68,7 @@ export function Slider({ value, min, max, step = 1, onChange, label, valueText }
     >
       <View style={styles.track} pointerEvents="none" />
       <View style={[styles.fill, { width: pct }]} pointerEvents="none" />
-      <View style={[styles.thumb, { left: pct }]} pointerEvents="none" />
+      <View style={[styles.thumb, { start: pct }]} pointerEvents="none" />
     </View>
   );
 }

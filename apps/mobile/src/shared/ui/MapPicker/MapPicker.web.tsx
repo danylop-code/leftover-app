@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Circle, MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import { type StyleProp, View, type ViewStyle } from 'react-native';
 import { METERS_PER_KM } from '../../constants/map';
-import { circle, pinColor, styles, tiles, zoomFor } from './styles';
+import { tiles, useStyles, zoomFor } from './styles';
 
 type Props = {
   value: LatLng;
@@ -16,12 +16,13 @@ type Props = {
 };
 
 // A round pin drawn with CSS: Leaflet's default marker images don't survive bundling.
-const pinIcon = L.divIcon({
-  className: '',
-  html: `<div style="width:28px;height:28px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:${pinColor};box-shadow:0 4px 10px rgba(29,42,34,.25);border:3px solid #fff"></div>`,
-  iconSize: [28, 28],
-  iconAnchor: [14, 28],
-});
+const pinIconFor = (pinColor: string, pinBorder: string, pinShadow: string) =>
+  L.divIcon({
+    className: '',
+    html: `<div style="width:28px;height:28px;border-radius:50% 50% 50% 4px;transform:rotate(-45deg);background:${pinColor};box-shadow:0 4px 10px ${pinShadow};border:3px solid ${pinBorder}"></div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+  });
 
 /** Follows `value`/`radiusKm` changes from outside (search, current position, the slider). */
 function Recenter({ value, radiusKm }: { value: LatLng; radiusKm?: number }) {
@@ -46,6 +47,8 @@ function TapToMove({ onChange }: { onChange: (next: LatLng) => void }) {
  * pin, tap-to-move and radius circle.
  */
 export function MapPicker({ value, onChange, label, radiusKm, style }: Props) {
+  const { circle, pin, styles } = useStyles();
+  const pinIcon = useMemo(() => pinIconFor(pin.fill, pin.border, pin.shadow), [pin]);
   const center = useMemo(() => [value.lat, value.lng] as [number, number], [value]);
   return (
     <View

@@ -29,7 +29,7 @@ describe('fetchAddressSuggestions', () => {
     const url = new URL(String(fetchMock.mock.calls[0][0]));
     expect(url.origin).toBe(new URL(DEFAULT_API_URL).origin);
     expect(url.pathname).toBe('/geo/autocomplete');
-    expect([...url.searchParams.keys()].sort()).toEqual(['lat', 'lng', 'q']);
+    expect([...url.searchParams.keys()].sort()).toEqual(['lang', 'lat', 'lng', 'q']);
     expect(Location.geocodeAsync).not.toHaveBeenCalled();
   });
 

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { sheetPadding, styles } from './styles';
+import { sheetPadding, useStyles } from './styles';
 
 type Props = {
   visible: boolean;
@@ -14,6 +14,7 @@ type Props = {
 
 /** In-app bottom sheet (`.sheet` on a scrim) for confirmations and small forms. */
 export function Sheet({ visible, onClose, title, text, children }: Props) {
+  const { styles } = useStyles();
   const insets = useSafeAreaInsets();
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
