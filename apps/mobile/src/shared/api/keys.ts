@@ -11,6 +11,8 @@ export const keys = {
   myStore: () => ['stores', 'me'] as const,
   /** Discover: every input, so a new location, radius or category refetches. */
   nearby: (p: SearchArea & { category: Category | null }) => ['bags', 'nearby', p] as const,
+  /** StoreDetail; the location is included because the distance depends on it. */
+  storeDetail: (p: { id: string; lat: number; lng: number }) => ['stores', 'detail', p] as const,
   addressSuggestions: (p: { q: string; near: { lat: number; lng: number } | null }) =>
     ['geo', 'autocomplete', p] as const,
 } as const;

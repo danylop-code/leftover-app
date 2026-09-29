@@ -2,7 +2,9 @@ import { Text, View } from 'react-native';
 import { logoColor } from './logo-color';
 import { styles } from './styles';
 
-type Props = { id: string; name: string; size?: 'md' | 'lg'; ring?: boolean };
+type Props = { id: string; name: string; size?: 'md' | 'lg' | 'xl'; ring?: boolean };
+
+const letter = { md: 'letterMd', lg: 'letterLg', xl: 'letterXl' } as const;
 
 /** Initial-letter logo on a stable brand color (logo upload is out of scope). */
 export function StoreLogo({ id, name, size = 'md', ring }: Props) {
@@ -12,7 +14,7 @@ export function StoreLogo({ id, name, size = 'md', ring }: Props) {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      <Text style={[styles.letter, size === 'lg' ? styles.letterLg : styles.letterMd]}>
+      <Text style={[styles.letter, styles[letter[size]]]}>
         {name.trim().charAt(0).toUpperCase()}
       </Text>
     </View>

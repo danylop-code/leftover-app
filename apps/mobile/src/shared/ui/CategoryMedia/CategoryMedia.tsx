@@ -20,7 +20,9 @@ type Props = {
 /** Tinted food-photo placeholder with the category glyph (`.media-*`). */
 export function CategoryMedia({ category, variant = 'card', children, style }: Props) {
   const tint = mediaTint[category];
-  const art = variants[variant].art;
+  const size = variants[variant];
+  const art = size.art;
+  const stroke = 'stroke' in size ? size.stroke : ICON_STROKE_WIDTH;
   return (
     <View
       style={[styles.root, styles[variant], { backgroundColor: media[tint.bg] }, style]}
@@ -33,7 +35,7 @@ export function CategoryMedia({ category, variant = 'card', children, style }: P
         viewBox={ART_VIEWBOX}
         fill="none"
         stroke={media[tint.ink]}
-        strokeWidth={ICON_STROKE_WIDTH}
+        strokeWidth={stroke}
         strokeLinecap="round"
         strokeLinejoin="round"
         accessible={false}
