@@ -1,8 +1,11 @@
 import { Hono } from 'hono';
 import type { AppEnv } from './lib/env';
+import { installErrorHandling } from './lib/errors';
+import { health } from './routes/health';
 
 const app = new Hono<AppEnv>();
+installErrorHandling(app);
 
-// Mount resource routers from src/routes/<resource>.ts here, e.g. app.route('/bags', bags).
+app.route('/health', health);
 
 export default app;
