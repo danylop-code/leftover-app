@@ -40,3 +40,4 @@
 - Component tests that assert an optimistic update inside a `FlatList` need `waitFor`/`findBy…`: the list re-renders a tick after the cache changes.
 - The kit's `Switch` is a `Pressable` with the switch role: tests `fireEvent.press` it (`valueChange` does nothing).
 - Clock-dependent screens (Pickup, Orders, bag form) are tested with `fakeNow` (`src/shared/testing/fake-date.ts`), which fakes only `Date` so React Query and the router keep real timers.
+- A new migration isn't in your local D1 until it's applied: a running API then fails with `no such table` (tests migrate their own DB, so they stay green). `pnpm dev:api` now applies pending local migrations on start; after pulling one, restart it and re-run `db:seed:local`.
