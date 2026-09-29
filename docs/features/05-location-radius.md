@@ -1,6 +1,6 @@
 # Feature: location-radius
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A customer picks where to look for food and how far they're willing to go, and that choice drives every distance in the app.
@@ -12,11 +12,11 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 - `src/shared/store/location.ts` (Zustand + persist via `@react-native-async-storage/async-storage`): `{ lat, lng, label, radiusKm, recent[≤5] }`, default radius 5 km.
 - `src/shared/constants/location.ts`: radius min 1, max 30, default 5, recent limit 5.
 - LocationScreen: MapPicker with radius circle, "use my current location" button, bottom sheet with address label (reverse-geocoded) + Change + radius slider + "Show results".
-- Address autocomplete (requested 2026-09-29): suggestions update while typing, through a hosted places/geocoding provider proxied by the API (`GET /geo/autocomplete?q&lat&lng`, `GET /geo/place/:id`), so the provider key stays server-side and web (17) gets the same results. **Decide first:** provider (e.g. Google Places, Mapbox, or Photon/Nominatim on OpenStreetMap), key and quota, results biased to the current pin.
+- Address autocomplete (requested 2026-09-29): suggestions update while typing, through a hosted provider proxied by the API (`GET /geo/autocomplete?q&lat&lng`, signed-in users only), so any provider key stays server-side and web (17) gets the same results. **Decided 2026-09-29:** Photon (OpenStreetMap, komoot's public instance at `PHOTON_URL`), no key, fair-use; results biased to the current pin and sorted nearest first. The provider sits behind one adapter (`src/services/geo/`), so self-hosting Photon or switching to Mapbox/Google later touches one file. Photon suggestions already carry coordinates, so there is no `GET /geo/place/:id` (add it with a provider that needs a details call).
 - LocationSearchScreen: debounced autocomplete suggestions, distance from the current pin, recent list, clear button, "Use my current location". On-device `geocodeAsync`/`reverseGeocodeAsync` remain the fallback when the provider is unavailable, and label the pin after "use my current location".
 - Shop setup (04) address field switches to the same autocomplete (shared component in `src/shared/ui`), replacing search-on-submit.
 - Permission handling: denied → search still works, with an inline banner explaining it.
-- Customer without a selected location is routed here before Discover.
+- Customer without a selected location is routed here before Discover. This replaces 03's `justRegistered` flag; the location store is cleared on logout, so a new account on the same device starts here too.
 
 ### Out of scope
 - Place details beyond coordinates and a label (opening hours, photos).
@@ -38,7 +38,7 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 
 ### Approach steps
 1. Write the location store + constants + unit tests.
-2. Pick the autocomplete provider; add the API proxy routes + integration tests (provider mocked); write the shared `AddressAutocomplete` field and the hooks (`use-address-suggestions`, `use-current-position`), with `expo-location` as the fallback.
+2. Add the API proxy route (Photon adapter) + integration tests (provider mocked); write the shared `AddressAutocomplete` field and the hooks (`use-address-suggestions`, `use-current-position`), with `expo-location` as the fallback.
 3. Build LocationScreen (MapPicker + sheet + slider), then LocationSearchScreen.
 4. Add the routing guard for customers without a location.
 5. Swap shop setup's address field to `AddressAutocomplete`.
@@ -51,7 +51,7 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
@@ -59,3 +59,4 @@ planned
 ## Changelog
 - 2026-09-29 — created from the design canvas
 - 2026-09-29 — plan amended (not yet frozen): address autocomplete via a hosted provider behind the API, also used by shop setup; hosted geocoding moved from out of scope to in scope
+- 2026-09-29 — provider decided (Photon, no key); `/geo/place/:id` dropped because suggestions carry coordinates; `justRegistered` replaced by the location gate. Plan frozen; work started on `feat/05-location-radius`
