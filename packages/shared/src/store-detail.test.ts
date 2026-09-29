@@ -19,6 +19,7 @@ const detail = {
     {
       id: 'b1',
       title: 'Bakery surprise bag',
+      description: 'Bread and pastries.',
       category: 'bakery',
       priceMinor: 14900,
       originalPriceMinor: 45000,
@@ -29,6 +30,8 @@ const detail = {
   ],
   counts: { available: 0, total: 1 },
   rating: null,
+  recentReviews: [],
+  isFavorite: false,
 };
 
 describe('StoreDetailQuery', () => {
@@ -47,10 +50,12 @@ describe('StoreDetail', () => {
   });
 
   it('accepts a rating once reviews exist', () => {
-    expect(StoreDetail.parse({ ...detail, rating: { average: 4.7, count: 128 } }).rating).toEqual({
+    const rating = {
       average: 4.7,
       count: 128,
-    });
+      aspects: { quality: 4.8, variety: null, freshness: 4.9, ease: 4.6 },
+    };
+    expect(StoreDetail.parse({ ...detail, rating }).rating).toEqual(rating);
   });
 
   it('rejects an unknown open status', () => {

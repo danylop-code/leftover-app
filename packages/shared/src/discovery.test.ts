@@ -35,6 +35,8 @@ describe('NearbyResponse', () => {
     pickupEnd: '2026-09-29T16:30:00.000Z',
     store: { id: 's1', name: 'Crumb & Co. Bakery', timezone: 'Europe/Kyiv' },
     distanceKm: 0.8,
+    rating: null,
+    isFavorite: false,
   };
 
   it('accepts bags with a store summary and a distance', () => {
