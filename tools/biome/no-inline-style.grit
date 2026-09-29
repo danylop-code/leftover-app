@@ -1,0 +1,8 @@
+language js
+
+// Styles live in the co-located styles.ts, not inline objects.
+JsxAttribute(name=$name, initializer=$init) where {
+  $name <: r"style|[a-zA-Z]+Style",
+  $init <: JsxAttributeInitializerClause(value=JsxExpressionAttributeValue(expression=JsObjectExpression())),
+  register_diagnostic(span=$init, message="Inline style object: move it to the co-located styles.ts (rules/conventions.md).")
+}
