@@ -12,6 +12,7 @@ import {
   typography,
 } from '.';
 import { designRootCss as css } from './fixtures/design-root';
+import { fontAssets } from './fonts';
 
 const tokens = [...css.matchAll(/--([a-z0-9-]+):([^;]+);/g)].map(([, name, value]) => ({
   name: name as string,
@@ -95,5 +96,12 @@ describe('native elevation', () => {
       shadowOpacity: 0.08,
       shadowRadius: 12,
     });
+  });
+});
+
+describe('fonts', () => {
+  it('loads every family the theme references', () => {
+    const families = [...Object.values(fontFamily.display), ...Object.values(fontFamily.body)];
+    for (const f of families) expect(Object.keys(fontAssets)).toContain(f);
   });
 });
