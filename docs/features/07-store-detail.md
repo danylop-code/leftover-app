@@ -1,6 +1,6 @@
 # Feature: store-detail
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A customer sees what a shop offers today, where it is, and whether it's any good, and can move on to reserve.
@@ -42,10 +42,11 @@ Artboard **StoreDetail** (full scroll): back/header actions, logo, name, categor
 ---
 
 ## Status
-planned
+in-progress
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/07-store-detail` (after 06; 18 still pending at the user's request). Decisions: `openToday` becomes `openStatus: 'open' | 'beforeOpening' | 'afterClosing'` so the header can say when it opens; `rating` is `{ average, count } | null` and reviews aren't in the response until 13 defines them; `lat`/`lng` are required. Tapping an available bag goes to Reserve, which 08 builds (until then it does nothing). Route: `/store/[id]`, opened from Discover's cards.
