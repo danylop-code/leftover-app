@@ -33,3 +33,13 @@ export type AutocompleteQuery = z.infer<typeof AutocompleteQuery>;
 
 export const AutocompleteResponse = z.object({ results: z.array(PlaceSuggestion) });
 export type AutocompleteResponse = z.infer<typeof AutocompleteResponse>;
+
+/** `GET /geo/reverse`: label a point. */
+export const ReverseQuery = z.object({
+  lat: z.coerce.number().pipe(Latitude),
+  lng: z.coerce.number().pipe(Longitude),
+});
+export type ReverseQuery = z.infer<typeof ReverseQuery>;
+
+export const ReverseResponse = z.object({ place: Place.nullable() });
+export type ReverseResponse = z.infer<typeof ReverseResponse>;

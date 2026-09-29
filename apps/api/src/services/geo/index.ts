@@ -1,6 +1,12 @@
-import { type AutocompleteQuery, haversineKm, type PlaceSuggestion } from '@leftover/shared';
+import {
+  type AutocompleteQuery,
+  haversineKm,
+  type LatLng,
+  type Place,
+  type PlaceSuggestion,
+} from '@leftover/shared';
 import { AppError } from '../../lib/errors';
-import { ProviderError, photonAutocomplete } from './photon';
+import { ProviderError, photonAutocomplete, photonReverse } from './photon';
 
 /** Suggestions returned to the app. */
 export const SUGGESTION_LIMIT = 6;
@@ -38,4 +44,27 @@ export const autocompletePlaces = async (
     unique.sort((a, b) => haversineKm(from, a) - haversineKm(from, b));
   }
   return unique.slice(0, SUGGESTION_LIMIT);
+};
+
+/**
+ * A label for a point (a dropped pin, or the browser's position on web, where on-device
+ * reverse geocoding doesn't exist). Keeps the point itself; null when nothing is near.
+ */
+export const reversePlace = async (
+  env: Pick<Env, 'PHOTON_URL'>,
+  point: LatLng,
+): Promise<Place | null> => {
+  let nearest: PlaceSuggestion | null;
+  try {
+    nearest = await photonReverse(env.PHOTON_URL, point);
+  } catch (error) {
+    if (error instanceof ProviderError) {
+      console.warn(error.message, error.cause);
+      throw geoUnavailable();
+    }
+    throw error;
+  }
+  if (!nearest) return null;
+  const { id: _id, lat: _lat, lng: _lng, ...label } = nearest;
+  return { ...label, lat: point.lat, lng: point.lng };
 };

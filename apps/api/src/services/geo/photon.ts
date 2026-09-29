@@ -1,4 +1,4 @@
-import type { AutocompleteQuery, PlaceSuggestion } from '@leftover/shared';
+import type { AutocompleteQuery, LatLng, PlaceSuggestion } from '@leftover/shared';
 import { z } from 'zod';
 
 // Photon (https://github.com/komoot/photon): OpenStreetMap search-as-you-type, no key.
@@ -6,7 +6,9 @@ import { z } from 'zod';
 
 /** Features asked for; the service dedupes and trims to its own limit. */
 const PHOTON_LIMIT = 10;
-const PHOTON_TIMEOUT_MS = 3000;
+// The public instance is usually ~1 s but has slow moments; the app waits a bit longer
+// (SUGGEST_TIMEOUT_MS) before it falls back to on-device search.
+const PHOTON_TIMEOUT_MS = 6000;
 // The public instance asks clients to identify themselves.
 const USER_AGENT = 'Leftover/0.1 (+https://github.com/danylop-code/leftover-app)';
 
@@ -59,20 +61,7 @@ export class ProviderError extends Error {
   }
 }
 
-/** Raw suggestions from Photon, biased towards the query's point. Throws ProviderError. */
-export const photonAutocomplete = async (
-  baseUrl: string,
-  query: AutocompleteQuery,
-): Promise<PlaceSuggestion[]> => {
-  const url = new URL('/api/', baseUrl);
-  url.searchParams.set('q', query.q);
-  url.searchParams.set('limit', String(PHOTON_LIMIT));
-  url.searchParams.set('lang', 'en');
-  if (query.lat !== undefined && query.lng !== undefined) {
-    url.searchParams.set('lat', String(query.lat));
-    url.searchParams.set('lon', String(query.lng));
-  }
-
+const fetchFeatures = async (url: URL) => {
   let res: globalThis.Response;
   try {
     res = await fetch(url, {
@@ -93,4 +82,34 @@ export const photonAutocomplete = async (
   const parsed = Response.safeParse(body);
   if (!parsed.success) throw new ProviderError('Photon answered an unexpected shape');
   return parsed.data.features.map(toSuggestion).filter((s) => s !== null);
+};
+
+/** Raw suggestions from Photon, biased towards the query's point. Throws ProviderError. */
+export const photonAutocomplete = async (
+  baseUrl: string,
+  query: AutocompleteQuery,
+): Promise<PlaceSuggestion[]> => {
+  const url = new URL('/api/', baseUrl);
+  url.searchParams.set('q', query.q);
+  url.searchParams.set('limit', String(PHOTON_LIMIT));
+  url.searchParams.set('lang', 'en');
+  if (query.lat !== undefined && query.lng !== undefined) {
+    url.searchParams.set('lat', String(query.lat));
+    url.searchParams.set('lon', String(query.lng));
+  }
+  return fetchFeatures(url);
+};
+
+/** The nearest named place or address to a point, or null. Throws ProviderError. */
+export const photonReverse = async (
+  baseUrl: string,
+  point: LatLng,
+): Promise<PlaceSuggestion | null> => {
+  const url = new URL('/reverse', baseUrl);
+  url.searchParams.set('lat', String(point.lat));
+  url.searchParams.set('lon', String(point.lng));
+  url.searchParams.set('lang', 'en');
+  url.searchParams.set('limit', '1');
+  const [nearest] = await fetchFeatures(url);
+  return nearest ?? null;
 };
