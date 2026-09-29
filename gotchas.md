@@ -13,3 +13,9 @@
 - `declare module '*.sql?raw'` only works in an ambient `.d.ts` with no top-level imports; inside a module file it becomes an augmentation and the import stays untyped (`apps/api/test/sql-raw.d.ts`).
 - Seed pickup windows are relative to when `db:seed:local` ran (UTC). If Discover looks empty in dev, re-run the seed.
 - Hono's validator throws `HTTPException(400)` for unparseable bodies before our Zod schema runs; `installErrorHandling` maps it to `validation`.
+- PBKDF2: deployed Workers reject more than 100,000 iterations, but local workerd (and so the test pool) accepts more. Don't raise `PBKDF2_ITERATIONS`; tests won't catch it.
+- React Query in Jest: use `createTestQueryClient` (`src/shared/testing/render.tsx`). A default client's mutation `gcTime` timer keeps a single-file Jest run alive after the tests finish.
+- `jest.mock` factories are hoisted above imports; `require` the mock inside the factory (see `jest.setup.ts`).
+- expo-router's Jest matchers (`toHavePathname`…) have no shipped types; they're declared in `src/shared/testing/expo-router-matchers.d.ts`.
+- Expo Router groups don't appear in URLs: two groups can't both have `orders.tsx`. Store routes are prefixed (`store-orders`, `store-profile`).
+- Biome's `useValidAriaRole` treats any JSX prop named `role` as an ARIA role; name domain props differently (`kind`).
