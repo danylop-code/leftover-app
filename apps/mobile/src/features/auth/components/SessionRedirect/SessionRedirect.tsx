@@ -2,8 +2,9 @@ import { Redirect } from 'expo-router';
 import { useSession } from '../../../../shared/store/session';
 
 /**
- * The routing hub (app/index): signed out → Welcome; customer → Discover; store → Bags.
- * Right after registering: customer → Location (05), store → shop setup (04).
+ * The routing hub (app/index): signed out → Welcome; customer → Discover (Location right after
+ * registering, until 05 gates on a saved location); shop owner → Bags, or shop setup while they
+ * have no shop (04).
  */
 export function SessionRedirect() {
   const status = useSession((s) => s.status);
@@ -13,5 +14,5 @@ export function SessionRedirect() {
   if (status === 'signedOut' || !user) return <Redirect href="/welcome" />;
   if (user.role === 'customer')
     return <Redirect href={justRegistered ? '/location' : '/discover'} />;
-  return <Redirect href={justRegistered ? '/setup' : '/bags'} />;
+  return <Redirect href={user.storeId ? '/bags' : '/setup'} />;
 }

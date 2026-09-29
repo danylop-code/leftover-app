@@ -5,4 +5,5 @@
 // Mutations invalidate by these same functions.
 export const keys = {
   me: () => ['me'] as const,
+  myStore: () => ['stores', 'me'] as const,
 } as const;
