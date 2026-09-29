@@ -12,12 +12,14 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 - `src/shared/store/location.ts` (Zustand + persist via `@react-native-async-storage/async-storage`): `{ lat, lng, label, radiusKm, recent[≤5] }`, default radius 5 km.
 - `src/shared/constants/location.ts`: radius min 1, max 30, default 5, recent limit 5.
 - LocationScreen: MapPicker with radius circle, "use my current location" button, bottom sheet with address label (reverse-geocoded) + Change + radius slider + "Show results".
-- LocationSearchScreen: debounced on-device `geocodeAsync`, results labelled via `reverseGeocodeAsync`, distance from the current pin, recent list, clear button, "Use my current location".
+- Address autocomplete (requested 2026-09-29): suggestions update while typing, through a hosted places/geocoding provider proxied by the API (`GET /geo/autocomplete?q&lat&lng`, `GET /geo/place/:id`), so the provider key stays server-side and web (17) gets the same results. **Decide first:** provider (e.g. Google Places, Mapbox, or Photon/Nominatim on OpenStreetMap), key and quota, results biased to the current pin.
+- LocationSearchScreen: debounced autocomplete suggestions, distance from the current pin, recent list, clear button, "Use my current location". On-device `geocodeAsync`/`reverseGeocodeAsync` remain the fallback when the provider is unavailable, and label the pin after "use my current location".
+- Shop setup (04) address field switches to the same autocomplete (shared component in `src/shared/ui`), replacing search-on-submit.
 - Permission handling: denied → search still works, with an inline banner explaining it.
 - Customer without a selected location is routed here before Discover.
 
 ### Out of scope
-- Hosted geocoding/autocomplete APIs.
+- Place details beyond coordinates and a label (opening hours, photos).
 - Showing shops on this map (the design's shop dots are decorative).
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
@@ -29,12 +31,17 @@ Artboards **Location** (map, pin, "Where should we look?" sheet, radius slider 1
 - [ ] Given a search result is chosen, then the pin moves there, the label updates, and the entry is added to the top of recents (deduped, max 5).
 - [ ] Given "Show results", then the store holds the new lat/lng/radius, and the Discover query key changes so it refetches (no stale distances — see `gotchas.md`).
 - [ ] Given an app restart, then the last location and radius are restored.
+- [ ] Given a partial address ("Dorosh"), when typing pauses, then suggestions from the provider appear, nearest to the current pin first, and choosing one moves the pin and sets the label.
+- [ ] Given the provider fails or times out, then search falls back to on-device geocoding and still works.
+- [ ] Given the provider key, then it never reaches the app (all provider calls go through the API).
+- [ ] Given shop setup (04), then its address field offers the same suggestions.
 
 ### Approach steps
 1. Write the location store + constants + unit tests.
-2. Write the geocoding hooks (`use-geocode-search`, `use-current-position`) wrapping `expo-location`.
+2. Pick the autocomplete provider; add the API proxy routes + integration tests (provider mocked); write the shared `AddressAutocomplete` field and the hooks (`use-address-suggestions`, `use-current-position`), with `expo-location` as the fallback.
 3. Build LocationScreen (MapPicker + sheet + slider), then LocationSearchScreen.
 4. Add the routing guard for customers without a location.
+5. Swap shop setup's address field to `AddressAutocomplete`.
 
 ### Testing
 - Unit: store reducer logic (radius clamp, recents dedupe/limit).
@@ -51,3 +58,4 @@ planned
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan amended (not yet frozen): address autocomplete via a hosted provider behind the API, also used by shop setup; hosted geocoding moved from out of scope to in scope
