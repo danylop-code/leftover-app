@@ -19,3 +19,4 @@
 - expo-router's Jest matchers (`toHavePathname`…) have no shipped types; they're declared in `src/shared/testing/expo-router-matchers.d.ts`.
 - Expo Router groups don't appear in URLs: two groups can't both have `orders.tsx`. Store routes are prefixed (`store-orders`, `store-profile`).
 - Biome's `useValidAriaRole` treats any JSX prop named `role` as an ARIA role; name domain props differently (`kind`).
+- Don't give a single-line `TextInput` a `lineHeight`: on iOS it pushes the text below centre, out of line with icons beside it. `Input` uses font + size only; multi-line `Textarea` keeps the body line height.

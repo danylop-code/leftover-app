@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 import { color } from '../../theme';
 import { Field } from './Field';
 import { Input } from './Input';
@@ -55,5 +56,16 @@ describe('Field', () => {
       </Field>,
     );
     expect(screen.getByText('Optional')).toBeOnTheScreen();
+  });
+
+  it('keeps single-line text vertically centred beside its icon (no lineHeight on iOS)', () => {
+    render(
+      <Field label="Email">
+        <Input icon="mail" value="olena@example.com" onChangeText={jest.fn()} />
+      </Field>,
+    );
+    const style = StyleSheet.flatten(screen.getByLabelText('Email').props.style);
+    expect(style.lineHeight).toBeUndefined();
+    expect(style.fontSize).toBe(16);
   });
 });
