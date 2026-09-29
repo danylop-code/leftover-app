@@ -1,5 +1,5 @@
-import { type Category, type LatLng, StoreProfileBody } from '@leftover/shared';
-import { useRef, useState } from 'react';
+import { type Category, type LatLng, type Place, StoreProfileBody } from '@leftover/shared';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { ApiError, NetworkError } from '../../../shared/api/client';
@@ -7,6 +7,7 @@ import { useLogout } from '../../../shared/api/use-logout';
 import { DEFAULT_MAP_CENTER } from '../../../shared/constants/map';
 import { normalizeTime } from '../../../shared/lib/time';
 import {
+  AddressAutocomplete,
   Banner,
   Button,
   Field,
@@ -18,17 +19,15 @@ import {
 } from '../../../shared/ui';
 import { useCreateStore } from '../api/use-create-store';
 import { CategoryPicker } from '../components/CategoryPicker/CategoryPicker';
-import { useGeocode } from '../hooks/use-geocode';
 import { styles } from './styles';
 
 type FieldName = 'name' | 'category' | 'address' | 'opensAt' | 'closesAt' | 'pin';
 type Errors = Partial<Record<FieldName, string>>;
-type PinStatus = 'none' | 'searching' | 'found' | 'notFound' | 'moved';
+type PinStatus = 'none' | 'found' | 'moved';
 
 /** Not in the design: built from the kit after Register when the role is shop (brief 04). */
 export function ShopSetupScreen() {
   const { t } = useTranslation();
-  const geocode = useGeocode();
   const createStore = useCreateStore();
   const logout = useLogout();
 
@@ -41,23 +40,13 @@ export function ShopSetupScreen() {
   const [closesAt, setClosesAt] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [banner, setBanner] = useState<string | null>(null);
-  const lookedUp = useRef('');
 
   const pinPlaced = pinStatus === 'found' || pinStatus === 'moved';
 
-  const findAddress = async () => {
-    const query = address.trim();
-    if (!query || query === lookedUp.current) return;
-    lookedUp.current = query;
-    setPinStatus('searching');
-    const found = await geocode(query);
-    if (found) {
-      setLocation(found);
-      setPinStatus('found');
-      setErrors((e) => ({ ...e, pin: undefined }));
-    } else {
-      setPinStatus('notFound');
-    }
+  const chooseAddress = (place: Place) => {
+    setLocation({ lat: place.lat, lng: place.lng });
+    setPinStatus('found');
+    setErrors((e) => ({ ...e, address: undefined, pin: undefined }));
   };
 
   const movePin = (next: LatLng) => {
@@ -108,15 +97,11 @@ export function ShopSetupScreen() {
   };
 
   const statusText =
-    pinStatus === 'searching'
-      ? t('shopSetup.searching')
-      : pinStatus === 'found'
-        ? t('shopSetup.found')
-        : pinStatus === 'moved'
-          ? t('shopSetup.moved')
-          : pinStatus === 'notFound'
-            ? t('shopSetup.notFound')
-            : t('shopSetup.addressHelp');
+    pinStatus === 'found'
+      ? t('shopSetup.found')
+      : pinStatus === 'moved'
+        ? t('shopSetup.moved')
+        : t('shopSetup.addressHelp');
 
   return (
     <Screen
@@ -153,22 +138,18 @@ export function ShopSetupScreen() {
             />
           </Field>
           <Field label={t('shopSetup.address')} error={errors.address}>
-            <Input
-              icon="search"
+            <AddressAutocomplete
               value={address}
               onChangeText={setAddress}
-              onSubmitEditing={findAddress}
-              onBlur={findAddress}
+              onSelect={chooseAddress}
+              near={location}
               placeholder={t('shopSetup.addressPlaceholder')}
-              returnKeyType="search"
-              autoComplete="street-address"
-              textContentType="fullStreetAddress"
             />
           </Field>
           <View style={styles.group}>
             <MapPicker value={location} onChange={movePin} label={t('shopSetup.map')} />
             <Text
-              style={errors.pin || pinStatus === 'notFound' ? styles.statusError : styles.status}
+              style={errors.pin ? styles.statusError : styles.status}
               accessibilityLiveRegion="polite"
             >
               {errors.pin ?? statusText}

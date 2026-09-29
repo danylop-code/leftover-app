@@ -1,6 +1,5 @@
-import type { Me } from '@leftover/shared';
+import type { Me, PlaceSuggestion } from '@leftover/shared';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
-import * as Location from 'expo-location';
 import { apiRequest } from '../../../shared/api/client';
 import { useSession } from '../../../shared/store/session';
 import { renderWithProviders } from '../../../shared/testing/render';
@@ -10,10 +9,23 @@ jest.mock('../../../shared/api/client', () => ({
   ...jest.requireActual('../../../shared/api/client'),
   apiRequest: jest.fn(),
 }));
-jest.mock('expo-location', () => ({ geocodeAsync: jest.fn() }));
 
 const request = apiRequest as jest.Mock;
-const geocode = Location.geocodeAsync as jest.Mock;
+
+const suggestion: PlaceSuggestion = {
+  id: 'N32',
+  label: 'vul. Doroshenka 32',
+  secondary: 'Lviv, Ukraine',
+  lat: 49.8393,
+  lng: 24.0325,
+};
+
+// Address suggestions come from the API; saving answers with the created store.
+const serve = (store: unknown = { id: 's1' }, results = [suggestion]) =>
+  request.mockImplementation(async (path: string) =>
+    path === '/geo/autocomplete' ? { results } : store,
+  );
+const saveCalls = () => request.mock.calls.filter(([path]) => path === '/stores/me');
 
 const owner: Me = {
   id: 'u2',
@@ -34,19 +46,23 @@ const fillBasics = () => {
   fireEvent.changeText(screen.getByLabelText('Closes at'), '20:00');
 };
 
-const findAddress = async (address = 'vul. Doroshenka 32, Lviv') => {
-  fireEvent.changeText(screen.getByLabelText('Address'), address);
+const pickAddress = async () => {
+  fireEvent.changeText(screen.getByLabelText('Address'), 'Dorosh');
+  const row = await screen.findByRole('button', { name: /vul\. Doroshenka 32/ });
   await act(async () => {
-    fireEvent(screen.getByLabelText('Address'), 'submitEditing');
+    fireEvent.press(row);
   });
+  // Picking closes the list.
+  await waitFor(() =>
+    expect(screen.queryByRole('button', { name: /vul\. Doroshenka 32/ })).toBeNull(),
+  );
 };
 
 const save = () => fireEvent.press(screen.getByRole('button', { name: 'Save and continue' }));
 
 beforeEach(() => {
   request.mockReset();
-  geocode.mockReset();
-  useSession.setState({ status: 'signedIn', token: 'tok', user: owner, justRegistered: false });
+  useSession.setState({ status: 'signedIn', token: 'tok', user: owner });
 });
 
 describe('ShopSetupScreen', () => {
@@ -56,60 +72,62 @@ describe('ShopSetupScreen', () => {
     expect(screen.getByText('Enter your shop’s name (2–60 characters).')).toBeOnTheScreen();
     expect(screen.getByText('Pick a category.')).toBeOnTheScreen();
     expect(screen.getByText('Enter the street address (3–120 characters).')).toBeOnTheScreen();
-    expect(screen.getByText('Find your address or drag the pin to your shop.')).toBeOnTheScreen();
-    expect(request).not.toHaveBeenCalled();
+    expect(
+      screen.getByText('Pick your address from the suggestions, or drag the pin to your shop.'),
+    ).toBeOnTheScreen();
+    expect(saveCalls()).toHaveLength(0);
   });
 
   it('rejects closing time not after opening time on the closing field', async () => {
-    geocode.mockResolvedValue([{ latitude: 49.8393, longitude: 24.0325 }]);
+    serve();
     renderWithProviders(<ShopSetupScreen />);
     fillBasics();
     fireEvent.changeText(screen.getByLabelText('Closes at'), '07:00');
-    await findAddress();
+    await pickAddress();
     save();
     expect(screen.getByText('Closing time must be after opening time.')).toBeOnTheScreen();
-    expect(request).not.toHaveBeenCalled();
+    expect(saveCalls()).toHaveLength(0);
   });
 
-  it('moves the pin to the geocoded address', async () => {
-    geocode.mockResolvedValue([{ latitude: 49.8393, longitude: 24.0325 }]);
+  it('suggests addresses while typing, biased to the pin; picking one fills it and moves the pin', async () => {
+    serve();
     renderWithProviders(<ShopSetupScreen />);
-    await findAddress();
-    expect(geocode).toHaveBeenCalledWith('vul. Doroshenka 32, Lviv');
+    await pickAddress();
+    expect(request).toHaveBeenCalledWith(
+      '/geo/autocomplete',
+      expect.objectContaining({ query: { q: 'Dorosh', lat: 49.8397, lng: 24.0297 } }),
+    );
+    expect(screen.getByLabelText('Address')).toHaveProp('value', 'vul. Doroshenka 32');
     expect(marker()).toHaveProp('coordinate', { latitude: 49.8393, longitude: 24.0325 });
   });
 
-  it('tells the owner when the address cannot be found', async () => {
-    geocode.mockResolvedValue([]);
+  it('says so when nothing matches', async () => {
+    serve({ id: 's1' }, []);
     renderWithProviders(<ShopSetupScreen />);
-    await findAddress('nowhere at all');
-    expect(
-      screen.getByText('We couldn’t find that address. Drag the pin to your shop instead.'),
-    ).toBeOnTheScreen();
+    fireEvent.changeText(screen.getByLabelText('Address'), 'nowhere at all');
+    expect(await screen.findByText('No matches. Try a street name or a place.')).toBeOnTheScreen();
   });
 
-  it('dragging the pin updates the location without changing the typed address', async () => {
-    geocode.mockResolvedValue([{ latitude: 49.8393, longitude: 24.0325 }]);
-    request.mockResolvedValue({ id: 's1' });
+  it('dragging the pin updates the location without changing the address', async () => {
+    serve();
     renderWithProviders(<ShopSetupScreen />);
     fillBasics();
-    await findAddress();
+    await pickAddress();
     fireEvent(marker(), 'dragEnd', {
       nativeEvent: { coordinate: { latitude: 49.84, longitude: 24.03 } },
     });
-    expect(screen.getByLabelText('Address')).toHaveProp('value', 'vul. Doroshenka 32, Lviv');
+    expect(screen.getByLabelText('Address')).toHaveProp('value', 'vul. Doroshenka 32');
     save();
-    await waitFor(() => expect(request).toHaveBeenCalled());
-    expect(request.mock.calls[0]?.[1].body).toMatchObject({ lat: 49.84, lng: 24.03 });
+    await waitFor(() => expect(saveCalls()).toHaveLength(1));
+    expect(saveCalls()[0]?.[1].body).toMatchObject({ lat: 49.84, lng: 24.03 });
   });
 
   it('saves the profile and records the new shop on the session', async () => {
-    geocode.mockResolvedValue([{ latitude: 49.8393, longitude: 24.0325 }]);
-    request.mockResolvedValue({
+    serve({
       id: 's1',
       name: 'Crumb & Co. Bakery',
       category: 'bakery',
-      address: 'vul. Doroshenka 32, Lviv',
+      address: 'vul. Doroshenka 32',
       lat: 49.8393,
       lng: 24.0325,
       opensAt: '08:00',
@@ -118,7 +136,7 @@ describe('ShopSetupScreen', () => {
     });
     renderWithProviders(<ShopSetupScreen />);
     fillBasics();
-    await findAddress();
+    await pickAddress();
     save();
     await waitFor(() => expect(useSession.getState().user?.storeId).toBe('s1'));
     expect(request).toHaveBeenCalledWith(
@@ -128,7 +146,7 @@ describe('ShopSetupScreen', () => {
         body: {
           name: 'Crumb & Co. Bakery',
           category: 'bakery',
-          address: 'vul. Doroshenka 32, Lviv',
+          address: 'vul. Doroshenka 32',
           lat: 49.8393,
           lng: 24.0325,
           opensAt: '08:00',

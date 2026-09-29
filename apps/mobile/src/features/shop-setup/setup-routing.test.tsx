@@ -1,5 +1,4 @@
 import type { Me } from '@leftover/shared';
-import * as Location from 'expo-location';
 import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testing-library';
 import * as SecureStore from 'expo-secure-store';
 import { useSession } from '../../shared/store/session';
@@ -9,7 +8,6 @@ jest.mock('expo-font', () => ({
   ...jest.requireActual('expo-font'),
   useFonts: () => [true, null],
 }));
-jest.mock('expo-location', () => ({ geocodeAsync: jest.fn() }));
 
 const owner: Me = {
   id: 'u2',
@@ -37,17 +35,18 @@ const json = (status: number, body: unknown) =>
 
 describe('shop setup routing', () => {
   it('saving the shop lands the owner on My bags, and a restart stays there', async () => {
-    useSession.setState({ status: 'hydrating', token: null, user: null, justRegistered: false });
+    useSession.setState({ status: 'hydrating', token: null, user: null });
     await SecureStore.setItemAsync(
       SESSION_STORAGE_KEY,
       JSON.stringify({ token: 'tok', user: owner }),
     );
-    (Location.geocodeAsync as jest.Mock).mockResolvedValue([
-      { latitude: 49.8393, longitude: 24.0325 },
-    ]);
     const fetchMock = jest.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
       // Check /stores/me first: it also ends with /me.
       if (String(url).endsWith('/stores/me') && init?.method === 'POST') return json(201, store);
+      if (String(url).includes('/geo/autocomplete'))
+        return json(200, {
+          results: [{ id: 'N32', label: store.address, lat: store.lat, lng: store.lng }],
+        });
       if (String(url).endsWith('/me')) return json(200, owner);
       throw new Error(`unexpected ${String(url)}`);
     });
@@ -56,9 +55,10 @@ describe('shop setup routing', () => {
     await waitFor(() => expect(screen).toHavePathname('/setup'));
     fireEvent.changeText(screen.getByLabelText('Shop name'), store.name);
     fireEvent.press(screen.getByRole('button', { name: 'Bakery' }));
-    fireEvent.changeText(screen.getByLabelText('Address'), store.address);
+    fireEvent.changeText(screen.getByLabelText('Address'), 'Dorosh');
+    const suggestion = await screen.findByRole('button', { name: /vul\. Doroshenka 32/ });
     await act(async () => {
-      fireEvent(screen.getByLabelText('Address'), 'submitEditing');
+      fireEvent.press(suggestion);
     });
     fireEvent.changeText(screen.getByLabelText('Opens at'), '08:00');
     fireEvent.changeText(screen.getByLabelText('Closes at'), '20:00');
