@@ -8,8 +8,9 @@ export const SUGGESTION_LIMIT = 6;
 export const geoUnavailable = () =>
   new AppError(502, 'geo_unavailable', 'Address search is unavailable right now.');
 
+// Photon can list one OSM object twice (as a street and as a house), so ids repeat too.
 const sameAddress = (a: PlaceSuggestion, b: PlaceSuggestion) =>
-  a.label === b.label && a.secondary === b.secondary;
+  a.id === b.id || (a.label === b.label && a.secondary === b.secondary);
 
 /**
  * Address suggestions for `query`: repeated addresses dropped, nearest to the bias point first.

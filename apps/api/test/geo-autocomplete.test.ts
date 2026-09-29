@@ -70,8 +70,9 @@ describe('GET /geo/autocomplete', () => {
     expect(new Headers(init?.headers).get('Authorization')).toBeNull();
   });
 
-  it('drops repeated addresses', async () => {
-    fetchSpy.mockResolvedValue(photon([near, duplicate]));
+  it('drops repeated addresses and repeated places', async () => {
+    const sameObject = feature(2, [24.0299, 49.8399], { name: 'Doroshenka' });
+    fetchSpy.mockResolvedValue(photon([near, duplicate, sameObject]));
     const { token } = await registerUser('customer');
     const { results } = AutocompleteResponse.parse(
       await (await autocomplete({ q: 'Dorosh', ...pin }, token)).json(),
