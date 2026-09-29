@@ -63,7 +63,8 @@ export const fetchAddressSuggestions = async (
  */
 export const useAddressSuggestions = (text: string, near: Near) => {
   const trimmed = text.trim();
-  const q = useDebouncedValue(trimmed, SUGGEST_DEBOUNCE_MS);
+  // Too short to search (or cleared): no need to wait.
+  const q = useDebouncedValue(trimmed, SUGGEST_DEBOUNCE_MS, (v) => v.length < PLACE_QUERY_MIN);
   const enabled = q.length >= PLACE_QUERY_MIN;
   const query = useQuery({
     queryKey: keys.addressSuggestions({ q, near }),

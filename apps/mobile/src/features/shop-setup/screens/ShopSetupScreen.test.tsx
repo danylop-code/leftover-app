@@ -2,6 +2,7 @@ import type { Me, PlaceSuggestion } from '@leftover/shared';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react-native';
 import { apiRequest } from '../../../shared/api/client';
 import { useSession } from '../../../shared/store/session';
+import { pickTime } from '../../../shared/testing/pick-time';
 import { renderWithProviders } from '../../../shared/testing/render';
 import { ShopSetupScreen } from './ShopSetupScreen';
 
@@ -38,12 +39,11 @@ const owner: Me = {
 
 const marker = () => screen.getByTestId('map-marker');
 
-const fillBasics = () => {
+const fillBasics = async () => {
   fireEvent.changeText(screen.getByLabelText('Shop name'), 'Crumb & Co. Bakery');
   fireEvent.press(screen.getByRole('button', { name: 'Bakery' }));
-  fireEvent.changeText(screen.getByLabelText('Opens at'), '8:00');
-  fireEvent(screen.getByLabelText('Opens at'), 'blur');
-  fireEvent.changeText(screen.getByLabelText('Closes at'), '20:00');
+  await pickTime('Opens at', '08:00');
+  await pickTime('Closes at', '20:00');
 };
 
 const pickAddress = async () => {
@@ -81,8 +81,8 @@ describe('ShopSetupScreen', () => {
   it('rejects closing time not after opening time on the closing field', async () => {
     serve();
     renderWithProviders(<ShopSetupScreen />);
-    fillBasics();
-    fireEvent.changeText(screen.getByLabelText('Closes at'), '07:00');
+    await fillBasics();
+    await pickTime('Closes at', '07:00');
     await pickAddress();
     save();
     expect(screen.getByText('Closing time must be after opening time.')).toBeOnTheScreen();
@@ -111,7 +111,7 @@ describe('ShopSetupScreen', () => {
   it('dragging the pin updates the location without changing the address', async () => {
     serve();
     renderWithProviders(<ShopSetupScreen />);
-    fillBasics();
+    await fillBasics();
     await pickAddress();
     fireEvent(marker(), 'dragEnd', {
       nativeEvent: { coordinate: { latitude: 49.84, longitude: 24.03 } },
@@ -135,7 +135,7 @@ describe('ShopSetupScreen', () => {
       timezone: 'Europe/Kyiv',
     });
     renderWithProviders(<ShopSetupScreen />);
-    fillBasics();
+    await fillBasics();
     await pickAddress();
     save();
     await waitFor(() => expect(useSession.getState().user?.storeId).toBe('s1'));

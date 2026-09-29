@@ -49,4 +49,5 @@ export { TabBar, type TabItem } from './TabBar/TabBar';
 export { useTabBarInset } from './TabBar/use-tab-bar-inset';
 export { Text } from './Text/Text';
 export { Ticket } from './Ticket/Ticket';
+export { TimeField } from './TimeField/TimeField';
 export { Toast } from './Toast/Toast';
