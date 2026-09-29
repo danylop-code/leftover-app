@@ -1,1 +1,8 @@
-{}
+{
+  "format": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "window": "{{day}} · {{start}}–{{end}}",
+    "km": "{{value}} km"
+  }
+}
