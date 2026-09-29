@@ -1,6 +1,5 @@
-import { SignedInPlaceholderScreen } from '../../../src/features/auth/screens/SignedInPlaceholderScreen';
+import { DiscoverScreen } from '../../../src/features/discover/screens/DiscoverScreen';
 
-// Placeholder until its feature lands (see SignedInPlaceholderScreen).
 export default function DiscoverRoute() {
-  return <SignedInPlaceholderScreen screen="discover" />;
+  return <DiscoverScreen />;
 }

@@ -6,7 +6,6 @@ import { Button, HeaderLarge, Screen } from '../../../shared/ui';
 import { styles } from './styles';
 
 const titles = {
-  discover: 'tabs.discover',
   orders: 'tabs.orders',
   profile: 'tabs.profile',
   bags: 'tabs.bags',
@@ -16,7 +15,7 @@ const titles = {
 type Props = { screen: keyof typeof titles };
 
 /**
- * Stand-in for screens owned by later features (06 Discover, 10/12 Orders,
+ * Stand-in for screens owned by later features (10/12 Orders,
  * 11 Bags, 15 Profile). Shows who is signed in and offers Log out. Replaced route by route.
  */
 export function SignedInPlaceholderScreen({ screen }: Props) {
