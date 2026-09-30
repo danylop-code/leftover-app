@@ -19,3 +19,10 @@
 - expo-router's Jest matchers (`toHavePathname`…) have no shipped types; they're declared in `src/shared/testing/expo-router-matchers.d.ts`.
 - Expo Router groups don't appear in URLs: two groups can't both have `orders.tsx`. Store routes are prefixed (`store-orders`, `store-profile`).
 - Biome's `useValidAriaRole` treats any JSX prop named `role` as an ARIA role; name domain props differently (`kind`).
+- Don't give a single-line `TextInput` a `lineHeight`: on iOS it pushes the text below centre, out of line with icons beside it. `Input` uses font + size only; multi-line `Textarea` keeps the body line height.
+- Maps: `react-native-maps` + `expo-location` ship in Expo Go, so no Android Maps key is needed there. A dev build or release on Android needs `android.config.googleMaps.apiKey` in `app.json` first.
+- Running on the iOS Simulator with Xcode 26: Expo Go won't install on the older iOS 17.2 runtimes ("Failed to make staged container live"). Use an iOS 26 device (e.g. iPhone 17).
+- Start Metro from `apps/mobile` (or `pnpm dev:mobile`). From the repo root Expo falls back to `expo/AppEntry.js` and fails with `Unable to resolve "../../App"`.
+- Don't start Metro with `--localhost`: it binds IPv6 `[::1]` only and Expo Go (asking `127.0.0.1`) reports "Could not connect to the server". The default LAN mode works.
+- The app's "Couldn't connect" banner on login usually means `pnpm dev:api` isn't running.
+- In expo-router Jest tests, a fetch mock matching `url.endsWith('/me')` also matches `/stores/me`; check the longer path first.

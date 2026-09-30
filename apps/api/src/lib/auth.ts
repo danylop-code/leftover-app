@@ -13,7 +13,7 @@ export const requireAuth = createMiddleware<AppEnv>(async (c, next) => {
   if (!token) throw unauthorized();
   const session = await userForToken(c.var.db, token);
   if (!session) throw unauthorized();
-  c.set('user', toMe(session.user));
+  c.set('user', toMe(session.user, session.storeId));
   c.set('tokenHash', session.tokenHash);
   await next();
 });

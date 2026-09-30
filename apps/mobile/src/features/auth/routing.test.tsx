@@ -15,6 +15,7 @@ const customer: Me = {
   firstName: 'Olena',
   role: 'customer',
   createdAt: '2026-09-29T10:00:00.000Z',
+  storeId: null,
 };
 const owner: Me = {
   ...customer,
@@ -23,6 +24,7 @@ const owner: Me = {
   firstName: 'Taras',
   role: 'store',
 };
+const ownerWithShop: Me = { ...owner, storeId: 's1' };
 
 const json = (status: number, body: unknown) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -64,10 +66,25 @@ describe('auth routing', () => {
     expect(screen.getByText('Signed in as Olena · olena@example.com')).toBeOnTheScreen();
   });
 
-  it('cold-starts a stored shop owner into Bags', async () => {
+  it('cold-starts a shop owner with a shop into Bags', async () => {
+    await storeSession(ownerWithShop);
+    serve((url) => (url.endsWith('/me') ? json(200, ownerWithShop) : undefined));
+    renderApp();
+    await waitFor(() => expect(screen).toHavePathname('/bags'));
+  });
+
+  it('always sends a shop owner without a shop to setup; the tabs are unreachable', async () => {
     await storeSession(owner);
     serve((url) => (url.endsWith('/me') ? json(200, owner) : undefined));
-    renderApp();
+    renderRouter('./app', { initialUrl: '/store-orders' });
+    await waitFor(() => expect(screen).toHavePathname('/setup'));
+    expect(screen.getByText('Set up your shop')).toBeOnTheScreen();
+  });
+
+  it('keeps a set-up shop owner out of setup', async () => {
+    await storeSession(ownerWithShop);
+    serve((url) => (url.endsWith('/me') ? json(200, ownerWithShop) : undefined));
+    renderRouter('./app', { initialUrl: '/setup' });
     await waitFor(() => expect(screen).toHavePathname('/bags'));
   });
 

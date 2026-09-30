@@ -105,5 +105,41 @@
     "orders": "Orders",
     "profile": "Profile",
     "bags": "Bags"
+  },
+  "categories": {
+    "bakery": "Bakery",
+    "meals": "Meals",
+    "groceries": "Groceries",
+    "cafe": "Café",
+    "produce": "Produce",
+    "other": "Other"
+  },
+  "shopSetup": {
+    "title": "Set up your shop",
+    "subtitle": "Tell customers where to find you. You can change this later.",
+    "name": "Shop name",
+    "category": "Category",
+    "address": "Address",
+    "addressPlaceholder": "Street and number, city",
+    "addressHelp": "Search the address to place the pin, then drag it to fine-tune.",
+    "searching": "Finding your address…",
+    "found": "Pin placed at your address — drag it to fine-tune.",
+    "moved": "Pin moved. Your typed address stays as it is.",
+    "notFound": "We couldn’t find that address. Drag the pin to your shop instead.",
+    "map": "Shop location on the map",
+    "hours": "Opening hours",
+    "opensAt": "Opens at",
+    "closesAt": "Closes at",
+    "timePlaceholder": "HH:mm",
+    "submit": "Save and continue",
+    "logout": "Log out",
+    "errors": {
+      "name": "Enter your shop’s name (2–60 characters).",
+      "category": "Pick a category.",
+      "address": "Enter the street address (3–120 characters).",
+      "pin": "Find your address or drag the pin to your shop.",
+      "time": "Use HH:mm, e.g. 08:00.",
+      "closesAfterOpens": "Closing time must be after opening time."
+    }
   }
 }

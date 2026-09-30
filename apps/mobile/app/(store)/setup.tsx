@@ -1,6 +1,10 @@
-import { SignedInPlaceholderScreen } from '../../src/features/auth/screens/SignedInPlaceholderScreen';
+import { ShopGate } from '../../src/features/shop-setup/components/ShopGate/ShopGate';
+import { ShopSetupScreen } from '../../src/features/shop-setup/screens/ShopSetupScreen';
 
-// Placeholder until its feature lands (see SignedInPlaceholderScreen).
 export default function SetupRoute() {
-  return <SignedInPlaceholderScreen screen="setup" />;
+  return (
+    <ShopGate need="noShop">
+      <ShopSetupScreen />
+    </ShopGate>
+  );
 }

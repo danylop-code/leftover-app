@@ -21,9 +21,11 @@ Design: [Leftover App Design canvas](https://claude.ai/artifact/9xNrBDdebCvj6Auj
 | 14 | [favorites](14-favorites.md) | 06, 07 | — (heart on BagCard / StoreDetail) | — |
 | 15 | [profile-settings](15-profile-settings.md) | 03, 05, 10 | Settings | — |
 | 16 | [report-problem](16-report-problem.md) | 10 | Report, ReportSent | — |
+| 17 | [web-support](17-web-support.md) | 01–16 | — (existing screens in a browser) | — |
+| 18 | [floating-tab-bar](18-floating-tab-bar.md) | 01, 03 | Components (tab bar; canvas update first) | — |
 
-Recommended sequence: 01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 11 → 12 → 09 → 10 → 13 → 14 → 15 → 16.
-(11 and 12 move up so that 09 can show the real "collected" transition.)
+Recommended sequence: 01 → 02 → 03 → 04 → 05 → 18 → 06 → 07 → 08 → 11 → 12 → 09 → 10 → 13 → 14 → 15 → 16 → 17.
+(11 and 12 move up so that 09 can show the real "collected" transition. 18 lands before 06, the first real tab screen.)
 
 ## Cross-cutting decisions
 - **Money:** UAH, integer kopiyky (`priceMinor: 14900` = ₴149). Format with `formatMoney` only in UI.
@@ -35,4 +37,4 @@ Recommended sequence: 01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 11
 - **Payment:** pay at the store. The app never handles money.
 
 ## Global out of scope (every brief)
-Payments · push notifications · password reset / email verification · real food photos (category tint placeholders stay) · languages other than English · admin UI · rate limiting · web target.
+Payments · push notifications · password reset / email verification · real food photos (category tint placeholders stay) · languages other than English · admin UI · rate limiting · web target (until [17](17-web-support.md); demos run on the iOS Simulator / Android emulator via Expo Go until then).

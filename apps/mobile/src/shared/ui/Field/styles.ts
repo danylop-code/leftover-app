@@ -31,8 +31,11 @@ export const inputStyles = StyleSheet.create({
   },
   focus: { borderColor: color.primary },
   error: { borderColor: color.danger },
+  // No lineHeight: on iOS it pushes single-line TextInput text below centre (misaligned with
+  // the icon). Font and size still match `typography.body`.
   input: {
-    ...typography.body,
+    fontFamily: typography.body.fontFamily,
+    fontSize: typography.body.fontSize,
     flex: 1,
     minWidth: 0,
     height: '100%',
