@@ -98,6 +98,8 @@ export async function apiRequest<S extends z.ZodType>(
   const payload = await readJson(res);
 
   if (!res.ok) {
+    // An authenticated call rejected: the token expired or was revoked (a failed login sends none).
+    if (res.status === 401 && token) await useSession.getState().signOut();
     const envelope = payload.ok ? ApiErrorBody.safeParse(payload.value) : undefined;
     if (envelope?.success) {
       const { code, message, fields } = envelope.data.error;

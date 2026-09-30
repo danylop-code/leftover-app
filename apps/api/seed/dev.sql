@@ -2,7 +2,8 @@
 -- Pickup windows are relative to the moment the seed runs (UTC; Kyiv is UTC+2/+3), so re-run it
 -- to refresh them: `pnpm --filter @leftover/api db:seed:local`. Idempotent: it removes its own
 -- rows (ids starting with `seed-`) first.
--- Owners have a placeholder password hash that can never verify; auth (03) adds demo logins.
+-- Demo logins (all share the password `leftover24`): olena@seed.leftover.app (customer),
+-- crumb@ / kasha@ / zelena@ / morning@ / greenrow@seed.leftover.app (shop owners).
 
 DELETE FROM orders WHERE id LIKE 'seed-%' OR bag_id LIKE 'seed-%';
 DELETE FROM bags WHERE id LIKE 'seed-%';
@@ -11,12 +12,12 @@ DELETE FROM sessions WHERE user_id LIKE 'seed-%';
 DELETE FROM users WHERE id LIKE 'seed-%';
 
 INSERT INTO users (id, email, password_hash, first_name, role, created_at) VALUES
-  ('seed-owner-crumb', 'crumb@seed.leftover.app', '!seed-no-login', 'Taras', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-  ('seed-owner-kasha', 'kasha@seed.leftover.app', '!seed-no-login', 'Iryna', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-  ('seed-owner-zelena', 'zelena@seed.leftover.app', '!seed-no-login', 'Oksana', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-  ('seed-owner-morning', 'morning@seed.leftover.app', '!seed-no-login', 'Andriy', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-  ('seed-owner-greenrow', 'greenrow@seed.leftover.app', '!seed-no-login', 'Marta', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
-  ('seed-customer-olena', 'olena@seed.leftover.app', '!seed-no-login', 'Olena', 'customer', strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
+  ('seed-owner-crumb', 'crumb@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Taras', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  ('seed-owner-kasha', 'kasha@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Iryna', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  ('seed-owner-zelena', 'zelena@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Oksana', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  ('seed-owner-morning', 'morning@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Andriy', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  ('seed-owner-greenrow', 'greenrow@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Marta', 'store', strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+  ('seed-customer-olena', 'olena@seed.leftover.app', 'pbkdf2-sha256$100000$eF-IQXIXz_GqehfH8api5w$TDpv5juiij0seSfSaNJbiD102DFiDgcOnd6qzM-f3YU', 'Olena', 'customer', strftime('%Y-%m-%dT%H:%M:%fZ', 'now'));
 
 -- Distances from vul. Doroshenka 14 (49.8421, 24.0224): Crumb ~0.8 km, Kasha ~1.4 km,
 -- Morning Proof ~1.1 km, Zelena ~2.2 km, Green Row ~6.0 km (outside the default 5 km radius).
