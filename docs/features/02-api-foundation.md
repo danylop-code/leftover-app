@@ -24,13 +24,13 @@ No artboards. This is groundwork for every flow. Data model and conventions: [RE
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a fresh local D1, when `db:migrate:local` then `db:seed:local` run, then both succeed and the seed stores are queryable.
-- [ ] Given `GET /health`, then 200 `{ ok: true }`.
-- [ ] Given an unknown route, then 404 with the error envelope `code: "not_found"`.
-- [ ] Given a body that fails a Zod schema, then 400 with `code: "validation"` and per-field messages.
-- [ ] Given a thrown unexpected error, then 500 `code: "internal"` with no stack in the body.
-- [ ] Given a response that doesn't match the schema passed to `client.ts`, then the call rejects with a typed parse error (never returns unparsed data).
-- [ ] `haversineKm` is accurate to ±0.5% against known city pairs.
+- [x] Given a fresh local D1, when `db:migrate:local` then `db:seed:local` run, then both succeed and the seed stores are queryable.
+- [x] Given `GET /health`, then 200 `{ ok: true }`.
+- [x] Given an unknown route, then 404 with the error envelope `code: "not_found"`.
+- [x] Given a body that fails a Zod schema, then 400 with `code: "validation"` and per-field messages.
+- [x] Given a thrown unexpected error, then 500 `code: "internal"` with no stack in the body.
+- [x] Given a response that doesn't match the schema passed to `client.ts`, then the call rejects with a typed parse error (never returns unparsed data).
+- [x] `haversineKm` is accurate to ±0.5% against known city pairs.
 
 ### Approach steps
 1. Write the shared schemas + `haversineKm` (+ tests).
@@ -48,10 +48,20 @@ No artboards. This is groundwork for every flow. Data model and conventions: [RE
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/02-api-foundation`
+- 2026-09-29 — done. Decisions and deviations:
+  - `client.ts` needs the bearer token, so a minimal `src/shared/store/session.ts` (token only, not persisted) lands here; 03 adds the user, `expo-secure-store` persistence and 401 handling.
+  - Client errors: `ApiError` (status, code, fields, plus extra envelope keys as `details`, e.g. `qtyAvailable`), `NetworkError`, `ParseError`. `NoContent` schema for 204 endpoints. The shared schema is `ApiError`; the mobile class shares the name, so the client imports the schema as `ApiErrorBody`.
+  - API domain errors are `AppError(status, code, message, details?)`; details are spread into the envelope. Malformed JSON bodies map to 400 `validation`.
+  - 400/500 tests use a test-only Hono app wired with the same `installErrorHandling`, so no test route ships.
+  - Schema adds CHECK constraints (0 ≤ `qty_available` ≤ `qty_total`, money ≥ 0, order qty > 0) as a backstop to the guarded UPDATEs.
+  - Seed owners have a placeholder password hash that never verifies; 03 adds demo logins. Pickup windows are relative to seed time; the seed is idempotent (removes `seed-%` rows first).
+  - Shared also exports `Role`, `OrderStatus`, `PickupCode`, `TimeOfDay`, `Health`, `DEFAULT_TIMEZONE`.
+  - `keys.ts` stays empty with the pattern documented; features add their keys.

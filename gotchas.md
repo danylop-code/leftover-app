@@ -10,3 +10,6 @@
 - `Intl` month names differ by locale: CLDR `en-GB` abbreviates September as "Sept"; the design uses "Sep", so date parts are formatted with `en-US` (`src/shared/lib/format.ts`).
 - Mobile tests have no Node types (`fs`, `__dirname` fail typecheck). Keep fixtures as TS modules instead of reading files.
 - The Biome no-literals plugins (`tools/biome/*.grit`) only run on paths listed in `biome.json` `overrides`; a new mobile source folder outside `apps/mobile/src` or `apps/mobile/app` isn't checked until it's added there.
+- `declare module '*.sql?raw'` only works in an ambient `.d.ts` with no top-level imports; inside a module file it becomes an augmentation and the import stays untyped (`apps/api/test/sql-raw.d.ts`).
+- Seed pickup windows are relative to when `db:seed:local` ran (UTC). If Discover looks empty in dev, re-run the seed.
+- Hono's validator throws `HTTPException(400)` for unparseable bodies before our Zod schema runs; `installErrorHandling` maps it to `validation`.
