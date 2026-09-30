@@ -45,6 +45,7 @@ beforeEach(() => {
   fetchMock = jest.spyOn(globalThis, 'fetch').mockImplementation(async (url, init) => {
     if (String(url).endsWith('/auth/logout')) return new Response(null, { status: 204 });
     if (String(url).endsWith('/me')) return json(200, customer);
+    if (String(url).includes('/bags/nearby')) return json(200, { bags: [] });
     throw new Error(`unexpected ${init?.method ?? 'GET'} ${String(url)}`);
   });
 });
@@ -75,8 +76,8 @@ describe('location routing', () => {
   });
 
   it('forgets the location on logout, so the next account starts at Location', async () => {
-    await start('/', { selected: dorosh, radiusKm: 12 });
-    await waitFor(() => expect(screen).toHavePathname('/discover'));
+    await start('/profile', { selected: dorosh, radiusKm: 12 });
+    await waitFor(() => expect(screen).toHavePathname('/profile'));
     await act(async () => {
       fireEvent.press(screen.getByRole('button', { name: 'Log out' }));
     });

@@ -31,3 +31,6 @@
 - Outbound `fetch` from Worker code can be stubbed in API tests with `vi.spyOn(globalThis, 'fetch')` (see `test/geo-autocomplete.test.ts`); `app.request` itself doesn't go through it.
 - React Query notifies observers on a `setTimeout(0)`: a test that ends right after a state change can log "not wrapped in act". End it on a `waitFor` of the visible result.
 - RN 0.86's types have no `StyleSheet.absoluteFillObject`; spell out `position: 'absolute'` and the four edges.
+- API discovery tests place their shops far from Lviv (`freshCentre()` in `test/helpers/fixtures.ts`), so the seed's Lviv shops (loaded by `seed.test.ts`) can't show up in their results.
+- Never give the Discover query `placeholderData`/`keepPreviousData`: while a new area loads, the old list would show distances from the previous location.
+- The Biome no-literals plugin also flags numbers in SVG props. Keep illustration geometry in the component's `styles.ts` (see `EmptyBagArt`, `LogoMark`).

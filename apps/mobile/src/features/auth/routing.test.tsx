@@ -35,7 +35,8 @@ type Route = (url: string, init: RequestInit) => Response | undefined;
 let fetchMock: jest.SpyInstance;
 const serve = (route: Route) =>
   fetchMock.mockImplementation(async (url: string, init: RequestInit) => {
-    const res = route(url, init);
+    // Discover (06) loads bags on arrival; these tests only care about routing.
+    const res = url.includes('/bags/nearby') ? json(200, { bags: [] }) : route(url, init);
     if (!res) throw new Error(`unexpected request ${init.method ?? 'GET'} ${url}`);
     return res;
   });
@@ -80,7 +81,7 @@ describe('auth routing', () => {
     renderApp();
     await waitFor(() => expect(screen).toHavePathname('/discover'));
     expect(screen.queryByText('Good food deserves a second chance.')).toBeNull();
-    expect(screen.getByText('Signed in as Olena · olena@example.com')).toBeOnTheScreen();
+    expect(await screen.findByText('Rescue something tasty')).toBeOnTheScreen();
   });
 
   it('cold-starts a shop owner with a shop into Bags', async () => {
@@ -153,8 +154,9 @@ describe('auth routing', () => {
       if (url.endsWith('/auth/logout')) return new Response(null, { status: 204 });
       return undefined;
     });
-    renderApp();
-    await waitFor(() => expect(screen).toHavePathname('/discover'));
+    // Customers log out from Profile (a placeholder until 15).
+    renderRouter('./app', { initialUrl: '/profile' });
+    await waitFor(() => expect(screen).toHavePathname('/profile'));
     await act(async () => {
       fireEvent.press(screen.getByRole('button', { name: 'Log out' }));
     });

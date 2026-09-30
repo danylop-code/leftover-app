@@ -166,5 +166,39 @@
       "searching": "Searching…",
       "noResults": "No matches. Try a street name or a place."
     }
+  },
+  "discover": {
+    "title": "Rescue something tasty",
+    "pickupNear": "Pickup near",
+    "pill": "Pickup near {{label}}, {{km}} km. Change location",
+    "mapView": "Map view",
+    "categories": "Categories",
+    "all": "All",
+    "section": "Pick up today",
+    "count_one": "{{count}} bag",
+    "count_other": "{{count}} bags",
+    "finding": "Finding bags…",
+    "loading": "Loading bags near you",
+    "empty": {
+      "title": "Nothing nearby right now",
+      "text": "No bags within {{km}} km yet. Shops add bags through the day — try a wider area.",
+      "textFiltered": "No {{noun}} bags within {{km}} km yet. Shops add bags through the day — try a wider area.",
+      "changeLocation": "Change location",
+      "showAll": "Show all categories"
+    },
+    "error": {
+      "title": "Couldn’t load bags",
+      "offline": "Looks like you’re offline. Check your connection and try again.",
+      "server": "Something went wrong on our side. Please try again in a moment.",
+      "retry": "Try again"
+    },
+    "noun": {
+      "bakery": "bakery",
+      "meals": "meal",
+      "groceries": "grocery",
+      "cafe": "café",
+      "produce": "produce",
+      "other": "other"
+    }
   }
 }

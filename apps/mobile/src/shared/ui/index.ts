@@ -17,6 +17,8 @@ export { Header } from './Header/Header';
 export { HeaderLarge } from './Header/HeaderLarge';
 export { IconButton } from './IconButton/IconButton';
 export { Icon, type IconName } from './icons';
+export { EmptyBagArt } from './illustrations/EmptyBagArt';
+export { OfflineArt } from './illustrations/OfflineArt';
 export { ListGroup } from './ListRow/ListGroup';
 export { ListRow } from './ListRow/ListRow';
 export { MapPicker } from './MapPicker/MapPicker';

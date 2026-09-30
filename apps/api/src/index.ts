@@ -3,6 +3,7 @@ import { withDb } from './lib/db';
 import type { AppEnv } from './lib/env';
 import { installErrorHandling } from './lib/errors';
 import { auth } from './routes/auth';
+import { bags } from './routes/bags';
 import { geo } from './routes/geo';
 import { health } from './routes/health';
 import { me } from './routes/me';
@@ -17,5 +18,6 @@ app.route('/auth', auth);
 app.route('/me', me);
 app.route('/stores', stores);
 app.route('/geo', geo);
+app.route('/bags', bags);
 
 export default app;
