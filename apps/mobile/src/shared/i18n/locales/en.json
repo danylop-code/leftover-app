@@ -200,5 +200,32 @@
       "produce": "produce",
       "other": "other"
     }
+  },
+  "storeDetail": {
+    "openToday": "Open today {{opens}}–{{closes}}",
+    "opensLater": "Closed now · opens at {{opens}}",
+    "opensTomorrow": "Closed now · opens tomorrow at {{opens}}",
+    "ratingCount_one": "{{count}} rating",
+    "ratingCount_other": "{{count}} ratings",
+    "away": "{{distance}} away",
+    "directions": "Directions",
+    "available": "Available today",
+    "counts": "{{available}} of {{total}}",
+    "backTomorrow": "Back tomorrow",
+    "bagLabel": "{{title}}, {{window}}, {{stock}}, {{price}}",
+    "soldOutLabel": "{{title}}. Sold out · Back tomorrow",
+    "noBags": "No bags today. Shops add bags through the day — check back later.",
+    "ratings": "Ratings",
+    "notFound": {
+      "title": "This shop isn’t available",
+      "text": "It may have stopped using Leftover. Go back and pick another bag.",
+      "back": "Go back"
+    },
+    "error": {
+      "title": "Couldn’t load this shop",
+      "offline": "Looks like you’re offline. Check your connection and try again.",
+      "server": "Something went wrong on our side. Please try again in a moment.",
+      "retry": "Try again"
+    }
   }
 }

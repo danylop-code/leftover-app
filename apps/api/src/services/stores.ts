@@ -1,10 +1,18 @@
-import { type Store, StoreProfileBody, type StoreProfilePatch } from '@leftover/shared';
-import { eq } from 'drizzle-orm';
+import {
+  haversineKm,
+  type Store,
+  type StoreDetail,
+  type StoreDetailQuery,
+  StoreProfileBody,
+  type StoreProfilePatch,
+} from '@leftover/shared';
+import { and, asc, eq, gt } from 'drizzle-orm';
 import type { Db } from '../db/client';
-import { stores } from '../db/schema';
-import { now } from '../lib/clock';
+import { bags, stores } from '../db/schema';
+import { now, nowIso } from '../lib/clock';
 import { conflict, fieldsFromZod, notFound, ValidationError } from '../lib/errors';
 import { newId } from '../lib/ids';
+import { openStatus } from './opening-hours';
 
 type StoreRow = typeof stores.$inferSelect;
 
@@ -62,4 +70,43 @@ export const updateMyStore = async (
   const next = { name, category, address, lat, lng, opensAt, closesAt, timezone };
   await db.update(stores).set(next).where(eq(stores.id, row.id));
   return toStore({ ...row, ...next });
+};
+
+/**
+ * A shop as a customer sees it: distance from their selected location, whether it's open now
+ * (in its timezone), and today's bags whose window hasn't ended, sold-out ones included.
+ */
+export const getStoreDetail = async (
+  db: Db,
+  id: string,
+  from: StoreDetailQuery,
+): Promise<StoreDetail> => {
+  const row = await db.select().from(stores).where(eq(stores.id, id)).get();
+  if (!row) throw notFound('This shop doesn’t exist.');
+  const today = await db
+    .select({
+      id: bags.id,
+      title: bags.title,
+      category: bags.category,
+      priceMinor: bags.priceMinor,
+      originalPriceMinor: bags.originalPriceMinor,
+      qtyAvailable: bags.qtyAvailable,
+      pickupStart: bags.pickupStart,
+      pickupEnd: bags.pickupEnd,
+    })
+    .from(bags)
+    .where(and(eq(bags.storeId, id), eq(bags.isActive, true), gt(bags.pickupEnd, nowIso())))
+    .orderBy(asc(bags.pickupStart))
+    .all();
+  const available = today.filter((b) => b.qtyAvailable > 0);
+  const soldOut = today.filter((b) => b.qtyAvailable <= 0);
+  const store = toStore(row);
+  return {
+    store,
+    distanceKm: haversineKm(from, store),
+    openStatus: openStatus(store, now()),
+    bags: [...available, ...soldOut],
+    counts: { available: available.length, total: today.length },
+    rating: null,
+  };
 };

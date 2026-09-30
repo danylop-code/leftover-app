@@ -30,6 +30,7 @@ export { Screen } from './Screen/Screen';
 export { Segmented } from './Segmented/Segmented';
 export { Skeleton } from './Skeleton/Skeleton';
 export { Slider } from './Slider/Slider';
+export { Star } from './Stars/Star';
 export { Stars } from './Stars/Stars';
 export { Stepper } from './Stepper/Stepper';
 export { StoreLogo } from './StoreLogo/StoreLogo';

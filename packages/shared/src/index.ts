@@ -9,5 +9,6 @@ export * from './geo';
 export * from './order';
 export * from './place';
 export * from './store';
+export * from './store-detail';
 export * from './store-profile';
 export * from './user';

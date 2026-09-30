@@ -44,8 +44,8 @@ export function DiscoverScreen() {
   );
 
   const openLocation = () => router.push('/location');
-  // StoreDetail (07) opens from here.
-  const openBag = (_bag: NearbyBag) => {};
+  const openBag = (bag: NearbyBag) =>
+    router.push({ pathname: '/store/[id]', params: { id: bag.store.id } });
 
   const refresh = async () => {
     setPulling(true);

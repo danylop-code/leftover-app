@@ -58,7 +58,11 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 
 const open = () =>
   renderRouter(
-    { discover: DiscoverScreen, location: () => <Text>Location screen</Text> },
+    {
+      discover: DiscoverScreen,
+      location: () => <Text>Location screen</Text>,
+      'store/[id]': () => <Text>Store screen</Text>,
+    },
     { initialUrl: '/discover', wrapper: Wrapper },
   );
 
@@ -192,5 +196,13 @@ describe('DiscoverScreen', () => {
       fireEvent(screen.getByTestId('discover-list'), 'refresh');
     });
     await waitFor(() => expect(request.mock.calls.length).toBe(calls + 1));
+  });
+
+  it('opens the bag’s shop', async () => {
+    serve([crumb]);
+    open();
+    fireEvent.press(await screen.findByRole('button', { name: /^Bakery surprise bag from/ }));
+    expect(await screen.findByText('Store screen')).toBeOnTheScreen();
+    expect(screen).toHavePathname('/store/s1');
   });
 });

@@ -54,6 +54,8 @@ export function BagRow(props: Props) {
     return (
       <View
         style={[styles.row, props.soldOut && styles.dimmed]}
+        accessible={Boolean(props.accessibilityLabel)}
+        accessibilityLabel={props.accessibilityLabel}
         accessibilityState={{ disabled: Boolean(props.soldOut) }}
       >
         {inner}
