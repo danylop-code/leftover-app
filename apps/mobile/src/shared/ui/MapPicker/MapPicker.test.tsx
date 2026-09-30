@@ -55,4 +55,23 @@ describe('MapPicker', () => {
       expect.objectContaining({ latitude: 50.45, longitude: 30.52 }),
     );
   });
+
+  it('reframes when the radius changes after the pin was dragged', () => {
+    const onChange = jest.fn();
+    const { rerender } = render(
+      <MapPicker value={here} onChange={onChange} label="Area" radiusKm={5} />,
+    );
+    const dragged = { latitude: 49.85, longitude: 24.04 };
+    fireEvent(screen.getByTestId('map-marker'), 'dragEnd', {
+      nativeEvent: { coordinate: dragged },
+    });
+    const next = { lat: dragged.latitude, lng: dragged.longitude };
+    rerender(<MapPicker value={next} onChange={onChange} label="Area" radiusKm={5} />);
+    animateToRegion.mockClear();
+
+    rerender(<MapPicker value={next} onChange={onChange} label="Area" radiusKm={12} />);
+    expect(animateToRegion).toHaveBeenCalledWith(
+      expect.objectContaining({ latitude: 49.85, longitude: 24.04 }),
+    );
+  });
 });

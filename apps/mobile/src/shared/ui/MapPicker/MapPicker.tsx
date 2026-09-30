@@ -34,11 +34,15 @@ export function MapPicker({ value, onChange, label, radiusKm, style }: Props) {
   const ref = useRef<MapView>(null);
   const initialRegion = useRef(regionFor(value, radiusKm)).current;
   const lastEmitted = useRef<LatLng | null>(null);
+  const lastRadius = useRef(radiusKm);
 
   useEffect(() => {
     const emitted = lastEmitted.current;
-    // Moves we reported ourselves are already on screen; only follow outside changes.
-    if (emitted && emitted.lat === value.lat && emitted.lng === value.lng) return;
+    const radiusChanged = lastRadius.current !== radiusKm;
+    lastRadius.current = radiusKm;
+    // Moves we reported ourselves are already on screen; only follow outside changes, and
+    // reframe when the radius changes so the circle stays in view.
+    if (!radiusChanged && emitted && emitted.lat === value.lat && emitted.lng === value.lng) return;
     ref.current?.animateToRegion(regionFor(value, radiusKm));
   }, [value, radiusKm]);
 

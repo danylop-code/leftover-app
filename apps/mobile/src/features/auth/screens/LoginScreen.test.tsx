@@ -20,7 +20,7 @@ const logIn = (email = 'olena@example.com', password = 'leftover24') => {
 
 beforeEach(() => {
   request.mockReset();
-  useSession.setState({ status: 'signedOut', token: null, user: null, justRegistered: false });
+  useSession.setState({ status: 'signedOut', token: null, user: null });
 });
 
 describe('LoginScreen', () => {
@@ -49,7 +49,7 @@ describe('LoginScreen', () => {
     expect(request).not.toHaveBeenCalled();
   });
 
-  it('signs in on success (not flagged as just registered)', async () => {
+  it('signs in on success', async () => {
     request.mockResolvedValue({
       token: 'tok',
       user: {
@@ -64,7 +64,6 @@ describe('LoginScreen', () => {
     renderWithProviders(<LoginScreen />);
     logIn();
     await waitFor(() => expect(useSession.getState().status).toBe('signedIn'));
-    expect(useSession.getState().justRegistered).toBe(false);
   });
 
   it('toggles password visibility', () => {

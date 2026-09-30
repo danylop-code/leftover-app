@@ -1,4 +1,5 @@
 // The shared UI kit. Screens import from here, never from a component folder.
+export { AddressAutocomplete } from './AddressAutocomplete/AddressAutocomplete';
 export { Badge, type BadgeTone } from './Badge/Badge';
 export { stockTone } from './Badge/stock-tone';
 export { BagCard } from './BagCard/BagCard';
@@ -20,6 +21,7 @@ export { ListGroup } from './ListRow/ListGroup';
 export { ListRow } from './ListRow/ListRow';
 export { MapPicker } from './MapPicker/MapPicker';
 export { OrderCard } from './OrderCard/OrderCard';
+export { PlaceRow } from './PlaceRow/PlaceRow';
 export { Price } from './Price/Price';
 export { RatingBar } from './RatingBar/RatingBar';
 export { Screen } from './Screen/Screen';

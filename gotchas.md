@@ -26,3 +26,8 @@
 - Don't start Metro with `--localhost`: it binds IPv6 `[::1]` only and Expo Go (asking `127.0.0.1`) reports "Could not connect to the server". The default LAN mode works.
 - The app's "Couldn't connect" banner on login usually means `pnpm dev:api` isn't running.
 - In expo-router Jest tests, a fetch mock matching `url.endsWith('/me')` also matches `/stores/me`; check the longer path first.
+- Zustand `persist` writes on every `setState`, including a test resetting the store. To simulate a restart, put the saved entry back into AsyncStorage before `persist.rehydrate()`. The location store uses `skipHydration`; `useBootstrapSession` rehydrates it before routing.
+- Photon (address autocomplete) is komoot's public, fair-use instance with no SLA. Send a `User-Agent`, keep the app debounced, and self-host or switch the adapter (`apps/api/src/services/geo/photon.ts`) before real traffic. It can list one OSM object twice (street + house), so suggestion ids repeat unless deduped.
+- Outbound `fetch` from Worker code can be stubbed in API tests with `vi.spyOn(globalThis, 'fetch')` (see `test/geo-autocomplete.test.ts`); `app.request` itself doesn't go through it.
+- React Query notifies observers on a `setTimeout(0)`: a test that ends right after a state change can log "not wrapped in act". End it on a `waitFor` of the visible result.
+- RN 0.86's types have no `StyleSheet.absoluteFillObject`; spell out `position: 'absolute'` and the four edges.

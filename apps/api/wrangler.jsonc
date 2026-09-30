@@ -4,6 +4,11 @@
   "main": "src/index.ts",
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    // Address autocomplete provider (brief 05). komoot's public Photon: free, no key, fair use.
+    // Self-host Photon (or switch the adapter in src/services/geo) before real traffic.
+    "PHOTON_URL": "https://photon.komoot.io"
+  },
   "d1_databases": [
     {
       "binding": "DB",

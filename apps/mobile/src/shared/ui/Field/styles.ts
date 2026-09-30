@@ -29,6 +29,7 @@ export const inputStyles = StyleSheet.create({
     borderColor: color.borderStrong,
     backgroundColor: color.surface,
   },
+  pill: { borderRadius: radius.pill },
   focus: { borderColor: color.primary },
   error: { borderColor: color.danger },
   // No lineHeight: on iOS it pushes single-line TextInput text below centre (misaligned with

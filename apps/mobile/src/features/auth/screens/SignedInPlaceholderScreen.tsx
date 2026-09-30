@@ -10,14 +10,13 @@ const titles = {
   orders: 'tabs.orders',
   profile: 'tabs.profile',
   bags: 'tabs.bags',
-  location: 'auth.placeholder.location',
   setup: 'auth.placeholder.setup',
 } as const;
 
 type Props = { screen: keyof typeof titles };
 
 /**
- * Stand-in for screens owned by later features (04 setup, 05 location, 06 Discover, 10/12 Orders,
+ * Stand-in for screens owned by later features (06 Discover, 10/12 Orders,
  * 11 Bags, 15 Profile). Shows who is signed in and offers Log out. Replaced route by route.
  */
 export function SignedInPlaceholderScreen({ screen }: Props) {
