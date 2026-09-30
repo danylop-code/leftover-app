@@ -26,6 +26,7 @@ Design: [Leftover App Design canvas](https://claude.ai/artifact/9xNrBDdebCvj6Auj
 | 19 | [dark-theme](19-dark-theme.md) | 01, 18 | All (dark token set + dark Components artboard first) | — |
 | 20 | [images](20-images.md) | 04, 11 | StoreDetail, Discover, AddBag (real photos instead of tints) | store-add-bag (optional photo) |
 | 21 | [oman-localization](21-oman-localization.md) | 01–18 | All (Arabic RTL, OMR) | both flows once in Arabic |
+| 22 | [native-layout](22-native-layout.md) | 19–21 | — (fit fixes on existing screens) | — |
 
 Recommended sequence: 01 → 02 → 03 → 04 → 05 → 18 → 06 → 07 → 08 → 11 → 12 → 09 → 10 → 13 → 14 → 15 → 16 → 17.
 (11 and 12 move up so that 09 can show the real "collected" transition. 18 lands before 06, the first real tab screen.)
