@@ -3,7 +3,7 @@
     "today": "Today",
     "tomorrow": "Tomorrow",
     "window": "{{day}} · {{start}}–{{end}}",
-    "km": "{{value}} km",
+    "km": "{{value}}\u00a0km",
     "range": "{{start}}–{{end}}",
     "minutes": "{{minutes}} min",
     "hours": "{{hours}} h",

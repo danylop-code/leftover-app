@@ -92,7 +92,7 @@ describe('LocationScreen', () => {
     fireEvent(slider(), 'accessibilityAction', { nativeEvent: { actionName: 'decrement' } });
     fireEvent(slider(), 'accessibilityAction', { nativeEvent: { actionName: 'decrement' } });
     fireEvent(slider(), 'accessibilityAction', { nativeEvent: { actionName: 'decrement' } });
-    expect(slider()).toHaveAccessibilityValue({ min: 1, max: 30, now: 1, text: '1 km' });
+    expect(slider()).toHaveAccessibilityValue({ min: 1, max: 30, now: 1, text: '1\u00a0km' });
     expect(circle()).toHaveProp('radius', 1000);
   });
 

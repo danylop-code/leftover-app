@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { isolate } from './bidi';
 import { deviceLanguage } from './languages';
 import ar from './locales/ar.json';
 import en from './locales/en.json';
@@ -17,7 +18,12 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   supportedLngs: ['en', 'ar'],
   initAsync: false,
-  interpolation: { escapeValue: false },
+  // React escapes for us, so "escaping" is used for bidi only: in Arabic every value (a Latin
+  // shop name, an address, a price) is isolated so it can't reorder the sentence around it.
+  interpolation: {
+    escapeValue: true,
+    escape: (value: string) => (i18n.language === 'ar' ? isolate(value) : value),
+  },
   returnNull: false,
 });
 

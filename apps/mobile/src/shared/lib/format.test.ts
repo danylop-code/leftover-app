@@ -1,4 +1,5 @@
 import i18n from '../i18n';
+import { stripBidi } from '../testing/bidi';
 import {
   currencySymbol,
   dayKind,
@@ -48,16 +49,16 @@ describe('formatDiscount', () => {
 
 describe('formatDistance', () => {
   it('uses one decimal under 10 km', () => {
-    expect(formatDistance(0.8)).toBe('0.8 km');
-    expect(formatDistance(1.44)).toBe('1.4 km');
+    expect(formatDistance(0.8)).toBe('0.8\u00a0km');
+    expect(formatDistance(1.44)).toBe('1.4\u00a0km');
   });
 
   it('never shows 0.0', () => {
-    expect(formatDistance(0.01)).toBe('0.1 km');
+    expect(formatDistance(0.01)).toBe('0.1\u00a0km');
   });
 
   it('rounds to whole km from 10 km', () => {
-    expect(formatDistance(12.6)).toBe('13 km');
+    expect(formatDistance(12.6)).toBe('13\u00a0km');
   });
 });
 
@@ -141,7 +142,8 @@ describe('money in Oman (OMR, 3 decimals)', () => {
 
   it('puts the Arabic symbol after the amount in Arabic', async () => {
     await i18n.changeLanguage('ar');
-    expect(formatMoney(1500)).toBe('1.500 ر.ع.');
+    // The amount is isolated (FSI…PDI) so it can't reorder the sentence it's set in.
+    expect(formatMoney(1500)).toBe('\u20681.500\u2069 ر.ع.');
     expect(currencySymbol()).toBe('ر.ع.');
   });
 
@@ -165,7 +167,7 @@ describe('dates in Arabic', () => {
     await i18n.changeLanguage('ar');
     const now = new Date('2026-09-29T10:00:00Z');
     const day = formatDay('2026-10-03T14:00:00Z', 'Asia/Muscat', now);
-    expect(day).toBe('السبت، 3 أكتوبر');
+    expect(stripBidi(day)).toBe('السبت، 3 أكتوبر');
     expect(formatDay('2026-09-29T14:00:00Z', 'Asia/Muscat', now)).toBe('اليوم');
     expect(formatTime('2026-09-29T14:00:00Z', 'Asia/Muscat')).toBe('18:00');
   });

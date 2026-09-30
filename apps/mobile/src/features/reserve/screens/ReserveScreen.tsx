@@ -6,6 +6,7 @@ import { Text, View } from 'react-native';
 import { ApiError, NetworkError } from '../../../shared/api/client';
 import { useStoreDetail } from '../../../shared/api/use-store-detail';
 import { DEFAULT_MAP_CENTER } from '../../../shared/constants/map';
+import { isolateIn } from '../../../shared/i18n/bidi';
 import {
   dayKind,
   formatDay,
@@ -14,6 +15,7 @@ import {
   formatTimeRange,
 } from '../../../shared/lib/format';
 import { useLocation } from '../../../shared/store/location';
+import { useTheme } from '../../../shared/theme';
 import {
   Badge,
   BagRow,
@@ -43,6 +45,7 @@ type Failure = 'soldOut' | 'notAvailable';
  */
 export function ReserveScreen() {
   const { clockColor, styles } = useStyles();
+  const { direction } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
   const { bagId, storeId } = useLocalSearchParams<{ bagId: string; storeId: string }>();
@@ -153,7 +156,12 @@ export function ReserveScreen() {
                     {t('reserve.save', { amount: formatMoney(originalMinor - totalMinor) })}
                   </Text>
                 </View>
-                <Price priceMinor={totalMinor} originalMinor={originalMinor} size="lg" />
+                <Price
+                  priceMinor={totalMinor}
+                  originalMinor={originalMinor}
+                  size="lg"
+                  align="end"
+                />
               </View>
               <Button
                 block
@@ -191,7 +199,9 @@ export function ReserveScreen() {
           </View>
         </View>
 
-        {!out && bag.description ? <Text style={styles.description}>{bag.description}</Text> : null}
+        {!out && bag.description ? (
+          <Text style={styles.description}>{isolateIn(direction, bag.description)}</Text>
+        ) : null}
 
         <View style={styles.card}>
           <View style={styles.qtyText}>

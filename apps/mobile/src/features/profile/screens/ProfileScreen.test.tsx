@@ -4,6 +4,7 @@ import { apiRequest } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
 import { usePreferences } from '../../../shared/store/preferences';
 import { useSession } from '../../../shared/store/session';
+import { bidiName } from '../../../shared/testing/bidi';
 import { crumbStore, customer, shopOwnerUser } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
 import { ProfileScreen } from './ProfileScreen';
@@ -61,7 +62,7 @@ describe('ProfileScreen', () => {
     fireEvent.press(await screen.findByRole('radio', { name: 'العربية' }));
     expect(await screen.findByText('الحساب')).toBeOnTheScreen();
     expect(usePreferences.getState().language).toBe('ar');
-    fireEvent.press(screen.getByRole('button', { name: 'اللغة، العربية' }));
+    fireEvent.press(screen.getByRole('button', { name: bidiName('اللغة، العربية') }));
     fireEvent.press(await screen.findByRole('radio', { name: 'English' }));
     expect(await screen.findByText('Profile')).toBeOnTheScreen();
     expect(usePreferences.getState().language).toBe('en');

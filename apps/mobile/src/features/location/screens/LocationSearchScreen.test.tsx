@@ -70,11 +70,11 @@ describe('LocationSearchScreen', () => {
       '/geo/autocomplete',
       expect.objectContaining({ query: { q: 'Dorosh', lat: pin.lat, lng: pin.lng, lang: 'en' } }),
     );
-    expect(first).toHaveAccessibleName('vul. Doroshenka 14, Lviv, Ukraine, 0.2 km');
+    expect(first).toHaveAccessibleName('vul. Doroshenka 14, Lviv, Ukraine, 0.2\u00a0km');
     const rows = screen.getAllByRole('button', { name: /Dorosh/ });
     expect(rows.map((r) => r.props.accessibilityLabel)).toEqual([
-      'vul. Doroshenka 14, Lviv, Ukraine, 0.2 km',
-      'Doroshenka tram stop, Lviv, Ukraine, 0.4 km',
+      'vul. Doroshenka 14, Lviv, Ukraine, 0.2\u00a0km',
+      'Doroshenka tram stop, Lviv, Ukraine, 0.4\u00a0km',
     ]);
   });
 

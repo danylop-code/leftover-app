@@ -1,3 +1,4 @@
+import { stripBidi } from '../testing/bidi';
 import i18n from '.';
 import { FallbackPluralRules } from './plural-rules';
 
@@ -26,9 +27,9 @@ describe('Arabic plural rules', () => {
   it('picks the Arabic forms for counts like 2 and 11 bags', async () => {
     await i18n.changeLanguage('ar');
     expect(i18n.t('discover.count', { count: 2 })).toBe('كيسان');
-    expect(i18n.t('discover.count', { count: 3 })).toBe('3 أكياس');
-    expect(i18n.t('discover.count', { count: 11 })).toBe('11 كيسًا');
-    expect(i18n.t('discover.count', { count: 100 })).toBe('100 كيس');
+    expect(stripBidi(i18n.t('discover.count', { count: 3 }))).toBe('3 أكياس');
+    expect(stripBidi(i18n.t('discover.count', { count: 11 }))).toBe('11 كيسًا');
+    expect(stripBidi(i18n.t('discover.count', { count: 100 }))).toBe('100 كيس');
     await i18n.changeLanguage('en');
     expect(i18n.t('discover.count', { count: 2 })).toBe('2 bags');
   });

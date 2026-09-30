@@ -61,3 +61,10 @@
 - Re-running a seed deletes the seed users: a device signed in as a seed account is signed out. Log in again (Muscat: `aisha@`, Lviv: `olena@`).
 - Expo Go reads `userInterfaceStyle` from the manifest when the project loads: after changing `app.json`, reload the app, or `useColorScheme()` stays on the old value (System looks stuck on light).
 - Colors that aren't styles (icon `color`, `placeholderTextColor`, map pins) must come from `useStyles()`/`useTheme()` too; `styles-guard.test.ts` fails on a static import of themed tokens.
+- Prices in a row next to other things (badges, ratings, a switch) must be able to give way: `Price` shrinks and wraps its old price onto its own line. A fixed-width row that fits "₴149" overflows the card with "OMR 12.500", and only on native (web measures differently, so it looks fine there).
+- In Arabic, digits and punctuation reorder around Latin text: "12:42–13:42" shows as "13:42–12:42", "Sultan Qaboos Highway · 5 كم" splits. Every interpolated value is FSI-isolated (i18next `escape`, `shared/i18n/bidi.ts`), time ranges are LRI-wrapped in `ar.json`, and plain user text uses `isolateIn`. Tests compare Arabic words with `stripBidi`/`bidiName` (`shared/testing/bidi.ts`); Maestro selectors need `.*` around interpolated parts.
+- Don't write bidi controls (U+2066–2069, U+202A–202E) as literal characters in source: they're invisible. Use `\u2068`-style escapes.
+- On native, RN already mirrors `textAlign: 'left'/'right'` under the RTL root, and `sheet()` mirrors it again, so an explicit end alignment lands on the start in Arabic. Push content to the end with a flex spacer instead.
+- `ListRow` values: a `flex: 1` label with a long value squeezes the label to one syllable per line. The value is the part that shrinks (one line, ellipsis).
+- A shop's initial takes the face of its own script (`StoreLogo`): a Latin capital in IBM Plex Sans Arabic sits above centre.
+- Pickup codes are digits: keep code rows `direction: 'ltr'` in Arabic, or 1234 fills as 4321.
