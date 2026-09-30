@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { ApiError, apiRequest } from '../../../shared/api/client';
 import { fakeNow } from '../../../shared/testing/fake-date';
 import { shopBag, shopBags } from '../../../shared/testing/fixtures';
+import { pickTime } from '../../../shared/testing/pick-time';
 import { routerProviders } from '../../../shared/testing/render';
 import { BagFormScreen } from './BagFormScreen';
 
@@ -38,15 +39,11 @@ const fill = (fields: Record<string, string>) => {
   for (const [label, value] of Object.entries(fields))
     fireEvent.changeText(screen.getByLabelText(label), value);
 };
-const newBag = () => {
-  fill({
-    Title: 'Bakery surprise bag',
-    'Original price': '450',
-    'Sale price': '149',
-    From: '18:00',
-    Until: '19:30',
-  });
+const newBag = async () => {
+  fill({ Title: 'Bakery surprise bag', 'Original price': '450', 'Sale price': '149' });
   fireEvent.press(screen.getByRole('button', { name: 'Bakery' }));
+  await pickTime('From', '18:00');
+  await pickTime('Until', '19:30');
 };
 
 beforeEach(() => {
@@ -68,7 +65,7 @@ describe('BagFormScreen', () => {
   it('adds a bag: prices in kopiyky and today’s window in the shop’s timezone', async () => {
     serve();
     await open('/bag/new');
-    newBag();
+    await newBag();
     await act(async () => {
       fireEvent.press(screen.getByRole('button', { name: 'Add bag' }));
     });
@@ -94,7 +91,7 @@ describe('BagFormScreen', () => {
   it('won’t save a sale price at or above the original', async () => {
     serve();
     await open('/bag/new');
-    newBag();
+    await newBag();
     fill({ 'Sale price': '450' });
     fireEvent.press(screen.getByRole('button', { name: 'Add bag' }));
     expect(screen.getByText('The sale price must be below the original price.')).toBeOnTheScreen();
@@ -107,8 +104,9 @@ describe('BagFormScreen', () => {
   ])('won’t save a window %s', async (_name, from, until, message) => {
     serve();
     await open('/bag/new');
-    newBag();
-    fill({ From: from, Until: until });
+    await newBag();
+    await pickTime('From', from);
+    await pickTime('Until', until);
     fireEvent.press(screen.getByRole('button', { name: 'Add bag' }));
     expect(screen.getByText(message)).toBeOnTheScreen();
     expect(writes()).toHaveLength(0);

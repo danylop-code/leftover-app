@@ -13,7 +13,6 @@ import { Text, View } from 'react-native';
 import { CURRENCY_SYMBOL } from '../../../../shared/constants/money';
 import { formatDiscount } from '../../../../shared/lib/format';
 import { moneyInputText, parseMoneyInput } from '../../../../shared/lib/money-input';
-import { normalizeTime } from '../../../../shared/lib/time';
 import { isoAtLocalTime, localTimeOf } from '../../../../shared/lib/zoned-time';
 import {
   Badge,
@@ -26,6 +25,7 @@ import {
   Stepper,
   Switch,
   Textarea,
+  TimeField,
 } from '../../../../shared/ui';
 import { styles } from './styles';
 
@@ -206,26 +206,12 @@ export function BagForm({
         <View style={styles.pair}>
           <View style={styles.half}>
             <Field label={t('bagForm.from')} error={shown.from}>
-              <Input
-                icon="clock"
-                value={from}
-                onChangeText={setFrom}
-                onBlur={() => setFrom(normalizeTime)}
-                placeholder={t('bagForm.timePlaceholder')}
-                keyboardType="numbers-and-punctuation"
-              />
+              <TimeField value={from} onChange={setFrom} />
             </Field>
           </View>
           <View style={styles.half}>
             <Field label={t('bagForm.until')} error={shown.until}>
-              <Input
-                icon="clock"
-                value={until}
-                onChangeText={setUntil}
-                onBlur={() => setUntil(normalizeTime)}
-                placeholder={t('bagForm.timePlaceholder')}
-                keyboardType="numbers-and-punctuation"
-              />
+              <TimeField value={until} onChange={setUntil} />
             </Field>
           </View>
         </View>

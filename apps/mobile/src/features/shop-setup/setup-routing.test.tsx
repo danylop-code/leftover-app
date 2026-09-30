@@ -3,6 +3,7 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import * as SecureStore from 'expo-secure-store';
 import { useSession } from '../../shared/store/session';
 import { SESSION_STORAGE_KEY } from '../../shared/store/session-storage';
+import { pickTime } from '../../shared/testing/pick-time';
 
 jest.mock('expo-font', () => ({
   ...jest.requireActual('expo-font'),
@@ -64,8 +65,8 @@ describe('shop setup routing', () => {
     await waitFor(() =>
       expect(screen.queryByRole('button', { name: /vul\. Doroshenka 32/ })).toBeNull(),
     );
-    fireEvent.changeText(screen.getByLabelText('Opens at'), '08:00');
-    fireEvent.changeText(screen.getByLabelText('Closes at'), '20:00');
+    await pickTime('Opens at', '08:00');
+    await pickTime('Closes at', '20:00');
     await act(async () => {
       fireEvent.press(screen.getByRole('button', { name: 'Save and continue' }));
     });

@@ -62,3 +62,4 @@ done
   - Delete: 409 `has_reservations` with reserved orders; a bag with only past orders can't be removed either (409 `has_orders`, "pause it instead") because their history points at it.
   - Pickup times are typed as HH:mm and converted to UTC in the shop's timezone on the device (`isoAtLocalTime`); the API re-checks "today" and "ends in the future".
   - `store-add-bag.yaml` is written but not run yet (needs a dev build on a simulator); its times (23:00–23:45) only work before 23:00.
+- 2026-09-30 — times are now chosen with the platform's time picker (`TimeField`: Android dialog, iOS spinner sheet, browser time input on web) instead of typed `HH:mm` (requested after the demo).

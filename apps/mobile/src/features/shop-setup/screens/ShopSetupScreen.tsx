@@ -5,7 +5,6 @@ import { Text, View } from 'react-native';
 import { ApiError, NetworkError } from '../../../shared/api/client';
 import { useLogout } from '../../../shared/api/use-logout';
 import { DEFAULT_MAP_CENTER } from '../../../shared/constants/map';
-import { normalizeTime } from '../../../shared/lib/time';
 import {
   AddressAutocomplete,
   Banner,
@@ -16,6 +15,7 @@ import {
   Input,
   MapPicker,
   Screen,
+  TimeField,
 } from '../../../shared/ui';
 import { useCreateStore } from '../api/use-create-store';
 import { CategoryPicker } from '../components/CategoryPicker/CategoryPicker';
@@ -160,24 +160,12 @@ export function ShopSetupScreen() {
             <View style={styles.hours}>
               <View style={styles.hour}>
                 <Field label={t('shopSetup.opensAt')} error={errors.opensAt}>
-                  <Input
-                    value={opensAt}
-                    onChangeText={setOpensAt}
-                    onBlur={() => setOpensAt(normalizeTime)}
-                    placeholder={t('shopSetup.timePlaceholder')}
-                    keyboardType="numbers-and-punctuation"
-                  />
+                  <TimeField value={opensAt} onChange={setOpensAt} />
                 </Field>
               </View>
               <View style={styles.hour}>
                 <Field label={t('shopSetup.closesAt')} error={errors.closesAt}>
-                  <Input
-                    value={closesAt}
-                    onChangeText={setClosesAt}
-                    onBlur={() => setClosesAt(normalizeTime)}
-                    placeholder={t('shopSetup.timePlaceholder')}
-                    keyboardType="numbers-and-punctuation"
-                  />
+                  <TimeField value={closesAt} onChange={setClosesAt} />
                 </Field>
               </View>
             </View>

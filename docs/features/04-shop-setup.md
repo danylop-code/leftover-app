@@ -62,3 +62,4 @@ done
   - `PATCH /stores/me` re-validates the merged profile (hours stay valid). `GET /stores/me` was added for later screens.
   - Not in the design: Log out in the setup header, and the pin status line under the map.
   - Found in the first simulator demo and fixed in the kit: single-line `Input` text sat below centre on iOS.
+- 2026-09-30 — times are now chosen with the platform's time picker (`TimeField`: Android dialog, iOS spinner sheet, browser time input on web) instead of typed `HH:mm` (requested after the demo).

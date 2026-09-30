@@ -17,6 +17,9 @@ jest.mock(
   'expo-location',
   () => require('./src/shared/testing/expo-location-mock').expoLocationMock,
 );
+jest.mock('@react-native-community/datetimepicker', () =>
+  require('./src/shared/testing/datetimepicker-mock'),
+);
 jest.mock('react-native-maps', () => require('./src/shared/testing/react-native-maps-mock'));
 
 beforeEach(async () => {

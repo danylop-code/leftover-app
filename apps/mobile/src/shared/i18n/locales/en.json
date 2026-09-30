@@ -57,6 +57,12 @@
     },
     "sheet": {
       "cancel": "Not now"
+    },
+    "time": {
+      "choose": "Choose a time",
+      "done": "Done",
+      "none": "not set",
+      "label": "{{label}}, {{value}}"
     }
   },
   "app": {
@@ -141,7 +147,6 @@
     "hours": "Opening hours",
     "opensAt": "Opens at",
     "closesAt": "Closes at",
-    "timePlaceholder": "HH:mm",
     "submit": "Save and continue",
     "logout": "Log out",
     "errors": {
@@ -428,7 +433,6 @@
     "from": "From",
     "until": "Until",
     "windowHelp": "At least 30 minutes gives people time to get there.",
-    "timePlaceholder": "HH:mm",
     "live": "Show to customers",
     "liveHelp": "Turn off to pause this bag",
     "saveNew": "Add bag",
