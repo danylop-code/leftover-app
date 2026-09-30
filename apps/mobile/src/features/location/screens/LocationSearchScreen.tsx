@@ -5,16 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { useAddressSuggestions } from '../../../shared/api/use-address-suggestions';
 import { useLocation } from '../../../shared/store/location';
-import {
-  Banner,
-  Field,
-  Icon,
-  IconButton,
-  Input,
-  ListGroup,
-  PlaceRow,
-  Screen,
-} from '../../../shared/ui';
+import { Banner, Icon, IconButton, Input, ListGroup, PlaceRow, Screen } from '../../../shared/ui';
 import { useCurrentPosition } from '../hooks/use-current-position';
 import { clearColor, locateColor, styles } from './styles';
 
@@ -63,31 +54,31 @@ export function LocationSearchScreen() {
             style={styles.back}
           />
           <View style={styles.searchField}>
-            <Field label={t('location.searchScreen.field')}>
-              <Input
-                pill
-                icon="search"
-                value={text}
-                onChangeText={setText}
-                placeholder={t('location.search')}
-                autoFocus
-                autoCorrect={false}
-                returnKeyType="search"
-                right={
-                  typing ? (
-                    <IconButton
-                      icon="close"
-                      size="sm"
-                      iconSize="md"
-                      color={clearColor}
-                      label={t('location.searchScreen.clear')}
-                      onPress={() => setText('')}
-                      style={styles.clear}
-                    />
-                  ) : null
-                }
-              />
-            </Field>
+            {/* The artboard's label is screen-reader-only (`.sr-only`). */}
+            <Input
+              accessibilityLabel={t('location.searchScreen.field')}
+              pill
+              icon="search"
+              value={text}
+              onChangeText={setText}
+              placeholder={t('location.search')}
+              autoFocus
+              autoCorrect={false}
+              returnKeyType="search"
+              right={
+                typing ? (
+                  <IconButton
+                    icon="close"
+                    size="sm"
+                    iconSize="md"
+                    color={clearColor}
+                    label={t('location.searchScreen.clear')}
+                    onPress={() => setText('')}
+                    style={styles.clear}
+                  />
+                ) : null
+              }
+            />
           </View>
         </View>
       }

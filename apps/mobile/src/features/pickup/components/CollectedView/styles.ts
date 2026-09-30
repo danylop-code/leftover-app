@@ -36,6 +36,7 @@ export const styles = StyleSheet.create({
   },
   summaryBody: { flex: 1 },
   summaryTitle: { ...typography.label, color: color.textPrimary },
+  summaryCaption: { ...typography.caption, color: color.textSecondary },
   caption: { ...typography.caption, color: color.textSecondary, textAlign: 'center' },
   rateCard: {
     alignItems: 'center',

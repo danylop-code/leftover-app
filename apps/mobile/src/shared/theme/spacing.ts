@@ -30,3 +30,13 @@ export const layout = {
   cardGap: space[4],
   sectionGap: space[8],
 } as const;
+
+// The floating tab bar island (`--tabbar-*`, brief 18).
+export const tabBar = {
+  inset: space[4],
+  bottom: space[4],
+  height: 56,
+  padding: space[1],
+  radius: 28,
+  tab: 72,
+} as const;

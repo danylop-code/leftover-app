@@ -4,8 +4,8 @@ import type { ReactNode } from 'react';
 import { useSession } from '../../../../shared/store/session';
 
 type Props = {
-  /** `guest`: only signed-out users (the auth screens). */
-  allow: Role | 'guest';
+  /** `guest`: only signed-out users (the auth screens). `signedIn`: any role. */
+  allow: Role | 'guest' | 'signedIn';
   children: ReactNode;
 };
 
@@ -15,7 +15,9 @@ export function RoleGate({ allow, children }: Props) {
   const role = useSession((s) => s.user?.role);
   if (status === 'hydrating') return null;
   const allowed =
-    allow === 'guest' ? status === 'signedOut' : status === 'signedIn' && role === allow;
+    allow === 'guest'
+      ? status === 'signedOut'
+      : status === 'signedIn' && (allow === 'signedIn' || role === allow);
   if (!allowed) return <Redirect href="/" />;
   return children;
 }

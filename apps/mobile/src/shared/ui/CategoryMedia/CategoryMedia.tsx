@@ -38,7 +38,6 @@ export function CategoryMedia({ category, variant = 'card', children, style }: P
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeLinejoin="round"
-        accessible={false}
       >
         <ShapeList shapes={categoryArt[category]} />
       </Svg>

@@ -15,11 +15,12 @@ import {
   Skeleton,
   StatTile,
   Toast,
+  useTabBarInset,
 } from '../../../shared/ui';
 import { useToggleBag } from '../api/use-bag-mutations';
 import { useShopBags } from '../api/use-shop-bags';
 import { ShopBagRow } from '../components/ShopBagRow/ShopBagRow';
-import { styles } from './styles';
+import { FAB_CLEARANCE, styles } from './styles';
 
 /** StoreBags / StoreBagsEmpty artboards: today's bags, live stats, pause with Undo. */
 export function StoreBagsScreen() {
@@ -29,6 +30,7 @@ export function StoreBagsScreen() {
   const toggle = useToggleBag();
   const [toast, setToast] = useToast(UNDO_TOAST_MS);
   const [pulling, setPulling] = useState(false);
+  const tabBarInset = useTabBarInset();
 
   const addBag = () => router.push('/bag/new');
   const editBag = (bag: ShopBag) => router.push({ pathname: '/bag/[id]', params: { id: bag.id } });
@@ -106,7 +108,7 @@ export function StoreBagsScreen() {
       <FlatList
         data={bags.data.bags}
         keyExtractor={(b) => b.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[styles.list, { paddingBottom: FAB_CLEARANCE + tabBarInset }]}
         ListHeaderComponent={
           <View style={styles.stats}>
             <StatTile
@@ -140,12 +142,15 @@ export function StoreBagsScreen() {
     >
       {body()}
       {bags.data && bags.data.bags.length > 0 ? (
-        <View style={[styles.fab, toast && styles.fabRaised]} pointerEvents="box-none">
+        <View
+          style={[styles.fab, toast && styles.fabRaised, { marginBottom: tabBarInset }]}
+          pointerEvents="box-none"
+        >
           <Button icon="plus" label={t('storeBags.add')} onPress={addBag} />
         </View>
       ) : null}
       {toast ? (
-        <View style={styles.toast}>
+        <View style={[styles.toast, { bottom: tabBarInset }]}>
           <Toast message={toast.message} tone={toast.tone} action={toast.action} />
         </View>
       ) : null}

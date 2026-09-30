@@ -13,10 +13,16 @@ export function RoleTabs({ tabs }: Props) {
   const config = Object.fromEntries(
     tabs.map((tab) => [tab.name, { label: t(tab.labelKey), icon: tab.icon }]),
   );
+  // Declared in the configured order: otherwise the navigator's own route order (which can
+  // differ between platforms and entry URLs) decides the order of the tabs.
   return (
     <Tabs
       screenOptions={screenOptions}
       tabBar={(props) => <RouterTabBar {...props} tabs={config} />}
-    />
+    >
+      {tabs.map((tab) => (
+        <Tabs.Screen key={tab.name} name={tab.name} />
+      ))}
+    </Tabs>
   );
 }

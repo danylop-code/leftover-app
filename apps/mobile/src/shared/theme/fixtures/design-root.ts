@@ -67,5 +67,8 @@ export const designRootCss = `
   --elevation-3:0 12px 28px rgba(29,42,34,.14),0 24px 56px rgba(29,42,34,.12);
 
   --tap-min:48px;
+
+  /* ---- floating tab bar ---- */
+  --tabbar-inset:16px; --tabbar-bottom:16px; --tabbar-height:56px; --tabbar-padding:4px; --tabbar-radius:28px; --tabbar-tab:72px;
 }
 `;

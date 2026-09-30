@@ -15,6 +15,13 @@
       "when": 1790692031035,
       "tag": "0001_reviews_favorites",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790693920081,
+      "tag": "0002_reports",
+      "breakpoints": true
     }
   ]
 }

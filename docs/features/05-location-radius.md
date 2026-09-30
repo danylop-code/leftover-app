@@ -69,3 +69,4 @@ done
   - Shop setup: the address field is the shared `AddressAutocomplete`; picking a suggestion fills the address and places the pin. Search-on-submit (and `use-geocode`) is gone.
   - Kit changes beyond the brief: `Input` gained a `pill` shape; `MapPicker` reframes when the radius changes even after a drag; new `PlaceRow`.
   - Not in the design: the denied/failed banner, "Finding you…", the "No matches" line, and the empty-sheet hint before a place is chosen.
+- 2026-09-30 — a location is now remembered per account on the device (`byUser` in the store): logging out no longer forgets it, so the same person isn't asked again, while another account starts fresh. A pin placed while a device position is still being found now wins over the late position. Photon gets 6 s on the server and the app 8 s before falling back (the public instance has slow moments).

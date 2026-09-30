@@ -1,6 +1,6 @@
 # Feature: report-problem
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A user can tell us something went wrong, tied to an order when relevant, and gets a reference they can quote.
@@ -20,11 +20,11 @@ Artboards **Report** ("Report a problem — we'll reply by email", Subject radio
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a subject + a 20-char message, when sent, then 201 with a reference matching `R-\d{4}`, and the Sent screen shows it with the user's email.
-- [ ] Given a message < 10 or > 500 chars, then Send is disabled with helper/error text, and the API returns 400.
-- [ ] Given an `orderId` belonging to another user, then 404 and nothing is stored.
-- [ ] Given no subject selected, then Send is disabled.
-- [ ] Given "Report something else", then an empty form opens.
+- [x] Given a subject + a 20-char message, when sent, then 201 with a reference matching `R-\d{4}`, and the Sent screen shows it with the user's email.
+- [x] Given a message < 10 or > 500 chars, then Send is disabled with helper/error text, and the API returns 400.
+- [x] Given an `orderId` belonging to another user, then 404 and nothing is stored.
+- [x] Given no subject selected, then Send is disabled.
+- [x] Given "Report something else", then an empty form opens.
 
 ### Approach steps
 1. Write the migration + shared schemas.
@@ -40,10 +40,13 @@ Artboards **Report** ("Report a problem — we'll reply by email", Subject radio
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-30 — done on `feat/16-18-report-web-tabbar`. Decisions and deviations:
+  - One root route `/report` (both roles; route groups can't share a file name) that shows the Sent state itself; "Report something else" resets the form.
+  - Subject and order are radio lists (the artboard's selects don't exist natively). Migration `0002_reports`.

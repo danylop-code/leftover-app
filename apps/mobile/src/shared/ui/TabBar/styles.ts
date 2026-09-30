@@ -1,24 +1,28 @@
 import { StyleSheet } from 'react-native';
-import { color, fontFamily, radius, space, tapMin } from '../../theme';
+import { color, elevation, fontFamily, space, tabBar, tapMin } from '../../theme';
 
+// `.tabbar`: a compact centred island; screens scroll underneath (pad them with useTabBarInset).
 export const styles = StyleSheet.create({
-  bar: {
+  // Spans the width only to centre the island; taps outside the island pass through.
+  dock: { position: 'absolute', left: tabBar.inset, right: tabBar.inset, alignItems: 'center' },
+  island: {
+    height: tabBar.height,
+    padding: tabBar.padding,
     flexDirection: 'row',
-    paddingTop: 6,
-    paddingHorizontal: space[3],
+    gap: space[1],
     backgroundColor: color.surface,
-    borderTopWidth: 1,
-    borderTopColor: color.border,
+    borderRadius: tabBar.radius,
+    ...elevation[3],
   },
-  tab: { flex: 1, minHeight: tapMin, alignItems: 'center', justifyContent: 'center', gap: 2 },
-  pill: {
-    width: 56,
-    height: 30,
-    borderRadius: radius.pill,
+  tab: {
+    width: tabBar.tab,
+    minHeight: tapMin,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: tabBar.radius - tabBar.padding,
   },
-  pillActive: { backgroundColor: color.primarySoft },
+  tabActive: { backgroundColor: color.primarySoft },
+  pressed: { backgroundColor: color.surfaceSunken },
   label: {
     fontFamily: fontFamily.body['700'],
     fontSize: 12,
@@ -28,6 +32,4 @@ export const styles = StyleSheet.create({
   labelActive: { color: color.primary },
 });
 
-// The design's 84px bar = 50 of tabs + 34 home indicator; the real inset comes from the device.
-export const MIN_BOTTOM_PADDING = space[2];
 export const tint = { active: color.primary, inactive: color.textSecondary } as const;

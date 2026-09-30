@@ -15,7 +15,6 @@ export function OfflineArt() {
       strokeWidth={offline.stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
-      accessible={false}
     >
       <ShapeList shapes={icons.wifiOff} />
     </Svg>

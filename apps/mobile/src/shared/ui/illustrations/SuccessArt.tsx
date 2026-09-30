@@ -15,7 +15,6 @@ export function SuccessArt() {
       strokeWidth={success.stroke}
       strokeLinecap="round"
       strokeLinejoin="round"
-      accessible={false}
     >
       <ShapeList shapes={icons.check} />
     </Svg>

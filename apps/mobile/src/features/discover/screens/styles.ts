@@ -20,9 +20,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: layout.screenMargin,
     paddingBottom: space[3],
   },
+  // Space under the chips, so scrolled cards never run right up against them.
+  chips: { paddingBottom: space[3] },
   list: {
     gap: layout.cardGap,
-    paddingTop: space[5],
+    paddingTop: space[3],
     paddingHorizontal: layout.screenMargin,
     paddingBottom: space[6],
   },

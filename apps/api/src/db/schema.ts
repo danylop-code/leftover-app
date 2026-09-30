@@ -172,3 +172,21 @@ export const favorites = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.storeId] })],
 );
+
+/** Problem reports (16). Stored only; there is no support inbox yet. */
+export const reports = sqliteTable(
+  'reports',
+  {
+    id: text('id').primaryKey(),
+    /** `R-####`, quoted to the user. */
+    reference: text('reference').notNull().unique(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    subject: text('subject', { enum: ['order', 'closed', 'app', 'payment', 'other'] }).notNull(),
+    orderId: text('order_id').references(() => orders.id, { onDelete: 'set null' }),
+    message: text('message').notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index('reports_user_idx').on(t.userId)],
+);

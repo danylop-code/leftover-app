@@ -31,8 +31,10 @@ export function LocationScreen() {
   const { locate } = position;
 
   const locateMe = async () => {
+    const before = useLocation.getState().draft.place;
     const place = await locate();
-    if (place) setDraftPlace(place);
+    // A pin placed (or searched) while we waited wins over a late position.
+    if (place && useLocation.getState().draft.place === before) setDraftPlace(place);
   };
 
   // Edit from the saved area; with none yet (first run), start from the device position.

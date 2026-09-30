@@ -7,6 +7,7 @@ import { useBootstrapSession } from '../src/features/auth/hooks/use-bootstrap-se
 import { createQueryClient } from '../src/shared/api/query-client';
 import '../src/shared/i18n';
 import { fontAssets } from '../src/shared/theme/fonts';
+import { AppFrame } from '../src/shared/ui';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,7 +25,11 @@ function AppStack() {
   }, [ready]);
 
   if (!ready) return null;
-  return <Stack screenOptions={screenOptions} />;
+  return (
+    <AppFrame>
+      <Stack screenOptions={screenOptions} />
+    </AppFrame>
+  );
 }
 
 export default function RootLayout() {

@@ -31,7 +31,6 @@ export function Icon({
       strokeWidth={strokeWidth ?? ICON_STROKE_WIDTH}
       strokeLinecap="round"
       strokeLinejoin="round"
-      accessible={false}
       testID={`icon-${name}`}
     >
       <ShapeList shapes={icons[name]} />

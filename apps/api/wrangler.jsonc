@@ -7,7 +7,9 @@
   "vars": {
     // Address autocomplete provider (brief 05). komoot's public Photon: free, no key, fair use.
     // Self-host Photon (or switch the adapter in src/services/geo) before real traffic.
-    "PHOTON_URL": "https://photon.komoot.io"
+    "PHOTON_URL": "https://photon.komoot.io",
+    // Browser origins allowed to call the API (the Expo web dev server, brief 17). Comma-separated.
+    "CORS_ORIGINS": "http://localhost:8081,http://127.0.0.1:8081"
   },
   "d1_databases": [
     {

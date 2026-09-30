@@ -62,3 +62,4 @@ done
   - Kit additions: `EmptyBagArt` and `OfflineArt` (the DiscoverEmpty/DiscoverError illustrations, reusable by 10/11); `keys.nearby` now includes the category.
   - A seed test pins what the demo shows from vul. Doroshenka 14 at 5 km: Crumb ×2, Morning Proof, Kasha, Zelena (sold-out, paused, past-window and Green Row bags are excluded).
   - Not in the design: the server-error copy ("Something went wrong on our side…"), used when the API answers but fails.
+- 2026-09-30 — space added under the category chips so scrolled cards don't run into them.

@@ -116,3 +116,35 @@ describe('GET /geo/autocomplete', () => {
     expect(ApiError.parse(await res.json()).error.code).toBe('geo_unavailable');
   });
 });
+
+describe('GET /geo/reverse', () => {
+  const reverse = (query: Record<string, string>, token?: string) =>
+    jsonRequest(`/geo/reverse?${new URLSearchParams(query)}`, 'GET', undefined, token);
+
+  it('labels the point, keeping the point itself', async () => {
+    fetchSpy.mockResolvedValue(photon([near]));
+    const { token } = await registerUser('customer');
+    const res = await reverse(pin, token);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({
+      place: {
+        label: 'vulytsia Doroshenka 14',
+        secondary: 'Lviv, Ukraine',
+        lat: Number(pin.lat),
+        lng: Number(pin.lng),
+      },
+    });
+    const url = new URL(String(fetchSpy.mock.calls[0]?.[0]));
+    expect(url.pathname).toBe('/reverse');
+    expect(url.searchParams.get('lon')).toBe(pin.lng);
+  });
+
+  it('answers null when nothing is near, 502 when the provider fails, 401 without a token', async () => {
+    const { token } = await registerUser('customer');
+    fetchSpy.mockResolvedValue(photon([]));
+    expect(await (await reverse(pin, token)).json()).toEqual({ place: null });
+    fetchSpy.mockRejectedValue(new Error('timeout'));
+    expect((await reverse(pin, token)).status).toBe(502);
+    expect((await reverse(pin)).status).toBe(401);
+  });
+});

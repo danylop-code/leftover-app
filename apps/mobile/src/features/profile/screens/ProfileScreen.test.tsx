@@ -23,7 +23,11 @@ const serve = () =>
 
 const open = async () => {
   renderRouter(
-    { profile: ProfileScreen, location: () => <Text>Location screen</Text> },
+    {
+      profile: ProfileScreen,
+      location: () => <Text>Location screen</Text>,
+      report: () => <Text>Report screen</Text>,
+    },
     { initialUrl: '/profile', ...routerProviders() },
   );
   await act(async () => {});
@@ -109,5 +113,12 @@ describe('ProfileScreen', () => {
       expect.objectContaining({ method: 'PATCH', body: { firstName: 'Olha' } }),
     );
     await waitFor(() => expect(useSession.getState().user?.firstName).toBe('Olha'));
+  });
+
+  it('opens Report a problem, for both roles', async () => {
+    useSession.setState({ status: 'signedIn', token: 'tok', user: shopOwnerUser });
+    await open();
+    fireEvent.press(screen.getByRole('button', { name: 'Report a problem' }));
+    expect(await screen.findByText('Report screen')).toBeOnTheScreen();
   });
 });

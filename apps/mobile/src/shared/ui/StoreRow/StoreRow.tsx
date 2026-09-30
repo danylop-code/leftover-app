@@ -10,7 +10,10 @@ type Props = {
   name: string;
   meta?: string;
   onPress?: () => void;
-  /** Replaces the chevron (e.g. a Directions button). */
+  /**
+   * Replaces the chevron. Only for rows without `onPress`: a control nested in a pressable row
+   * is unreachable by screen readers (put it beside the row instead).
+   */
   trailing?: ReactNode;
 };
 
