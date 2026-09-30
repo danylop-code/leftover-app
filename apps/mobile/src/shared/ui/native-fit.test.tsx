@@ -6,6 +6,7 @@ import { ListRow } from './ListRow/ListRow';
 import { Price } from './Price/Price';
 import { StatTile } from './StatTile/StatTile';
 import { StoreLogo } from './StoreLogo/StoreLogo';
+import { Ticket } from './Ticket/Ticket';
 
 // Brief 22: long OMR prices and Arabic faces must fit their cards on iOS/Android, not only on web.
 const styleOf = (text: string) =>
@@ -57,5 +58,12 @@ describe('fitting on native (brief 22)', () => {
     expect(styleOf('Q').fontFamily).toBe(fontFamily.display['600italic']);
     expect(styleOf('م').fontFamily).toBe(arabicFontFamily.display['600']);
     expect(styleOf('Q').textAlign).toBe('center');
+  });
+
+  it('sets the pickup code in the Latin display face in Arabic, spaced as in English', async () => {
+    await act(async () => usePreferences.getState().setLanguage('ar'));
+    render(<Ticket code="9510" bandLabel="رمز" />);
+    expect(styleOf('9510').fontFamily).toBe(fontFamily.display['600']);
+    expect(styleOf('9510').letterSpacing).toBeGreaterThan(0);
   });
 });

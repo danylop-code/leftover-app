@@ -1,8 +1,9 @@
 import { makeStyles, radius, space } from '../../theme';
 
 const notch = 24;
+const codeSpacing = 11.5;
 
-export const useStyles = makeStyles(({ color, elevation, fontFamily, typography, sheet }) => {
+export const useStyles = makeStyles(({ color, elevation, scriptFonts, typography, sheet }) => {
   const styles = sheet({
     ticket: { backgroundColor: color.surface, borderRadius: radius.xl, ...elevation[2] },
     band: {
@@ -23,12 +24,13 @@ export const useStyles = makeStyles(({ color, elevation, fontFamily, typography,
       paddingHorizontal: space[5],
       paddingBottom: space[4],
     },
+    // Western digits in every language, so always the Latin display face: at 64/68 the Arabic
+    // face's tall metrics cut the tops off.
     code: {
-      fontFamily: fontFamily.display['600'],
+      fontFamily: scriptFonts.latin.display['600'],
       fontSize: 64,
       lineHeight: 68,
-      letterSpacing: 11.5,
-      paddingStart: 11.5,
+      paddingStart: codeSpacing,
       color: color.primary,
       textAlign: 'center',
     },
@@ -53,5 +55,7 @@ export const useStyles = makeStyles(({ color, elevation, fontFamily, typography,
   });
 
   const bandIconColor = color.onPrimary;
-  return { styles, bandIconColor };
+  // Outside `sheet()`, which drops letter spacing in Arabic: the code is digits, not joined letters.
+  const codeLetters = { letterSpacing: codeSpacing };
+  return { styles, bandIconColor, codeLetters };
 });

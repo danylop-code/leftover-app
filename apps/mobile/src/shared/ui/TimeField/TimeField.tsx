@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, Text } from 'react-native';
 import { dateForTime, timeOfDate } from '../../lib/time-of-day';
+import { useTheme } from '../../theme';
 import { Button } from '../Button/Button';
 import { useFieldContext } from '../Field/field-context';
 import { useStyles as useFieldStyles } from '../Field/styles';
@@ -22,7 +23,8 @@ type Props = {
  * <Field>, which gives it its label and error state.
  */
 export function TimeField({ value, onChange }: Props) {
-  const { styles } = useStyles();
+  const { pickerTextColor, styles } = useStyles();
+  const { scheme } = useTheme();
   const { iconColor, inputStyles } = useFieldStyles();
   const { t } = useTranslation();
   const { label, invalid } = useFieldContext();
@@ -69,6 +71,9 @@ export function TimeField({ value, onChange }: Props) {
           value={draft}
           mode="time"
           display="spinner"
+          style={styles.picker}
+          themeVariant={scheme}
+          textColor={pickerTextColor}
           is24Hour
           locale="en-GB"
           onChange={(_event, date) => date && setDraft(date)}

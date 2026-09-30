@@ -16,7 +16,7 @@ type Props = {
 
 /** Pickup code ticket (`.ticket`); the code is read digit by digit. */
 export function Ticket({ code, bandLabel, summary, footer, accessibilityLabel }: Props) {
-  const { bandIconColor, styles } = useStyles();
+  const { bandIconColor, codeLetters, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.ticket} accessibilityLabel={accessibilityLabel}>
@@ -26,7 +26,7 @@ export function Ticket({ code, bandLabel, summary, footer, accessibilityLabel }:
       </View>
       <View style={styles.main}>
         <Text
-          style={styles.code}
+          style={[styles.code, codeLetters]}
           accessibilityLabel={t('ui.ticket.codeLabel', { digits: code.split('').join(' ') })}
         >
           {code}

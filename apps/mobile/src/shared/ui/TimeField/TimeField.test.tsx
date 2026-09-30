@@ -1,10 +1,12 @@
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { usePreferences } from '../../store/preferences';
 import { pickTime } from '../../testing/pick-time';
 import { testSafeArea } from '../../testing/render';
+import { darkColor } from '../../theme';
 import { Field } from '../Field/Field';
 import { TimeField } from './TimeField';
 
@@ -51,5 +53,16 @@ describe('TimeField', () => {
     await act(async () => onChange({ type: 'set' }, later));
     expect(screen.getByRole('button', { name: 'Opens at, 20:15' })).toBeOnTheScreen();
     Object.defineProperty(Platform, 'OS', { value: os, configurable: true });
+  });
+
+  it('on iOS: centres the spinner and draws it in the active scheme (brief 22)', async () => {
+    await act(async () => usePreferences.getState().setAppearance('dark'));
+    render(<Harness initial="08:00" />);
+    fireEvent.press(screen.getByRole('button', { name: 'Opens at, 08:00' }));
+    const picker = screen.getByTestId('time-picker');
+    expect(picker.props.themeVariant).toBe('dark');
+    expect(picker.props.textColor).toBe(darkColor.textPrimary);
+    expect(StyleSheet.flatten(picker.props.style).alignSelf).toBe('center');
+    await act(async () => usePreferences.getState().setAppearance('system'));
   });
 });

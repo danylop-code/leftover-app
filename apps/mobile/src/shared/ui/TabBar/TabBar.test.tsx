@@ -2,6 +2,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { Keyboard, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { testSafeArea } from '../../testing/render';
+import { tabBar } from '../../theme';
 import { TabBar, type TabItem } from './TabBar';
 
 const items = (onPress = jest.fn()): TabItem[] => [
@@ -34,12 +35,12 @@ describe('TabBar', () => {
     expect(onPress).toHaveBeenCalled();
   });
 
-  it('floats above the home indicator', () => {
+  it('floats low, reaching into the home-indicator inset (brief 22)', () => {
     renderBar(items());
-    // The dock sits max(safe-area bottom, 16) above the edge: 34 on the test iPhone.
+    // max(safe-area bottom − 18, 16): 16 on the test iPhone (34 pt inset), clear of the indicator.
     expect(screen.getByTestId('tab-bar')).toHaveStyle({
       position: 'absolute',
-      bottom: testSafeArea.insets.bottom,
+      bottom: testSafeArea.insets.bottom - tabBar.homeIndicatorOverlap,
     });
   });
 

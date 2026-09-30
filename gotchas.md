@@ -68,3 +68,5 @@
 - `ListRow` values: a `flex: 1` label with a long value squeezes the label to one syllable per line. The value is the part that shrinks (one line, ellipsis).
 - A shop's initial takes the face of its own script (`StoreLogo`): a Latin capital in IBM Plex Sans Arabic sits above centre.
 - Pickup codes are digits: keep code rows `direction: 'ltr'` in Arabic, or 1234 fills as 4321.
+- Big figures (pickup code, ratings average) in IBM Plex Sans Arabic get their tops cut at a tight line height. They're Western digits, so they use `scriptFonts.latin` in both languages.
+- The iOS `DateTimePicker` spinner draws natively: pass `themeVariant` and `textColor` from the theme, or it stays light in dark mode. It has its own width, so centre it with `alignSelf`.
