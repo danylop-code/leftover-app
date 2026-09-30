@@ -34,6 +34,18 @@ export const notFound = (message = 'Not found.') => new AppError(404, 'not_found
 export const conflict = (code: string, message: string, details?: Record<string, unknown>) =>
   new AppError(409, code, message, details);
 
+/**
+ * Whether `e` (or anything in its `cause` chain) is a SQLite UNIQUE / PRIMARY KEY violation.
+ * Drizzle wraps D1 errors, so the constraint text is only on the cause.
+ */
+export const isUniqueViolation = (e: unknown): boolean => {
+  for (let err = e; err; err = (err as { cause?: unknown }).cause) {
+    if (/UNIQUE constraint failed|SQLITE_CONSTRAINT_PRIMARYKEY/.test(String(err))) return true;
+    if (typeof err !== 'object') break;
+  }
+  return false;
+};
+
 /** Zod issues → `{ "dotted.path": [messages] }`; root-level issues go under `_`. */
 export const fieldsFromZod = (error: z.ZodError): Fields => {
   const fields: Fields = {};

@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react-native';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export const testSafeArea = {
@@ -24,5 +24,18 @@ export const renderWithProviders = (ui: ReactElement, queryClient = createTestQu
     <SafeAreaProvider initialMetrics={testSafeArea}>
       <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
     </SafeAreaProvider>,
+  ),
+});
+
+/**
+ * Wrapper for expo-router's `renderRouter` (which has no providers): safe area plus a fresh
+ * QueryClient per call. Returns the client too, for cache assertions.
+ */
+export const routerProviders = (queryClient = createTestQueryClient()) => ({
+  queryClient,
+  wrapper: ({ children }: { children: ReactNode }) => (
+    <SafeAreaProvider initialMetrics={testSafeArea}>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </SafeAreaProvider>
   ),
 });

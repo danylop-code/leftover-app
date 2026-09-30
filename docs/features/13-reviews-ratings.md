@@ -1,6 +1,6 @@
 # Feature: reviews-ratings
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 After collecting a bag, a customer rates it, and those ratings help others choose shops.
@@ -21,13 +21,13 @@ Artboard **Review** (store + bag, "How was it overall?" 5 stars with a word labe
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a collected order, when submitting overall 4, then 201, and the order shows "You rated" in Past.
-- [ ] Given a reserved/cancelled/missed order, then 409 `not_collected`.
-- [ ] Given a second review for the same order, then 409 `already_reviewed`.
-- [ ] Given a text of 501 chars, then the counter turns to the error state, Submit is disabled, and the API returns 400.
-- [ ] Given ratings 5, 4, 5, then the store shows 4.7 and "3 ratings"; aspects without answers are excluded from their own average.
-- [ ] Given a store with no reviews, then no rating shows anywhere (07, 06).
-- [ ] Given stars tapped on Collected, then the Review screen opens with that overall preselected.
+- [x] Given a collected order, when submitting overall 4, then 201, and the order shows "You rated" in Past.
+- [x] Given a reserved/cancelled/missed order, then 409 `not_collected`.
+- [x] Given a second review for the same order, then 409 `already_reviewed`.
+- [x] Given a text of 501 chars, then the counter turns to the error state, Submit is disabled, and the API returns 400.
+- [x] Given ratings 5, 4, 5, then the store shows 4.7 and "3 ratings"; aspects without answers are excluded from their own average.
+- [x] Given a store with no reviews, then no rating shows anywhere (07, 06).
+- [x] Given stars tapped on Collected, then the Review screen opens with that overall preselected.
 
 ### Approach steps
 1. Write the migration + shared schemas.
@@ -44,10 +44,16 @@ Artboard **Review** (store + bag, "How was it overall?" 5 stars with a word labe
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in the 08–15 batch. Migration `0001_reviews_favorites`.
+  - Recent reviews come inside `GET /stores/:id` (`recentReviews`, latest 3) instead of a separate `/stores/:id/reviews` endpoint; "See all" stays hidden.
+  - Nearby items carry `rating { average, count }`; StoreDetail adds per-aspect averages (null when nobody rated that aspect, and then its bar is hidden).
+  - Reviewer name = first name (profiles have no last name yet). Review opens as a modal (`/review/[orderId]`, `?overall=` preselects).
+  - Found while testing: D1 constraint errors are wrapped by Drizzle, so the duplicate-review check (and 04's duplicate-shop check) looked at the wrong message and returned 500. Both now use `isUniqueViolation`, which follows the error's `cause`.

@@ -3,6 +3,7 @@ import { Bag } from './bag';
 import { Category } from './category';
 import { Latitude, Longitude } from './common';
 import { Store } from './store';
+import { StoreRating } from './store-detail';
 
 // The Location screen's radius slider uses the same range.
 export const NEARBY_RADIUS_MIN_KM = 1;
@@ -30,6 +31,10 @@ export const NearbyBag = Bag.pick({
 }).extend({
   store: Store.pick({ id: true, name: true, timezone: true }),
   distanceKm: z.number().nonnegative(),
+  /** The shop's rating; null while it has no reviews (13). */
+  rating: StoreRating.nullable(),
+  /** Whether the signed-in customer saved this bag's shop (14). */
+  isFavorite: z.boolean(),
 });
 export type NearbyBag = z.infer<typeof NearbyBag>;
 

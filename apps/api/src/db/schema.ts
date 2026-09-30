@@ -1,7 +1,15 @@
 // Drizzle table definitions. Money columns are integer minor units; timestamps are ISO UTC text.
 // After a change: `pnpm --filter @leftover/api db:generate`.
 import { sql } from 'drizzle-orm';
-import { check, index, integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  check,
+  index,
+  integer,
+  primaryKey,
+  real,
+  sqliteTable,
+  text,
+} from 'drizzle-orm/sqlite-core';
 
 const createdAt = () => text('created_at').notNull();
 
@@ -116,6 +124,51 @@ export const orders = sqliteTable(
   (t) => [
     index('orders_user_idx').on(t.userId),
     index('orders_bag_idx').on(t.bagId),
+    index('orders_store_code_idx').on(t.storeId, t.code),
     check('orders_qty_positive', sql`${t.qty} > 0`),
   ],
+);
+
+const stars = (name: string) => integer(name);
+
+/** One review per collected order (13). Aspects are optional. */
+export const reviews = sqliteTable(
+  'reviews',
+  {
+    orderId: text('order_id')
+      .primaryKey()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    storeId: text('store_id')
+      .notNull()
+      .references(() => stores.id, { onDelete: 'cascade' }),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    overall: stars('overall').notNull(),
+    quality: stars('quality'),
+    variety: stars('variety'),
+    freshness: stars('freshness'),
+    ease: stars('ease'),
+    text: text('text').notNull().default(''),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index('reviews_store_created_idx').on(t.storeId, t.createdAt),
+    check('reviews_overall_range', sql`${t.overall} BETWEEN 1 AND 5`),
+  ],
+);
+
+/** Shops a customer saved (14). */
+export const favorites = sqliteTable(
+  'favorites',
+  {
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    storeId: text('store_id')
+      .notNull()
+      .references(() => stores.id, { onDelete: 'cascade' }),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.storeId] })],
 );

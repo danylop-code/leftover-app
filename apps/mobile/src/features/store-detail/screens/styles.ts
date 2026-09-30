@@ -8,7 +8,21 @@ export const STAR_SIZE = 16;
 export const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: color.background },
   scroll: { paddingBottom: space[10] },
-  back: { position: 'absolute', left: space[3] },
+  // Back on the left, the save heart on the right (Share is out of scope).
+  heroBar: {
+    position: 'absolute',
+    left: space[3],
+    right: space[3],
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  toast: {
+    position: 'absolute',
+    left: layout.screenMargin,
+    right: layout.screenMargin,
+    bottom: space[8],
+  },
   content: { gap: 28, paddingHorizontal: layout.screenMargin },
   logo: { position: 'absolute', left: layout.screenMargin, top: -LOGO_OVERLAP },
   intro: { gap: 6, paddingTop: 52 },

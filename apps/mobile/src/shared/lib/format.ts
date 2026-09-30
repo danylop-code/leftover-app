@@ -80,20 +80,45 @@ export const formatWindow = (
   endIso: string,
   timeZone: string,
   now: Date = new Date(),
-): string => {
-  const start = new Date(startIso);
-  const end = new Date(endIso);
-  const startKey = dateKey(start, timeZone);
-  const todayKey = dateKey(now, timeZone);
-  const day =
-    startKey === todayKey
-      ? i18n.t('format.today')
-      : startKey === nextDateKey(todayKey)
-        ? i18n.t('format.tomorrow')
-        : longDay(start, timeZone);
-  return i18n.t('format.window', {
-    day,
-    start: time(start, timeZone),
-    end: time(end, timeZone),
+): string =>
+  i18n.t('format.window', {
+    day: formatDay(startIso, timeZone, now),
+    start: time(new Date(startIso), timeZone),
+    end: time(new Date(endIso), timeZone),
   });
+
+/** Whether `iso` falls today, tomorrow or later, in `timeZone`. */
+export const dayKind = (
+  iso: string,
+  timeZone: string,
+  now: Date = new Date(),
+): 'today' | 'tomorrow' | 'other' => {
+  const key = dateKey(new Date(iso), timeZone);
+  const todayKey = dateKey(now, timeZone);
+  if (key === todayKey) return 'today';
+  if (key === nextDateKey(todayKey)) return 'tomorrow';
+  return 'other';
 };
+
+/** `Today`, `Tomorrow` or `Sat, 26 Sep` for `iso` in `timeZone`. */
+export const formatDay = (iso: string, timeZone: string, now: Date = new Date()): string => {
+  const at = new Date(iso);
+  const key = dateKey(at, timeZone);
+  const todayKey = dateKey(now, timeZone);
+  if (key === todayKey) return i18n.t('format.today');
+  if (key === nextDateKey(todayKey)) return i18n.t('format.tomorrow');
+  return longDay(at, timeZone);
+};
+
+/** `18:00–19:30` in `timeZone`. */
+export const formatTimeRange = (startIso: string, endIso: string, timeZone: string): string =>
+  i18n.t('format.range', {
+    start: time(new Date(startIso), timeZone),
+    end: time(new Date(endIso), timeZone),
+  });
+
+/** `16:40` in `timeZone`. */
+export const formatTime = (iso: string, timeZone: string): string => time(new Date(iso), timeZone);
+
+/** `Tue, 29 Sep` in `timeZone`. */
+export const formatDate = (at: Date, timeZone: string): string => longDay(at, timeZone);

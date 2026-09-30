@@ -3,7 +3,11 @@
     "today": "Today",
     "tomorrow": "Tomorrow",
     "window": "{{day}} · {{start}}–{{end}}",
-    "km": "{{value}} km"
+    "km": "{{value}} km",
+    "range": "{{start}}–{{end}}",
+    "minutes": "{{minutes}} min",
+    "hours": "{{hours}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}} min"
   },
   "ui": {
     "back": "Back",
@@ -38,6 +42,21 @@
     },
     "orderCard": {
       "item": "{{title}} × {{qty}}"
+    },
+    "status": {
+      "reserved": "Reserved",
+      "ready": "Ready now",
+      "missed": "Missed",
+      "collected": "Collected",
+      "cancelled": "Cancelled"
+    },
+    "favorite": {
+      "save": "Save {{name}}",
+      "unsave": "Unsave {{name}}",
+      "failed": "Couldn’t update your saved shops. Try again."
+    },
+    "sheet": {
+      "cancel": "Not now"
     }
   },
   "app": {
@@ -91,12 +110,6 @@
       "firstNameRequired": "Enter your first name.",
       "firstNameTooLong": "Use 40 characters or fewer.",
       "invalid": "Check this field."
-    },
-    "placeholder": {
-      "signedInAs": "Signed in as {{name}} · {{email}}",
-      "comingSoon": "This screen arrives in a later update.",
-      "logout": "Log out",
-      "setup": "Set up your shop"
     }
   },
   "tabs": {
@@ -226,6 +239,271 @@
       "offline": "Looks like you’re offline. Check your connection and try again.",
       "server": "Something went wrong on our side. Please try again in a moment.",
       "retry": "Try again"
+    },
+    "recentReviews": "Recent reviews",
+    "reviewAgo": "{{ago}}",
+    "aspects": {
+      "quality": "Quality",
+      "variety": "Variety",
+      "freshness": "Freshness",
+      "ease": "Ease of pickup"
+    }
+  },
+  "reserve": {
+    "title": "Reserve bag",
+    "quantity": "Quantity",
+    "fewer": "Fewer bags",
+    "more": "More bags",
+    "pickupToday": "Pick up today",
+    "pickupTomorrow": "Pick up tomorrow",
+    "pickupOn": "Pick up {{date}}",
+    "where": "{{address}} · {{distance}}",
+    "payTitle": "Pay at the store",
+    "payText": "No card needed now. Pay cash or card when you collect.",
+    "total": "Total",
+    "save": "You save {{amount}}",
+    "submit": "Reserve for {{amount}}",
+    "soldOut": {
+      "title": "Just sold out",
+      "text": "Someone grabbed the last bag a moment ago. Nothing was reserved.",
+      "button": "Sold out",
+      "others": "Still available here",
+      "nearby": "See other bags nearby"
+    },
+    "notAvailable": {
+      "title": "No longer available",
+      "text": "The shop paused this bag or its pickup time is over. Nothing was reserved."
+    },
+    "fewerLeft": "Only {{count}} left now — pick fewer and try again.",
+    "missing": {
+      "title": "This bag isn’t available",
+      "text": "It may have sold out or been removed. Go back and pick another."
+    }
+  },
+  "pickup": {
+    "title": "Your pickup",
+    "order": "Order {{number}}",
+    "band": "Show this code at the counter",
+    "summary": "{{qty}} × {{title}} · pay {{amount}} in store",
+    "where": "{{address}} · {{distance}}",
+    "opensIn": "Pickup opens in",
+    "readyNow": "Ready now",
+    "readyUntil": "Until {{time}}",
+    "ended": "Pickup window ended",
+    "endedText": "This reservation was missed. Nothing was charged.",
+    "progress": "Time until pickup",
+    "cancel": "Cancel reservation",
+    "cancelNote": "Plans changed? Cancelling frees the bag for someone else.",
+    "cancelSheet": {
+      "title": "Cancel this reservation?",
+      "text": "The bag goes back on sale for someone else. You can’t undo this.",
+      "confirm": "Cancel reservation"
+    },
+    "cancelled": {
+      "title": "Reservation cancelled",
+      "text": "You cancelled at {{time}}. The bag is back on sale."
+    },
+    "cancelFailed": "Couldn’t cancel. It may already be collected or over.",
+    "collected": {
+      "title": "Enjoy your haul!",
+      "text_one": "You collected {{count}} bag from {{store}} at {{time}}.",
+      "text_other": "You collected {{count}} bags from {{store}} at {{time}}.",
+      "saved": "You saved {{amount}}",
+      "code": "Code {{code}} · {{day}}",
+      "rateTitle": "How was your bag?",
+      "rateHint": "Your rating helps the shop and other rescuers.",
+      "rateLabel": "Rate your bag",
+      "leaveReview": "Leave a review",
+      "rated": "Thanks — you rated this bag",
+      "backToDiscover": "Back to Discover"
+    },
+    "error": {
+      "title": "Couldn’t load this order",
+      "notFound": "We couldn’t find this order.",
+      "retry": "Try again",
+      "back": "Go back"
+    }
+  },
+  "orders": {
+    "title": "My orders",
+    "current": "Current",
+    "past": "Past",
+    "payAtStore": "Pay at the store",
+    "showCode": "Show code",
+    "view": "View",
+    "leaveReview": "Leave a review",
+    "youRated": "You rated",
+    "cancelledAt": "You cancelled at {{time}}",
+    "missed": "Pickup window ended",
+    "pastMeta": "{{store}} · {{day}}",
+    "empty": {
+      "title": "No bags reserved yet",
+      "text": "Reserve a surprise bag and your pickup code will live right here.",
+      "action": "Find food nearby"
+    },
+    "emptyPast": {
+      "title": "Nothing here yet",
+      "text": "Collected, cancelled and missed pickups from the last 60 days show up here."
+    },
+    "error": {
+      "title": "Couldn’t load your orders",
+      "retry": "Try again"
+    }
+  },
+  "review": {
+    "title": "Rate your bag",
+    "subtitle": "{{title}} · {{day}}",
+    "overall": "How was it overall?",
+    "overallLabel": "Overall rating",
+    "words": {
+      "1": "Disappointing",
+      "2": "Not great",
+      "3": "Okay",
+      "4": "Really good",
+      "5": "Amazing"
+    },
+    "details": "Rate the details",
+    "aspects": {
+      "quality": "Quality",
+      "variety": "Variety",
+      "freshness": "Freshness",
+      "ease": "Ease of pickup"
+    },
+    "text": "Anything to add?",
+    "textPlaceholder": "What was inside? Any tips for the shop?",
+    "submit": "Submit review",
+    "pickOverall": "Pick a star rating to submit.",
+    "failed": "Couldn’t send your review. Try again.",
+    "already": "You’ve already reviewed this bag."
+  },
+  "relative": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "days_one": "{{count}} day ago",
+    "days_other": "{{count}} days ago",
+    "weeks_one": "{{count}} week ago",
+    "weeks_other": "{{count}} weeks ago",
+    "months_one": "{{count}} month ago",
+    "months_other": "{{count}} months ago"
+  },
+  "storeBags": {
+    "title": "My bags",
+    "liveNow_one": "bag live now",
+    "liveNow_other": "bags live now",
+    "reservedToday": "reserved today",
+    "leftOf": "{{available}} of {{total}} left",
+    "paused": "Paused · {{count}}",
+    "live": "{{title}} is live",
+    "pausedLabel": "{{title}} is paused",
+    "add": "Add bag",
+    "pausedToast": "{{title}} paused",
+    "resumedToast": "{{title}} is live again",
+    "undo": "Undo",
+    "toggleFailed": "Couldn’t update {{title}}. Try again.",
+    "empty": {
+      "title": "No bags yet",
+      "text": "Add your first surprise bag — it takes about a minute. It goes live as soon as you save.",
+      "action": "Add a bag"
+    },
+    "error": {
+      "title": "Couldn’t load your bags",
+      "retry": "Try again"
+    }
+  },
+  "bagForm": {
+    "addTitle": "Add bag",
+    "editTitle": "Edit bag",
+    "title": "Title",
+    "description": "Description",
+    "descriptionHelp": "Keep it short and honest",
+    "category": "Category",
+    "originalPrice": "Original price",
+    "salePrice": "Sale price",
+    "shownAs": "Shown as",
+    "qty": "Bags today",
+    "reserved_one": "{{count}} already reserved",
+    "reserved_other": "{{count}} already reserved",
+    "window": "Pickup window",
+    "from": "From",
+    "until": "Until",
+    "windowHelp": "At least 30 minutes gives people time to get there.",
+    "timePlaceholder": "HH:mm",
+    "live": "Show to customers",
+    "liveHelp": "Turn off to pause this bag",
+    "saveNew": "Add bag",
+    "save": "Save changes",
+    "delete": "Delete bag",
+    "deleteSheet": {
+      "title": "Delete this bag?",
+      "text": "It disappears from Discover straight away. You can’t undo this.",
+      "confirm": "Delete bag"
+    },
+    "errors": {
+      "title": "Use 3–60 characters.",
+      "description": "Keep it under 200 characters.",
+      "category": "Pick a category.",
+      "price": "Enter an amount, e.g. 149.",
+      "saleBelow": "The sale price must be below the original price.",
+      "time": "Use HH:mm, e.g. 18:00.",
+      "windowLength": "Make the window at least 30 minutes.",
+      "windowPast": "The window must end later today.",
+      "belowReserved": "{{count}} are already reserved — you can’t offer fewer.",
+      "hasReservations": "This bag has reservations. Pause it instead.",
+      "hasOrders": "This bag has past orders. Pause it instead.",
+      "notFound": "This bag no longer exists."
+    }
+  },
+  "storeOrders": {
+    "title": "Today’s orders",
+    "enterCode": "Enter pickup code",
+    "enterCodeHelp": "Ask the customer for their 4-digit code.",
+    "codeLegend": "Pickup code",
+    "digit": "Digit {{n}}",
+    "confirm": "Confirm pickup",
+    "notFound": "No order today matches {{code}}. Check the code and try again.",
+    "success": {
+      "title": "Code {{code}} — all good",
+      "handOver": "Hand over",
+      "items": "{{qty}} × {{title}}",
+      "to": "to {{name}}",
+      "payment": "Take payment",
+      "next": "Next code"
+    },
+    "toCollect": "To collect",
+    "counts": "{{toCollect}} of {{total}}",
+    "collectedAt": "Collected {{time}}",
+    "item": "{{qty}} × {{title}} · {{window}}",
+    "itemCollected": "{{qty}} × {{title}}",
+    "empty": "No orders for today yet. They show up here as customers reserve.",
+    "error": {
+      "title": "Couldn’t load today’s orders",
+      "retry": "Try again"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "edit": "Edit profile",
+    "bagsRescued_one": "bag rescued",
+    "bagsRescued_other": "bags rescued",
+    "saved": "saved so far",
+    "preferences": "Preferences",
+    "language": "Language",
+    "languageValue": "English",
+    "pickupArea": "Pickup area",
+    "pickupAreaValue": "{{label}} · {{km}} km",
+    "help": "Help",
+    "logout": "Log out",
+    "version": "Leftover {{version}}",
+    "logoutSheet": {
+      "title": "Log out?",
+      "text": "You’ll need your email and password to sign back in.",
+      "confirm": "Log out"
+    },
+    "editSheet": {
+      "title": "Your name",
+      "field": "First name",
+      "save": "Save",
+      "error": "Enter your first name (up to 40 characters)."
     }
   }
 }

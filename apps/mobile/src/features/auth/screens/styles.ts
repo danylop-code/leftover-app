@@ -19,5 +19,4 @@ export const styles = StyleSheet.create({
   },
   wordmark: { ...typography.title, color: color.primary, letterSpacing: -0.72 },
   actions: { marginTop: 'auto', gap: space[2] },
-  placeholder: { gap: space[4], paddingTop: space[4] },
 });

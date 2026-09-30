@@ -34,3 +34,9 @@
 - API discovery tests place their shops far from Lviv (`freshCentre()` in `test/helpers/fixtures.ts`), so the seed's Lviv shops (loaded by `seed.test.ts`) can't show up in their results.
 - Never give the Discover query `placeholderData`/`keepPreviousData`: while a new area loads, the old list would show distances from the previous location.
 - The Biome no-literals plugin also flags numbers in SVG props. Keep illustration geometry in the component's `styles.ts` (see `EmptyBagArt`, `LogoMark`).
+- Drizzle wraps D1 errors: "UNIQUE constraint failed" is on `error.cause`, not the message. Use `isUniqueViolation` (`apps/api/src/lib/errors.ts`), never `String(e).includes('UNIQUE')`.
+- Stock and status changes that must happen together use one `d1.batch` where the second statement is guarded by `changes() = 1` (reserve: take stock → insert order; cancel: status → restock). Keep that shape; a separate query in between reopens the race.
+- A string passed as a ReactNode prop that ends up inside a `View` (e.g. `Ticket`'s `summary`) crashes on device ("Text strings must be rendered within a <Text>"); wrap it in `<Text>`. Component tests only notice because the text can't be found.
+- Component tests that assert an optimistic update inside a `FlatList` need `waitFor`/`findBy…`: the list re-renders a tick after the cache changes.
+- The kit's `Switch` is a `Pressable` with the switch role: tests `fireEvent.press` it (`valueChange` does nothing).
+- Clock-dependent screens (Pickup, Orders, bag form) are tested with `fakeNow` (`src/shared/testing/fake-date.ts`), which fakes only `Date` so React Query and the router keep real timers.

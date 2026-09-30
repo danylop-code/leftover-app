@@ -1,6 +1,6 @@
 # Feature: orders
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 A customer finds every current and past reservation in one place.
@@ -20,12 +20,12 @@ Artboards **Orders** (segmented Current with count / Past; OrderCards with store
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a reserved order inside its window, then it's under Current with a "Ready now" badge and "Show code".
-- [ ] Given a reserved order whose window ended, then it's under Past as "Missed · Pickup window ended".
-- [ ] Given a cancelled order, then it's under Past with "You cancelled at HH:mm" in the store's timezone.
-- [ ] Given no orders, then the Current empty state shows "Find food nearby" → Discover.
-- [ ] Given another customer's orders, then they never appear.
-- [ ] The Current badge count equals the number of current orders.
+- [x] Given a reserved order inside its window, then it's under Current with a "Ready now" badge and "Show code".
+- [x] Given a reserved order whose window ended, then it's under Past as "Missed · Pickup window ended".
+- [x] Given a cancelled order, then it's under Past with "You cancelled at HH:mm" in the store's timezone.
+- [x] Given no orders, then the Current empty state shows "Find food nearby" → Discover.
+- [x] Given another customer's orders, then they never appear.
+- [x] The Current badge count equals the number of current orders.
 
 ### Approach steps
 1. Add the route + service (reusing `deriveOrderStatus`) + integration tests.
@@ -40,10 +40,14 @@ Artboards **Orders** (segmented Current with count / Past; OrderCards with store
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in the 08–15 batch.
+  - Past orders use the kit's `OrderCard` too (the artboard's past card is more compact: title first, "store · date" underneath). Leave a review is a ghost button without the star glyph (the icon set has none).
+  - Current "Show code" is primary for ready orders, "View" (secondary) for later ones, as on the artboard.

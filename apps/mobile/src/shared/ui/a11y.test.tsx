@@ -6,6 +6,7 @@ import { tapMin } from '../theme';
 import {
   Button,
   Chip,
+  FavoriteButton,
   IconButton,
   ListRow,
   Segmented,
@@ -30,6 +31,7 @@ const cases: [string, ReactElement][] = [
   ['IconButton', <IconButton key="i" icon="back" label="Back" onPress={noop} />],
   ['IconButton sm', <IconButton key="is" icon="close" label="Clear" size="sm" onPress={noop} />],
   ['Chip', <Chip key="c" label="Bakery" onPress={noop} />],
+  ['FavoriteButton', <FavoriteButton key="f" name="Crumb" saved={false} onToggle={noop} />],
   ['Stepper', <Stepper key="st" value={2} min={1} max={3} onChange={noop} />],
   ['Switch', <Switch key="sw" value label="Show to customers" onValueChange={noop} />],
   ['Slider', <Slider key="sl" value={5} min={1} max={30} label="Search radius" onChange={noop} />],

@@ -60,6 +60,10 @@ describe('shop setup routing', () => {
     await act(async () => {
       fireEvent.press(suggestion);
     });
+    // Picking closes the list (let React Query's batched notify land inside the test).
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /vul\. Doroshenka 32/ })).toBeNull(),
+    );
     fireEvent.changeText(screen.getByLabelText('Opens at'), '08:00');
     fireEvent.changeText(screen.getByLabelText('Closes at'), '20:00');
     await act(async () => {

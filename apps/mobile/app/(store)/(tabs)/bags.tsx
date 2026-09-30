@@ -1,6 +1,5 @@
-import { SignedInPlaceholderScreen } from '../../../src/features/auth/screens/SignedInPlaceholderScreen';
+import { StoreBagsScreen } from '../../../src/features/store-bags/screens/StoreBagsScreen';
 
-// Placeholder until its feature lands (see SignedInPlaceholderScreen).
 export default function BagsRoute() {
-  return <SignedInPlaceholderScreen screen="bags" />;
+  return <StoreBagsScreen />;
 }

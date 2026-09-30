@@ -1,6 +1,6 @@
 # Feature: store-orders-code
 
-## Plan — FROZEN once Status is in-progress (changes go in Changelog)
+## Plan — FROZEN (changes go in Changelog)
 
 ### Goal
 At the counter, a shop confirms a customer's code in seconds and knows exactly what to hand over and charge.
@@ -19,13 +19,13 @@ Artboards **StoreOrders** (date, "Today's orders", "Enter pickup code" with 4 bo
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given a reserved order today with code 4827, when confirmed, then its status is `collected` with `collected_at` set, and the success panel shows the items, customer and amount to charge.
-- [ ] Given the same code confirmed again, then 404 `code_not_found` (no double collection).
-- [ ] Given a code belonging to another shop, then 404.
-- [ ] Given a non-4-digit input, then Confirm stays disabled and the API rejects with 400.
-- [ ] Given a wrong code, then the error message quotes the entered code, and the inputs stay filled for editing.
-- [ ] Given a confirm, then the "To collect" count decreases and the order moves to Collected with its time.
-- [ ] The customer's Pickup screen (09) switches to Collected on its next poll.
+- [x] Given a reserved order today with code 4827, when confirmed, then its status is `collected` with `collected_at` set, and the success panel shows the items, customer and amount to charge.
+- [x] Given the same code confirmed again, then 404 `code_not_found` (no double collection).
+- [x] Given a code belonging to another shop, then 404.
+- [x] Given a non-4-digit input, then Confirm stays disabled and the API rejects with 400.
+- [x] Given a wrong code, then the error message quotes the entered code, and the inputs stay filled for editing.
+- [x] Given a confirm, then the "To collect" count decreases and the order moves to Collected with its time.
+- [x] The customer's Pickup screen (09) switches to Collected on its next poll.
 
 ### Approach steps
 1. Write the shared schemas.
@@ -41,10 +41,16 @@ Artboards **StoreOrders** (date, "Today's orders", "Enter pickup code" with 4 bo
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — done on `feat/08-15-customer-and-store`. Decisions and deviations:
+  - Built in the 08–15 batch.
+  - "Today" = the bag's pickup day in the shop's timezone; cancelled orders aren't listed; a missed order can't be confirmed (404 `code_not_found`).
+  - Customer names show the first name only (profiles have no last name yet).
+  - The code boxes don't auto-submit on the 4th digit; Confirm pickup does it (as on the artboard).
+  - Codes are unique among the shop's reserved orders from the last 24 h (08).

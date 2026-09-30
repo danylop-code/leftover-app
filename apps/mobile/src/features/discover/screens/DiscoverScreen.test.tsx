@@ -6,6 +6,7 @@ import { Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ApiError, apiRequest, NetworkError } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
+import { nearbyBag } from '../../../shared/testing/fixtures';
 import { createTestQueryClient, testSafeArea } from '../../../shared/testing/render';
 import { tones } from '../../../shared/ui/Badge/styles';
 import { DiscoverScreen } from './DiscoverScreen';
@@ -19,18 +20,7 @@ const request = apiRequest as jest.Mock;
 const home: Place = { label: 'vul. Doroshenka 14', lat: 49.8421, lng: 24.0224 };
 const elsewhere: Place = { label: 'Rynok Square 1', lat: 49.8419, lng: 24.0315 };
 
-const bag = (over: Partial<NearbyBag> & Pick<NearbyBag, 'id'>): NearbyBag => ({
-  title: 'Bakery surprise bag',
-  category: 'bakery',
-  priceMinor: 14900,
-  originalPriceMinor: 45000,
-  qtyAvailable: 3,
-  pickupStart: '2026-09-29T15:00:00.000Z',
-  pickupEnd: '2026-09-29T16:30:00.000Z',
-  store: { id: 's1', name: 'Crumb & Co. Bakery', timezone: 'Europe/Kyiv' },
-  distanceKm: 0.8,
-  ...over,
-});
+const bag = nearbyBag;
 const crumb = bag({ id: 'b1' });
 const kasha = bag({
   id: 'b2',
@@ -204,5 +194,62 @@ describe('DiscoverScreen', () => {
     fireEvent.press(await screen.findByRole('button', { name: /^Bakery surprise bag from/ }));
     expect(await screen.findByText('Store screen')).toBeOnTheScreen();
     expect(screen).toHavePathname('/store/s1');
+  });
+
+  it('shows the shop’s rating on its cards, and none without reviews', async () => {
+    serve([{ ...crumb, rating: { average: 4.7, count: 128 } }, kasha]);
+    open();
+    await screen.findByText('2 bags');
+    expect(screen.getByText('4.7')).toBeOnTheScreen();
+    expect(screen.getAllByText(/^\d\.\d$/)).toHaveLength(1);
+  });
+
+  it('saves a shop with the heart: every card of that shop fills at once', async () => {
+    const crumbSweet = bag({ id: 'b9', title: 'Sweet box' });
+    let saved = false;
+    request.mockImplementation(async (path: string, options: { method?: string }) => {
+      if (path.startsWith('/favorites/')) {
+        saved = options.method === 'PUT';
+        return undefined;
+      }
+      return {
+        bags: [crumb, crumbSweet, kasha].map((b) => ({
+          ...b,
+          isFavorite: saved && b.store.id === 's1',
+        })),
+      };
+    });
+    open();
+    await screen.findByText('3 bags');
+    await act(async () => {
+      fireEvent.press(
+        screen.getAllByRole('button', { name: 'Save Crumb & Co. Bakery' })[0] as never,
+      );
+    });
+    await waitFor(() =>
+      expect(screen.getAllByRole('button', { name: 'Unsave Crumb & Co. Bakery' })).toHaveLength(2),
+    );
+    expect(screen.getAllByRole('button', { name: 'Unsave Crumb & Co. Bakery' })[0]).toBeSelected();
+    expect(screen.getByRole('button', { name: 'Save Kasha Kitchen' })).not.toBeSelected();
+    expect(request).toHaveBeenCalledWith(
+      '/favorites/s1',
+      expect.objectContaining({ method: 'PUT' }),
+    );
+  });
+
+  it('puts the heart back and explains when saving fails', async () => {
+    request.mockImplementation(async (path: string) => {
+      if (path.startsWith('/favorites/')) throw new NetworkError();
+      return { bags: [crumb] };
+    });
+    open();
+    await screen.findByText('1 bag');
+    await act(async () => {
+      fireEvent.press(screen.getByRole('button', { name: 'Save Crumb & Co. Bakery' }));
+    });
+    expect(
+      await screen.findByText('Couldn’t update your saved shops. Try again.'),
+    ).toBeOnTheScreen();
+    expect(screen.getByRole('button', { name: 'Save Crumb & Co. Bakery' })).not.toBeSelected();
   });
 });
