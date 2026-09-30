@@ -2,9 +2,9 @@
   "format": {
     "today": "اليوم",
     "tomorrow": "غدًا",
-    "window": "{{day}} · {{start}}–{{end}}",
-    "km": "{{value}} كم",
-    "range": "{{start}}–{{end}}",
+    "window": "{{day}} · \u2066{{start}}–{{end}}\u2069",
+    "km": "{{value}}\u00a0كم",
+    "range": "\u2066{{start}}–{{end}}\u2069",
     "minutes": "{{minutes}} د",
     "hours": "{{hours}} س",
     "hoursMinutes": "{{hours}} س {{minutes}} د",
@@ -245,7 +245,7 @@
     }
   },
   "storeDetail": {
-    "openToday": "مفتوح اليوم {{opens}}–{{closes}}",
+    "openToday": "مفتوح اليوم \u2066{{opens}}–{{closes}}\u2069",
     "opensLater": "مغلق الآن · يفتح الساعة {{opens}}",
     "opensTomorrow": "مغلق الآن · يفتح غدًا الساعة {{opens}}",
     "ratingCount_zero": "لا تقييمات",

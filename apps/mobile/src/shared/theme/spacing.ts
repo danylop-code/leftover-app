@@ -35,6 +35,8 @@ export const layout = {
 export const tabBar = {
   inset: space[4],
   bottom: space[4],
+  // How far the island may reach into the home-indicator inset (the indicator is ~13 pt tall).
+  homeIndicatorOverlap: 18,
   height: 56,
   padding: space[1],
   radius: 28,

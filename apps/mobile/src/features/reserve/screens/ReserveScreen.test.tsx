@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 import { ApiError, apiRequest, NetworkError } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
 import { usePreferences } from '../../../shared/store/preferences';
+import { bidiName, stripBidi } from '../../../shared/testing/bidi';
 import { storeBag, storeDetail } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
 import { ReserveScreen } from './ReserveScreen';
@@ -82,8 +83,10 @@ describe('ReserveScreen', () => {
       expect(await screen.findByText('احجز كيسًا')).toBeOnTheScreen();
       await screen.findByText('Bakery surprise bag');
       fireEvent.press(screen.getByRole('button', { name: 'أكياس أكثر' }));
-      expect(screen.getByText('توفّر 5.000 ر.ع.')).toBeOnTheScreen();
-      expect(screen.getByRole('button', { name: 'احجز مقابل 3.000 ر.ع.' })).toBeOnTheScreen();
+      expect(screen.getByText('توفّر 5.000 ر.ع.', { normalizer: stripBidi })).toBeOnTheScreen();
+      expect(
+        screen.getByRole('button', { name: bidiName('احجز مقابل 3.000 ر.ع.') }),
+      ).toBeOnTheScreen();
       expect(screen.getByText('ادفع في المتجر')).toBeOnTheScreen();
     });
   });

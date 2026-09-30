@@ -36,6 +36,8 @@ export type Theme = {
   shadows: Record<keyof typeof shadows, string>;
   elevation: typeof elevation;
   fontFamily: FontFamily;
+  /** Both scripts' faces, for text whose script isn't the app's (a Latin shop initial in Arabic). */
+  scriptFonts: Record<Script, FontFamily>;
   typography: Typography;
   /** `StyleSheet.create` adjusted for the script and direction (see `adjust`). */
   sheet: <T extends NamedStyles<T>>(styles: T & NamedStyles<T>) => T;
@@ -97,6 +99,7 @@ const build = (scheme: Scheme, direction: Direction, script: Script): Theme => {
     ...palettes[scheme],
     logoPalette,
     fontFamily: faces,
+    scriptFonts: { latin: fontFamily, arabic: arabicFontFamily },
     typography: typographyFor(faces),
     sheet: sheetFor(direction, script),
   };

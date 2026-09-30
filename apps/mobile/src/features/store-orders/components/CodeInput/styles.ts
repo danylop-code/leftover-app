@@ -3,7 +3,8 @@ import { makeStyles, radius, space } from '../../../../shared/theme';
 export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
   // `.code-row` / `.code-box`
   const styles = sheet({
-    row: { flexDirection: 'row', gap: space[3], justifyContent: 'center' },
+    // Codes are digits, read left to right in Arabic too: typing 1-2-3-4 must show 1234.
+    row: { flexDirection: 'row', direction: 'ltr', gap: space[3], justifyContent: 'center' },
     box: {
       flex: 1,
       maxWidth: 64,
