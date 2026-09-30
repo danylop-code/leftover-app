@@ -48,6 +48,7 @@ export function BagRow(props: Props) {
             priceMinor={props.priceMinor}
             originalMinor={props.originalPriceMinor}
             soldOut={props.soldOut}
+            align="end"
           />
         </View>
       </View>

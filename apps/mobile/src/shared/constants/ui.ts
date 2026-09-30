@@ -9,3 +9,5 @@ export const NO_STARS = 0;
 // Rating shown with one decimal (4.7).
 export const RATING_DECIMALS = 1;
 export const TOAST_DURATION_MS = 4000;
+// Smallest scale a single-line figure (price, stat) may shrink to before it would overflow.
+export const MIN_FIT_SCALE = 0.75;

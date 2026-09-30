@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { isArabicScript } from '../../i18n/bidi';
 import { useTheme } from '../../theme';
 import { Photo } from '../Photo/Photo';
 import { logoColor } from './logo-color';
@@ -19,6 +20,7 @@ const letter = { md: 'letterMd', lg: 'letterLg', xl: 'letterXl' } as const;
 export function StoreLogo({ id, name, size = 'md', ring, logo }: Props) {
   const { styles } = useStyles();
   const theme = useTheme();
+  const initial = name.trim().charAt(0).toUpperCase();
   return (
     <View
       style={[
@@ -30,8 +32,16 @@ export function StoreLogo({ id, name, size = 'md', ring, logo }: Props) {
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
     >
-      <Text style={[styles.letter, styles[letter[size]]]}>
-        {name.trim().charAt(0).toUpperCase()}
+      {/* The initial's own script picks the face: a Latin "Q" in the Arabic UI keeps Fraunces
+          (IBM Plex Sans Arabic's tall metrics push Latin capitals above centre). */}
+      <Text
+        style={[
+          styles.letter,
+          isArabicScript(initial) ? styles.arabic : styles.latin,
+          styles[letter[size]],
+        ]}
+      >
+        {initial}
       </Text>
       <Photo src={logo} />
     </View>

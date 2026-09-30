@@ -1,4 +1,5 @@
 import { Text, View } from 'react-native';
+import { MIN_FIT_SCALE, SINGLE_LINE } from '../../constants/ui';
 import { useStyles } from './styles';
 
 type Props = { value: string; label: string; tone?: keyof ReturnType<typeof useStyles>['tones'] };
@@ -13,7 +14,14 @@ export function StatTile({ value, label, tone = 'primary' }: Props) {
       accessible
       accessibilityLabel={`${value} ${label}`}
     >
-      <Text style={[styles.value, { color: t.fg }]}>{value}</Text>
+      <Text
+        style={[styles.value, { color: t.fg }]}
+        numberOfLines={SINGLE_LINE}
+        adjustsFontSizeToFit
+        minimumFontScale={MIN_FIT_SCALE}
+      >
+        {value}
+      </Text>
       <Text style={[styles.label, { color: t.fg }]}>{label}</Text>
     </View>
   );

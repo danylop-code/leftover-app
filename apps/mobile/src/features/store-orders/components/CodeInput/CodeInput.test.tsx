@@ -1,5 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
 import { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { usePreferences } from '../../../../shared/store/preferences';
 import { CodeInput } from './CodeInput';
 
 function Harness({ initial = '' }: { initial?: string }) {
@@ -34,5 +36,13 @@ describe('CodeInput', () => {
     render(<Harness initial="4827" />);
     fireEvent.changeText(box(4), '');
     expect(values()).toEqual(['4', '8', '2', '']);
+  });
+
+  it('stays left-to-right in Arabic, so 1234 reads 1-2-3-4 (brief 22)', async () => {
+    await act(async () => usePreferences.getState().setLanguage('ar'));
+    render(<Harness />);
+    const row = screen.getByLabelText('رمز الاستلام');
+    expect(StyleSheet.flatten(row.props.style).direction).toBe('ltr');
+    await act(async () => usePreferences.getState().setLanguage('en'));
   });
 });

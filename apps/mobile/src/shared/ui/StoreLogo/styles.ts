@@ -2,7 +2,7 @@ import { makeStyles } from '../../theme';
 
 export const sizes = { md: 44, lg: 64, xl: 80 } as const;
 
-export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
+export const useStyles = makeStyles(({ color, scriptFonts, sheet }) => {
   const styles = sheet({
     root: { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
     md: { width: sizes.md, height: sizes.md, borderRadius: sizes.md / 2 },
@@ -16,7 +16,9 @@ export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
       borderColor: color.background,
     },
     ring: { borderWidth: 3, borderColor: color.surface },
-    letter: { fontFamily: fontFamily.display['600italic'], color: color.onPrimary },
+    letter: { color: color.onPrimary, textAlign: 'center', includeFontPadding: false },
+    latin: { fontFamily: scriptFonts.latin.display['600italic'] },
+    arabic: { fontFamily: scriptFonts.arabic.display['600'] },
     letterMd: { fontSize: 18, lineHeight: 22 },
     letterLg: { fontSize: 26, lineHeight: 30 },
     letterXl: { fontSize: 34, lineHeight: 40 },

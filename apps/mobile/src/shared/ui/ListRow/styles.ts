@@ -23,14 +23,21 @@ export const useStyles = makeStyles(({ color, fontFamily, typography, sheet }) =
     },
     iconDanger: { backgroundColor: color.dangerSoft },
     label: {
-      flex: 1,
+      flexShrink: 0,
+      maxWidth: '70%',
       fontFamily: fontFamily.body['500'],
       fontSize: 16,
       lineHeight: 22,
       color: color.textPrimary,
     },
     labelDanger: { color: color.danger },
-    value: { ...typography.label, fontFamily: fontFamily.body['500'], color: color.textSecondary },
+    value: {
+      ...typography.label,
+      flexShrink: 1,
+      fontFamily: fontFamily.body['500'],
+      color: color.textSecondary,
+    },
+    spacer: { flex: 1 },
     group: { gap: space[2] },
     list: { backgroundColor: color.surface, borderRadius: radius.xl, overflow: 'hidden' },
     groupLabel: {

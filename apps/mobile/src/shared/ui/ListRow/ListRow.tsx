@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
+import { SINGLE_LINE } from '../../constants/ui';
 import { Icon, type IconName } from '../icons';
 import { useStyles } from './styles';
 
@@ -33,7 +34,13 @@ export function ListRow({
         </View>
       ) : null}
       <Text style={[styles.label, danger && styles.labelDanger]}>{label}</Text>
-      {value ? <Text style={styles.value}>{value}</Text> : null}
+      <View style={styles.spacer} />
+      {/* The value gives way (one line, ellipsis) so a long address never squeezes the label. */}
+      {value ? (
+        <Text style={styles.value} numberOfLines={SINGLE_LINE}>
+          {value}
+        </Text>
+      ) : null}
       {chevron ? <Icon name="chevronRight" color={iconColor.chevron} /> : null}
     </>
   );

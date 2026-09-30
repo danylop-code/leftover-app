@@ -2,7 +2,14 @@ import { makeStyles, space } from '../../theme';
 
 export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
   const styles = sheet({
-    root: { flexDirection: 'row', alignItems: 'baseline', gap: space[2] },
+    root: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      flexShrink: 1,
+      alignItems: 'baseline',
+      columnGap: space[2],
+    },
+    end: { justifyContent: 'flex-end' },
     old: {
       fontFamily: fontFamily.body['500'],
       fontSize: 13,
@@ -11,6 +18,7 @@ export const useStyles = makeStyles(({ color, fontFamily, sheet }) => {
       textDecorationLine: 'line-through',
     },
     sale: {
+      flexShrink: 1,
       fontFamily: fontFamily.display['600'],
       fontSize: 22,
       lineHeight: 26,

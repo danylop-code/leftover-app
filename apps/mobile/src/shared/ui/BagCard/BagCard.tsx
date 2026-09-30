@@ -93,6 +93,7 @@ export function BagCard(props: Props) {
               priceMinor={props.priceMinor}
               originalMinor={props.originalPriceMinor}
               soldOut={props.qtyAvailable <= 0}
+              align="end"
             />
           </View>
         </View>
