@@ -1,6 +1,6 @@
 import { Pressable, Text, View } from 'react-native';
-import { Icon } from '../../../../shared/ui';
-import { checkColor, styles } from './styles';
+import { Icon } from '../icons';
+import { useStyles } from './styles';
 
 type Option<T extends string> = { value: T; label: string };
 type Props<T extends string> = {
@@ -12,6 +12,7 @@ type Props<T extends string> = {
 
 /** A labelled radio group as a card of rows (the artboard's selects, native-friendly). */
 export function ChoiceList<T extends string>({ label, options, value, onChange }: Props<T>) {
+  const { checkColor, styles } = useStyles();
   return (
     <View style={styles.list} accessibilityRole="radiogroup" accessibilityLabel={label}>
       {options.map((option, i) => {

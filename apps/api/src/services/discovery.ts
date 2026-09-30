@@ -4,6 +4,7 @@ import type { Db } from '../db/client';
 import { bags, stores } from '../db/schema';
 import { nowIso } from '../lib/clock';
 import { favoriteStoreIds } from './favorites';
+import { imageUrl } from './image-keys';
 import { storeRatings } from './reviews';
 
 // Kilometres per degree of latitude on the sphere haversineKm uses (R = 6371.0088 km).
@@ -61,9 +62,11 @@ export const nearbyBags = async (
       qtyAvailable: bags.qtyAvailable,
       pickupStart: bags.pickupStart,
       pickupEnd: bags.pickupEnd,
+      photoKey: bags.photoKey,
       storeId: stores.id,
       storeName: stores.name,
       timezone: stores.timezone,
+      logoKey: stores.logoKey,
       lat: stores.lat,
       lng: stores.lng,
     })
@@ -98,7 +101,13 @@ export const nearbyBags = async (
     qtyAvailable: row.qtyAvailable,
     pickupStart: row.pickupStart,
     pickupEnd: row.pickupEnd,
-    store: { id: row.storeId, name: row.storeName, timezone: row.timezone },
+    photoUrl: imageUrl(row.photoKey),
+    store: {
+      id: row.storeId,
+      name: row.storeName,
+      timezone: row.timezone,
+      logoUrl: imageUrl(row.logoKey),
+    },
     distanceKm,
     rating: ratings.get(row.storeId) ?? null,
     isFavorite: saved.has(row.storeId),

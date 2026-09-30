@@ -5,11 +5,12 @@ import { SINGLE_LINE } from '../../constants/ui';
 import { formatMoney } from '../../lib/format';
 import { Icon } from '../icons';
 import { StoreLogo } from '../StoreLogo/StoreLogo';
-import { metaIconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   storeId: string;
   storeName: string;
+  storeLogoUrl?: string | null;
   bagTitle: string;
   qty: number;
   /** Status badge, e.g. <Badge tone="ready" … />. */
@@ -25,11 +26,12 @@ type Props = {
 
 /** Order summary card (`.order-card`) for Orders current and past. */
 export function OrderCard(props: Props) {
+  const { metaIconColor, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.card}>
       <View style={styles.top}>
-        <StoreLogo id={props.storeId} name={props.storeName} />
+        <StoreLogo id={props.storeId} name={props.storeName} logo={props.storeLogoUrl} />
         <View style={styles.topBody}>
           <Text style={styles.store} numberOfLines={SINGLE_LINE}>
             {props.storeName}

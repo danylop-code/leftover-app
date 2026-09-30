@@ -28,8 +28,9 @@ export const NearbyBag = Bag.pick({
   qtyAvailable: true,
   pickupStart: true,
   pickupEnd: true,
+  photoUrl: true,
 }).extend({
-  store: Store.pick({ id: true, name: true, timezone: true }),
+  store: Store.pick({ id: true, name: true, timezone: true, logoUrl: true }),
   distanceKm: z.number().nonnegative(),
   /** The shop's rating; null while it has no reviews (13). */
   rating: StoreRating.nullable(),

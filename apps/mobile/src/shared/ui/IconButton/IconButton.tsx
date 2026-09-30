@@ -1,7 +1,7 @@
 import { Pressable, type StyleProp, type ViewStyle } from 'react-native';
 import type { iconSize } from '../../theme';
 import { Icon, type IconName } from '../icons';
-import { iconColor, smHitSlop, styles } from './styles';
+import { smHitSlop, useStyles } from './styles';
 
 type Props = {
   icon: IconName;
@@ -28,6 +28,7 @@ export function IconButton({
   disabled,
   style,
 }: Props) {
+  const { iconColor, styles } = useStyles();
   return (
     <Pressable
       accessibilityRole="button"

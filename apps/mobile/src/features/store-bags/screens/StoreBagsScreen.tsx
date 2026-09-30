@@ -20,10 +20,11 @@ import {
 import { useToggleBag } from '../api/use-bag-mutations';
 import { useShopBags } from '../api/use-shop-bags';
 import { ShopBagRow } from '../components/ShopBagRow/ShopBagRow';
-import { FAB_CLEARANCE, styles } from './styles';
+import { FAB_CLEARANCE, useStyles } from './styles';
 
 /** StoreBags / StoreBagsEmpty artboards: today's bags, live stats, pause with Undo. */
 export function StoreBagsScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const bags = useShopBags();

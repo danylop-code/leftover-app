@@ -4,17 +4,22 @@ import { ApiError, apiRequest } from '../../../shared/api/client';
 import { keys } from '../../../shared/api/keys';
 import { useSession } from '../../../shared/store/session';
 
-/** Creates the owner's shop; recording storeId on the session sends routing on to My bags. */
+/**
+ * Creates the owner's shop. `enterShop` records the storeId on the session, which sends routing
+ * on to My bags; the screen calls it once the optional photos are uploaded (brief 20).
+ */
 export const useCreateStore = () => {
   const queryClient = useQueryClient();
   const user = useSession((s) => s.user);
   const setUser = useSession((s) => s.setUser);
-  return useMutation({
+  const enterShop = async (store: Store) => {
+    if (user) await setUser({ ...user, storeId: store.id });
+  };
+  const mutation = useMutation({
     mutationFn: (body: StoreProfileBody) =>
       apiRequest('/stores/me', { method: 'POST', body, schema: Store }),
-    onSuccess: async (store) => {
+    onSuccess: (store) => {
       queryClient.setQueryData(keys.myStore(), store);
-      if (user) await setUser({ ...user, storeId: store.id });
     },
     onError: (error) => {
       // Already set up (e.g. a double submit): refresh /me, which carries the storeId.
@@ -23,4 +28,5 @@ export const useCreateStore = () => {
       }
     },
   });
+  return { ...mutation, enterShop };
 };

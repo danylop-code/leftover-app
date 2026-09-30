@@ -1,6 +1,10 @@
+import { minorPerMajor } from '@leftover/shared';
 import { DISTANCE_DECIMALS_BELOW_KM, MIN_DISPLAY_DISTANCE_KM } from '../constants/distance';
-import { CURRENCY_SYMBOL, MINOR_PER_MAJOR } from '../constants/money';
+import { activeMarket } from '../constants/market';
 import i18n from '../i18n';
+import { INTL_LOCALE, westernDigits } from '../i18n/languages';
+
+const currentLanguage = () => (i18n.language === 'ar' ? 'ar' : 'en');
 
 const groupThousands = (n: number) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -10,16 +14,26 @@ const assertInt = (value: number, name: string) => {
   }
 };
 
-/** `14900` → `₴149`, `348000` → `₴3,480`, `14950` → `₴149.50`. Input is integer kopiyky. */
+/**
+ * Integer minor units of the market's currency → display text in the app's language.
+ * OMR: `1500` → `OMR 1.500` / `1.500 ر.ع.`. UAH: `14900` → `₴149`, `14950` → `₴149.50`.
+ */
 export const formatMoney = (minor: number): string => {
   assertInt(minor, 'formatMoney');
+  const { currency } = activeMarket();
+  const perMajor = minorPerMajor(currency);
   const sign = minor < 0 ? '-' : '';
   const abs = Math.abs(minor);
-  const major = Math.floor(abs / MINOR_PER_MAJOR);
-  const rest = abs % MINOR_PER_MAJOR;
-  const fraction = rest ? `.${String(rest).padStart(2, '0')}` : '';
-  return `${sign}${CURRENCY_SYMBOL}${groupThousands(major)}${fraction}`;
+  const major = Math.floor(abs / perMajor);
+  const rest = abs % perMajor;
+  const fraction =
+    rest || currency.alwaysShowMinor ? `.${String(rest).padStart(currency.minorDigits, '0')}` : '';
+  const amount = `${groupThousands(major)}${fraction}`;
+  return `${sign}${i18n.t(`money.amount.${currency.code}`, { amount })}`;
 };
+
+/** The currency's symbol in the app's language, for price fields: `OMR` / `ر.ع.`, `₴`. */
+export const currencySymbol = (): string => i18n.t(`money.symbol.${activeMarket().currency.code}`);
 
 /** `(45000, 14900)` → `−67%`; null when the sale price isn't lower. */
 export const formatDiscount = (originalMinor: number, saleMinor: number): string | null => {
@@ -27,7 +41,7 @@ export const formatDiscount = (originalMinor: number, saleMinor: number): string
   assertInt(saleMinor, 'formatDiscount');
   if (originalMinor <= 0 || saleMinor >= originalMinor) return null;
   const pct = Math.round((1 - saleMinor / originalMinor) * 100);
-  return `−${pct}%`;
+  return i18n.t('format.discount', { pct });
 };
 
 /** `0.8` → `0.8 km`, `12.6` → `13 km`. */
@@ -61,14 +75,21 @@ const time = (d: Date, timeZone: string) =>
 
 const longDay = (d: Date, timeZone: string) => {
   // en-US parts: CLDR en-GB abbreviates September as "Sept"; the design uses "Sep".
-  const parts = new Intl.DateTimeFormat('en-US', {
+  // Arabic day and month names, with Western digits (brief 21).
+  const language = currentLanguage();
+  const parts = new Intl.DateTimeFormat(INTL_LOCALE[language], {
     timeZone,
-    weekday: 'short',
+    weekday: language === 'ar' ? 'long' : 'short',
     day: 'numeric',
-    month: 'short',
+    month: language === 'ar' ? 'long' : 'short',
   }).formatToParts(d);
-  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value;
-  return `${part('weekday')}, ${part('day')} ${part('month')}`;
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    westernDigits(parts.find((p) => p.type === type)?.value ?? '');
+  return i18n.t('format.longDay', {
+    weekday: part('weekday'),
+    day: part('day'),
+    month: part('month'),
+  });
 };
 
 /**

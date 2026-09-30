@@ -32,7 +32,7 @@ import {
   stockTone,
 } from '../../../shared/ui';
 import { useCreateOrder } from '../api/use-create-order';
-import { clockColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Failure = 'soldOut' | 'notAvailable';
 
@@ -42,6 +42,7 @@ type Failure = 'soldOut' | 'notAvailable';
  * available bags are offered instead.
  */
 export function ReserveScreen() {
+  const { clockColor, styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const { bagId, storeId } = useLocalSearchParams<{ bagId: string; storeId: string }>();
@@ -176,7 +177,7 @@ export function ReserveScreen() {
         {notice ? <Banner tone="warning" title={notice} /> : null}
 
         <View style={[styles.summary, out && styles.dimmed]}>
-          <CategoryMedia category={bag.category} variant="tile" />
+          <CategoryMedia category={bag.category} variant="tile" photo={bag.photoUrl} />
           <View style={styles.summaryBody}>
             <Text style={styles.store}>{store.name}</Text>
             <Text style={styles.bagTitle} accessibilityRole="header">
@@ -218,6 +219,7 @@ export function ReserveScreen() {
                   key={other.id}
                   title={other.title}
                   category={other.category}
+                  photoUrl={other.photoUrl}
                   meta={formatTimeRange(other.pickupStart, other.pickupEnd, store.timezone)}
                   priceMinor={other.priceMinor}
                   originalPriceMinor={other.originalPriceMinor}

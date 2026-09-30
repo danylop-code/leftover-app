@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { Category } from './category';
 import { Latitude, Longitude, TimeOfDay, TimeZone } from './common';
-import { DEFAULT_TIMEZONE } from './store';
 
 export const STORE_NAME_MIN = 2;
 export const STORE_NAME_MAX = 60;
@@ -26,9 +25,12 @@ const closesAfterOpens = {
   params: { path: ['closesAt'], message: 'Closing time must be after opening time' },
 };
 
-/** Create body for `POST /stores/me` (one shop per owner, same-day hours). */
+/**
+ * Create body for `POST /stores/me` (one shop per owner, same-day hours). Without `timezone`
+ * the API uses the market's.
+ */
 export const StoreProfileBody = fields
-  .extend({ timezone: TimeZone.default(DEFAULT_TIMEZONE) })
+  .extend({ timezone: TimeZone.optional() })
   .refine(closesAfterOpens.check, closesAfterOpens.params);
 export type StoreProfileBody = z.infer<typeof StoreProfileBody>;
 

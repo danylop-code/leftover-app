@@ -1,10 +1,11 @@
 import { Pressable, Text, View } from 'react-native';
-import { linkHitSlop, styles } from './styles';
+import { linkHitSlop, useStyles } from './styles';
 
 type Props = { prompt: string; action: string; onPress: () => void };
 
 /** "Have an account? Log in" line under the auth forms. */
 export function FooterLink({ prompt, action, onPress }: Props) {
+  const { styles } = useStyles();
   return (
     <View style={styles.row}>
       <Text style={styles.text}>{prompt}</Text>

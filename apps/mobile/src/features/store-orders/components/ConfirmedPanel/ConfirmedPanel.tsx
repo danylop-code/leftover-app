@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { formatMoney } from '../../../../shared/lib/format';
 import { Button, Icon } from '../../../../shared/ui';
-import { checkColor, checkStroke, styles } from './styles';
+import { checkStroke, useStyles } from './styles';
 
 type Props = { order: StoreOrder; onNext: () => void };
 
 /** StoreCodeSuccess: what to hand over, to whom, and what to charge. */
 export function ConfirmedPanel({ order, onNext }: Props) {
+  const { checkColor, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.card} accessibilityRole="summary" accessibilityLiveRegion="polite">

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { type Edge, SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   children: ReactNode;
@@ -28,6 +28,7 @@ export function Screen({
   edges = defaultEdges,
   bottomInset = 0,
 }: Props) {
+  const { styles } = useStyles();
   const inset = bottomInset ? { paddingBottom: bottomInset } : null;
   return (
     <SafeAreaView style={styles.root} edges={edges}>

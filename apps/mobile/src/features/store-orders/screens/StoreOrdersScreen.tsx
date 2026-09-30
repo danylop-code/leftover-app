@@ -10,13 +10,14 @@ import { useConfirmCode, useTodaysOrders } from '../api/use-store-orders';
 import { CodeInput } from '../components/CodeInput/CodeInput';
 import { ConfirmedPanel } from '../components/ConfirmedPanel/ConfirmedPanel';
 import { StoreOrderRow } from '../components/StoreOrderRow/StoreOrderRow';
-import { errorIconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 /**
  * StoreOrders / StoreCodeSuccess / StoreCodeError artboards: enter a customer's 4-digit code,
  * see what to hand over and charge, and today's list of orders to collect.
  */
 export function StoreOrdersScreen() {
+  const { errorIconColor, styles } = useStyles();
   const { t } = useTranslation();
   const today = useTodaysOrders();
   const confirm = useConfirmCode();

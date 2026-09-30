@@ -2,12 +2,13 @@ import type { Role } from '@leftover/shared';
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { Icon } from '../../../../shared/ui';
-import { styles, tint } from './styles';
+import { useStyles } from './styles';
 
 type Props = { kind: Role; title: string; hint: string; selected: boolean; onSelect: () => void };
 
 /** One option of the Register role picker (`.role`); a radio button. */
 export function RoleCard({ kind, title, hint, selected, onSelect }: Props) {
+  const { styles, tint } = useStyles();
   const { t } = useTranslation();
   return (
     <Pressable

@@ -71,3 +71,65 @@ export const map = {
 
 // Store logo backgrounds (`.logo-crumb` … `.logo-greenrow`); picked by a stable hash of the store id.
 export const logoPalette = ['#8A5A2B', '#A6452A', '#2F6B4A', '#44506F', '#5F6D1C'] as const;
+
+// Dark scheme (brief 19): same keys, warm near-black surfaces, and lighter brand tints so text
+// and controls keep WCAG AA contrast (checked in contrast.test.ts). Proposed for the canvas as
+// `:root[data-theme="dark"]` (fixtures/design-dark.ts).
+export const darkColor = {
+  primary: '#8FCBA6',
+  primaryPressed: '#A9D8BB',
+  primarySoft: '#21382B',
+  onPrimary: '#0E1E15',
+  accent: '#E8804B',
+  accentPressed: '#F29A6A',
+  accentSoft: '#3B2418',
+  onAccent: '#1A0D06',
+  background: '#121814',
+  surface: '#1B221E',
+  surfaceSunken: '#0D120F',
+  textPrimary: '#EEE8DA',
+  textSecondary: '#A7B0A6',
+  textDisabled: '#6A7369',
+  border: '#2D3630',
+  borderStrong: '#7A857B',
+  success: '#72C792',
+  successSoft: '#1B3325',
+  warning: '#E4B563',
+  warningSoft: '#382C12',
+  danger: '#F2917F',
+  dangerSoft: '#3D1E1A',
+  star: '#E9B23C',
+  starEmpty: '#3A423B',
+  scrim: 'rgba(0,0,0,.6)',
+  inverse: '#EEE8DA',
+  onInverse: '#121814',
+
+  switchTrackOff: '#4A544D',
+  primaryTint: '#17251D',
+  primaryDeep: '#7DBB95',
+  // The toast is light in the dark scheme, so its accents are the light scheme's inks.
+  toastSuccessIcon: '#2F7A4E',
+  toastErrorIcon: '#B3372B',
+  toastAction: '#A3441A',
+  mediaHighlight: 'rgba(255,255,255,.06)',
+  mapPinShadow: 'rgba(0,0,0,.4)',
+  transparent: 'transparent',
+} as const satisfies Record<keyof typeof color, string>;
+
+export const darkMedia = {
+  bakery: '#4A3A22',
+  bakeryInk: '#E6C48E',
+  meal: '#4D2E22',
+  mealInk: '#F0A988',
+  grocery: '#2A3A26',
+  groceryInk: '#A8CF95',
+  cafe: '#3D3126',
+  cafeInk: '#D9BC9B',
+  produce: '#3A3D20',
+  produceInk: '#D2D68E',
+  other: darkColor.surfaceSunken,
+  otherInk: darkColor.textSecondary,
+} as const satisfies Record<keyof typeof media, string>;
+
+// Map tiles stay light in both schemes (brief 19), so the map tokens do too.
+export const darkMap = map;

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { formatMoney } from '../../lib/format';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   priceMinor: number;
@@ -12,6 +12,7 @@ type Props = {
 
 /** Old price struck through beside the sale price; read as one label ("₴149, was ₴450"). */
 export function Price({ priceMinor, originalMinor, size = 'md', soldOut }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const price = formatMoney(priceMinor);
   const original = originalMinor !== undefined ? formatMoney(originalMinor) : undefined;

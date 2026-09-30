@@ -7,15 +7,14 @@ import { useBootstrapSession } from '../src/features/auth/hooks/use-bootstrap-se
 import { createQueryClient } from '../src/shared/api/query-client';
 import '../src/shared/i18n';
 import { fontAssets } from '../src/shared/theme/fonts';
-import { AppFrame } from '../src/shared/ui';
+import { AppFrame, useScreenOptions } from '../src/shared/ui';
 
 SplashScreen.preventAutoHideAsync();
-
-const screenOptions = { headerShown: false };
 
 // Holds the splash until fonts are loaded and the stored session has been read, so the first
 // frame is already the right screen (Welcome or the role's home).
 function AppStack() {
+  const screenOptions = useScreenOptions();
   const [fontsLoaded, fontError] = useFonts(fontAssets);
   const sessionReady = useBootstrapSession();
   const ready = (fontsLoaded || Boolean(fontError)) && sessionReady;

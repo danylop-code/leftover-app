@@ -16,6 +16,7 @@ const bag = {
   pickupStart: iso,
   pickupEnd: '2026-09-25T16:30:00.000Z',
   isActive: true,
+  photoUrl: '/images/bags/b1/photo/a.jpg',
 };
 
 describe('MoneyMinor', () => {
@@ -87,9 +88,15 @@ describe('resource schemas', () => {
       opensAt: '08:00',
       closesAt: '20:00',
       timezone: 'Europe/Kyiv',
+      logoUrl: null,
+      coverUrl: null,
     };
     expect(Store.parse(store)).toEqual(store);
     expect(Store.safeParse({ ...store, opensAt: '8:00' }).success).toBe(false);
+    // Images are API paths, never arbitrary URLs (brief 20).
+    expect(Store.safeParse({ ...store, logoUrl: 'https://evil.example/x.jpg' }).success).toBe(
+      false,
+    );
     expect(Store.safeParse({ ...store, lat: 91 }).success).toBe(false);
   });
 

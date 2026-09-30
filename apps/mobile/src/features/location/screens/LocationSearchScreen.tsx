@@ -7,13 +7,14 @@ import { useAddressSuggestions } from '../../../shared/api/use-address-suggestio
 import { useLocation } from '../../../shared/store/location';
 import { Banner, Icon, IconButton, Input, ListGroup, PlaceRow, Screen } from '../../../shared/ui';
 import { useCurrentPosition } from '../hooks/use-current-position';
-import { clearColor, locateColor, styles } from './styles';
+import { useStyles } from './styles';
 
 /**
  * LocationSearch artboard: address search with suggestions (distance from the current pin),
  * "Use my current location" and recent places. Choosing one sets the pin and goes back.
  */
 export function LocationSearchScreen() {
+  const { clearColor, locateColor, styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const [text, setText] = useState('');

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Icon } from '../icons';
-import { bandIconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   code: string;
@@ -16,6 +16,7 @@ type Props = {
 
 /** Pickup code ticket (`.ticket`); the code is read digit by digit. */
 export function Ticket({ code, bandLabel, summary, footer, accessibilityLabel }: Props) {
+  const { bandIconColor, styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.ticket} accessibilityLabel={accessibilityLabel}>

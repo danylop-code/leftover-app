@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { Button, Screen } from '../../../shared/ui';
 import { WelcomeHero } from '../components/WelcomeHero/WelcomeHero';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 export function WelcomeScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   return (

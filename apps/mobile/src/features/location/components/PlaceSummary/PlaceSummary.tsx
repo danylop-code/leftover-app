@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../../../shared/constants/ui';
 import { Button, Icon } from '../../../../shared/ui';
-import { pinColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   place: Place | null;
@@ -13,6 +13,7 @@ type Props = {
 
 /** The sheet's chosen place (`.loc-pin` + label + Change). */
 export function PlaceSummary({ place, locating, onChange }: Props) {
+  const { pinColor, styles } = useStyles();
   const { t } = useTranslation();
   // Once there's a place, show it even while a position is still being found.
   const finding = locating && !place;

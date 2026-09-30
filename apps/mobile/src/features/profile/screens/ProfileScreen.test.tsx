@@ -2,8 +2,9 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import { Text } from 'react-native';
 import { apiRequest } from '../../../shared/api/client';
 import { useLocation } from '../../../shared/store/location';
+import { usePreferences } from '../../../shared/store/preferences';
 import { useSession } from '../../../shared/store/session';
-import { customer, shopOwnerUser } from '../../../shared/testing/fixtures';
+import { crumbStore, customer, shopOwnerUser } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
 import { ProfileScreen } from './ProfileScreen';
 
@@ -16,6 +17,7 @@ const request = apiRequest as jest.Mock;
 const serve = () =>
   request.mockImplementation(async (path: string, options: { method?: string; body?: unknown }) => {
     if (path === '/me/stats') return { bagsRescued: 4, savedMinor: 71200 };
+    if (path === '/stores/me') return crumbStore;
     if (path === '/me' && options.method === 'PATCH')
       return { ...customer, ...(options.body as object) };
     return undefined;
@@ -52,6 +54,28 @@ describe('ProfileScreen', () => {
     expect(screen.getByText('English')).toBeOnTheScreen();
   });
 
+  it('switches to Arabic from Language and back to English, remembering the choice', async () => {
+    useSession.setState({ status: 'signedIn', token: 'tok', user: customer });
+    await open();
+    fireEvent.press(screen.getByRole('button', { name: 'Language, English' }));
+    fireEvent.press(await screen.findByRole('radio', { name: 'العربية' }));
+    expect(await screen.findByText('الحساب')).toBeOnTheScreen();
+    expect(usePreferences.getState().language).toBe('ar');
+    fireEvent.press(screen.getByRole('button', { name: 'اللغة، العربية' }));
+    fireEvent.press(await screen.findByRole('radio', { name: 'English' }));
+    expect(await screen.findByText('Profile')).toBeOnTheScreen();
+    expect(usePreferences.getState().language).toBe('en');
+  });
+
+  it('chooses Dark in Appearance and shows it on the row (brief 19)', async () => {
+    useSession.setState({ status: 'signedIn', token: 'tok', user: customer });
+    await open();
+    fireEvent.press(screen.getByRole('button', { name: 'Appearance, System' }));
+    fireEvent.press(await screen.findByRole('radio', { name: 'Dark' }));
+    expect(await screen.findByRole('button', { name: 'Appearance, Dark' })).toBeOnTheScreen();
+    expect(usePreferences.getState().appearance).toBe('dark');
+  });
+
   it('Pickup area opens Location, and the row follows the new choice', async () => {
     useSession.setState({ status: 'signedIn', token: 'tok', user: customer });
     await open();
@@ -78,6 +102,9 @@ describe('ProfileScreen', () => {
     expect(screen.queryByText('Pickup area')).toBeNull();
     expect(screen.getByRole('button', { name: 'Log out' })).toBeOnTheScreen();
     expect(request).not.toHaveBeenCalledWith('/me/stats', expect.anything());
+    // Logo and cover for an existing shop (brief 20).
+    expect(await screen.findByText('Shop photos')).toBeOnTheScreen();
+    expect(screen.getAllByRole('button', { name: 'Add photo' })).toHaveLength(2);
   });
 
   it('logs out after confirming, clearing the session', async () => {

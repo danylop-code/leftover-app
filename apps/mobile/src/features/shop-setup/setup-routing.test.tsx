@@ -29,6 +29,8 @@ const store = {
   opensAt: '08:00',
   closesAt: '20:00',
   timezone: 'Europe/Kyiv',
+  logoUrl: null,
+  coverUrl: null,
 };
 
 const json = (status: number, body: unknown) =>

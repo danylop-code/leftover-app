@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, View } from 'react-native';
 import { RATING_DECIMALS, RATING_MAX } from '../../constants/ui';
 import { Star } from './Star';
-import { buttonHitSlop, starSize, styles } from './styles';
+import { buttonHitSlop, starSize, useStyles } from './styles';
 
 const positions = Array.from({ length: RATING_MAX }, (_, i) => i + 1);
 
@@ -17,6 +17,7 @@ type Props =
 
 /** Display: one image read as "4.7 out of 5". Input: five labelled buttons reporting 1–5. */
 export function Stars(props: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const { value } = props;
 

@@ -27,7 +27,7 @@ import { useCancelOrder } from '../api/use-cancel-order';
 import { CollectedView } from '../components/CollectedView/CollectedView';
 import { PickupTimeCard } from '../components/PickupTimeCard/PickupTimeCard';
 import { useNow } from '../hooks/use-now';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 /**
  * Pickup / PickupCollected artboards. The code ticket, when to come (a live countdown), where,
@@ -35,6 +35,7 @@ import { styles } from './styles';
  * soon as the shop confirms the code.
  */
 export function PickupScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
@@ -165,7 +166,7 @@ export function PickupScreen() {
           }
           footer={
             <View style={styles.storeRow}>
-              <StoreLogo id={store.id} name={store.name} />
+              <StoreLogo id={store.id} name={store.name} logo={store.logoUrl} />
               <View style={styles.storeText}>
                 <Text style={styles.storeName}>{store.name}</Text>
                 <Text style={styles.caption}>

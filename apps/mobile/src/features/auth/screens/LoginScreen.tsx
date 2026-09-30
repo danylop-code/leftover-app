@@ -8,10 +8,11 @@ import { useLogin } from '../api/use-login';
 import { FooterLink } from '../components/FooterLink/FooterLink';
 import { PasswordInput } from '../components/PasswordInput/PasswordInput';
 import { type FieldErrors, useFormErrors } from '../hooks/use-form-errors';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 // "Forgot password?" is out of scope (03 brief) and not rendered.
 export function LoginScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const login = useLogin();

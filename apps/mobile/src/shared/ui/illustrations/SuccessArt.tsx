@@ -1,10 +1,11 @@
 import Svg from 'react-native-svg';
 import { ICON_VIEWBOX, icons } from '../icons/glyphs';
 import { ShapeList } from '../icons/ShapeList';
-import { success } from './styles';
+import { useStyles } from './styles';
 
 /** The big check on success states (`.empty-art.is-success`). */
 export function SuccessArt() {
+  const { success } = useStyles();
   return (
     <Svg
       width={success.size}

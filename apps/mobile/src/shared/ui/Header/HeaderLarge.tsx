@@ -1,10 +1,11 @@
 import { Text, View } from 'react-native';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { title: string; kicker?: string };
 
 /** Large page title (`.hdr-lg`): kicker above a display title. */
 export function HeaderLarge({ title, kicker }: Props) {
+  const { styles } = useStyles();
   return (
     <View style={styles.large}>
       {kicker ? <Text style={styles.kicker}>{kicker}</Text> : null}

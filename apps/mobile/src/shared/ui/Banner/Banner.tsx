@@ -1,15 +1,16 @@
 import { Text, View } from 'react-native';
 import { Icon, type IconName } from '../icons';
-import { styles, tones } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   title: string;
   text?: string;
   icon?: IconName;
-  tone?: keyof typeof tones;
+  tone?: keyof ReturnType<typeof useStyles>['tones'];
 };
 
 export function Banner({ title, text, icon = 'alert', tone = 'info' }: Props) {
+  const { styles, tones } = useStyles();
   const t = tones[tone];
   return (
     <View

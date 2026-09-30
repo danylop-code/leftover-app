@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { NO_STARS } from '../../../../shared/constants/ui';
 import { formatDay, formatMoney, formatTime } from '../../../../shared/lib/format';
 import { Badge, Button, Stars, StoreLogo, SuccessArt } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   order: OrderDetail;
@@ -15,6 +15,7 @@ type Props = {
 
 /** PickupCollected artboard: what was collected, what it saved, and a quick rating. */
 export function CollectedView({ order, onRate, onDone }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const { store, bag } = order;
   const savedMinor = (order.unitOriginalPriceMinor - order.unitPriceMinor) * order.qty;
@@ -43,7 +44,7 @@ export function CollectedView({ order, onRate, onDone }: Props) {
       </View>
 
       <View style={styles.summary}>
-        <StoreLogo id={store.id} name={store.name} />
+        <StoreLogo id={store.id} name={store.name} logo={store.logoUrl} />
         <View style={styles.summaryBody}>
           <Text style={styles.summaryTitle}>{bag.title}</Text>
           <Text style={styles.summaryCaption}>

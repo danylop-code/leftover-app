@@ -7,7 +7,9 @@
     "range": "{{start}}–{{end}}",
     "minutes": "{{minutes}} min",
     "hours": "{{hours}} h",
-    "hoursMinutes": "{{hours}} h {{minutes}} min"
+    "hoursMinutes": "{{hours}} h {{minutes}} min",
+    "discount": "−{{pct}}%",
+    "longDay": "{{weekday}}, {{day}} {{month}}"
   },
   "ui": {
     "back": "Back",
@@ -63,6 +65,17 @@
       "done": "Done",
       "none": "not set",
       "label": "{{label}}, {{value}}"
+    },
+    "photo": {
+      "add": "Add photo",
+      "change": "Change photo",
+      "remove": "Remove",
+      "camera": "Take a photo",
+      "library": "Choose from library",
+      "uploading": "Uploading photo",
+      "failed": "The photo didn’t upload. Check your connection and retry.",
+      "retry": "Retry",
+      "denied": "Allow photo access for Leftover in Settings to add one."
     }
   },
   "app": {
@@ -156,7 +169,10 @@
       "pin": "Pick your address from the suggestions, or drag the pin to your shop.",
       "time": "Use HH:mm, e.g. 08:00.",
       "closesAfterOpens": "Closing time must be after opening time."
-    }
+    },
+    "logo": "Logo",
+    "cover": "Cover photo",
+    "photosHelp": "Optional. You can add these later in Profile."
   },
   "location": {
     "title": "Where should we look?",
@@ -447,7 +463,7 @@
       "title": "Use 3–60 characters.",
       "description": "Keep it under 200 characters.",
       "category": "Pick a category.",
-      "price": "Enter an amount, e.g. 149.",
+      "price": "Enter an amount, e.g. {{example}}.",
       "saleBelow": "The sale price must be below the original price.",
       "time": "Use HH:mm, e.g. 18:00.",
       "windowLength": "Make the window at least 30 minutes.",
@@ -456,7 +472,9 @@
       "hasReservations": "This bag has reservations. Pause it instead.",
       "hasOrders": "This bag has past orders. Pause it instead.",
       "notFound": "This bag no longer exists."
-    }
+    },
+    "photo": "Photo",
+    "photoHelp": "Optional. A real photo sells better than the placeholder."
   },
   "storeOrders": {
     "title": "Today’s orders",
@@ -493,7 +511,6 @@
     "saved": "saved so far",
     "preferences": "Preferences",
     "language": "Language",
-    "languageValue": "English",
     "pickupArea": "Pickup area",
     "pickupAreaValue": "{{label}} · {{km}} km",
     "help": "Help",
@@ -510,7 +527,17 @@
       "save": "Save",
       "error": "Enter your first name (up to 40 characters)."
     },
-    "report": "Report a problem"
+    "report": "Report a problem",
+    "languageSheet": {
+      "title": "Language"
+    },
+    "shopPhotos": "Shop photos",
+    "appearance": "Appearance",
+    "appearanceValue": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    }
   },
   "report": {
     "title": "Report a problem",
@@ -552,6 +579,20 @@
     "error": {
       "title": "Couldn’t load your saved shops",
       "retry": "Try again"
+    }
+  },
+  "money": {
+    "amount": {
+      "OMR": "OMR {{amount}}",
+      "UAH": "₴{{amount}}"
+    },
+    "symbol": {
+      "OMR": "OMR",
+      "UAH": "₴"
+    },
+    "example": {
+      "OMR": "1.500",
+      "UAH": "149"
     }
   }
 }

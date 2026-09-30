@@ -6,12 +6,13 @@ import {
   RADIUS_STEP_KM,
 } from '../../../../shared/constants/location';
 import { Slider } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { value: number; onChange: (km: number) => void };
 
 /** "Search radius" label + value, the 1–30 km slider and its scale. */
 export function RadiusField({ value, onChange }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const valueText = t('format.km', { value });
   return (

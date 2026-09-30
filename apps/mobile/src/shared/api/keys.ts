@@ -17,8 +17,12 @@ export const keys = {
   savedAll: () => ['favorites'] as const,
   /** Saved tab; the location is included because distances depend on it. */
   saved: (p: { lat: number; lng: number }) => ['favorites', p] as const,
-  addressSuggestions: (p: { q: string; near: { lat: number; lng: number } | null }) =>
-    ['geo', 'autocomplete', p] as const,
+  /** Labels come back in the app language's script, so it's part of the key. */
+  addressSuggestions: (p: {
+    q: string;
+    near: { lat: number; lng: number } | null;
+    lang: 'en' | 'ar';
+  }) => ['geo', 'autocomplete', p] as const,
   ordersAll: () => ['orders'] as const,
   myOrders: (scope: OrdersScope) => ['orders', 'mine', scope] as const,
   order: (id: string) => ['orders', 'detail', id] as const,

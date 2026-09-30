@@ -4,6 +4,7 @@ import type { Db } from '../db/client';
 import { bags, favorites, stores } from '../db/schema';
 import { nowIso } from '../lib/clock';
 import { notFound } from '../lib/errors';
+import { imageUrl } from './image-keys';
 import { storeRatings } from './reviews';
 
 const requireStore = async (db: Db, storeId: string) => {
@@ -48,6 +49,7 @@ export const listFavorites = async (
       name: stores.name,
       category: stores.category,
       address: stores.address,
+      logoKey: stores.logoKey,
       lat: stores.lat,
       lng: stores.lng,
     })
@@ -75,8 +77,8 @@ export const listFavorites = async (
   ]);
   const counts = new Map(available.map((a) => [a.storeId, a.n]));
   return saved
-    .map(({ lat, lng, ...store }) => ({
-      store,
+    .map(({ lat, lng, logoKey, ...store }) => ({
+      store: { ...store, logoUrl: imageUrl(logoKey) },
       distanceKm: haversineKm(from, { lat, lng }),
       rating: ratings.get(store.id) ?? null,
       bagsAvailable: counts.get(store.id) ?? 0,

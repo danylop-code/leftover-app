@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Latitude, Longitude } from './common';
+import { Language, Latitude, Longitude } from './common';
 
 export const PLACE_QUERY_MIN = 2;
 export const PLACE_QUERY_MAX = 120;
@@ -7,7 +7,7 @@ export const PLACE_QUERY_MAX = 120;
 /** A point with a human label: the selected search location, a recent, a suggestion. */
 export const Place = z.object({
   label: z.string().min(1),
-  /** Second line, e.g. `Lviv, Ukraine`. */
+  /** Second line, e.g. `Muscat, Oman`. */
   secondary: z.string().min(1).optional(),
   lat: Latitude,
   lng: Longitude,
@@ -24,6 +24,7 @@ export const AutocompleteQuery = z
     q: z.string().trim().min(PLACE_QUERY_MIN).max(PLACE_QUERY_MAX),
     lat: z.coerce.number().pipe(Latitude).optional(),
     lng: z.coerce.number().pipe(Longitude).optional(),
+    lang: Language.optional(),
   })
   .refine((v) => (v.lat === undefined) === (v.lng === undefined), {
     path: ['lng'],
@@ -38,6 +39,7 @@ export type AutocompleteResponse = z.infer<typeof AutocompleteResponse>;
 export const ReverseQuery = z.object({
   lat: z.coerce.number().pipe(Latitude),
   lng: z.coerce.number().pipe(Longitude),
+  lang: Language.optional(),
 });
 export type ReverseQuery = z.infer<typeof ReverseQuery>;
 

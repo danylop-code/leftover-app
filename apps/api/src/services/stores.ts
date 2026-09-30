@@ -1,5 +1,6 @@
 import {
   haversineKm,
+  type Market,
   type Store,
   type StoreDetail,
   type StoreDetailQuery,
@@ -19,6 +20,7 @@ import {
 } from '../lib/errors';
 import { newId } from '../lib/ids';
 import { favoriteStoreIds } from './favorites';
+import { imageUrl } from './image-keys';
 import { openStatus } from './opening-hours';
 import { recentReviews, storeRatingDetail } from './reviews';
 
@@ -34,6 +36,8 @@ export const toStore = (s: StoreRow): Store => ({
   opensAt: s.opensAt,
   closesAt: s.closesAt,
   timezone: s.timezone,
+  logoUrl: imageUrl(s.logoKey),
+  coverUrl: imageUrl(s.coverKey),
 });
 
 const storeExists = () => conflict('store_exists', 'You already have a shop.');
@@ -52,9 +56,18 @@ export const createMyStore = async (
   db: Db,
   ownerId: string,
   body: StoreProfileBody,
+  market: Market,
 ): Promise<Store> => {
   if (await findByOwner(db, ownerId)) throw storeExists();
-  const row: StoreRow = { id: newId(), ownerId, ...body, createdAt: now().toISOString() };
+  const row: StoreRow = {
+    id: newId(),
+    ownerId,
+    ...body,
+    timezone: body.timezone ?? market.timezone,
+    logoKey: null,
+    coverKey: null,
+    createdAt: now().toISOString(),
+  };
   try {
     await db.insert(stores).values(row);
   } catch (e) {
@@ -75,7 +88,16 @@ export const updateMyStore = async (
   const merged = StoreProfileBody.safeParse({ ...toStore(row), ...patch });
   if (!merged.success) throw new ValidationError(fieldsFromZod(merged.error));
   const { name, category, address, lat, lng, opensAt, closesAt, timezone } = merged.data;
-  const next = { name, category, address, lat, lng, opensAt, closesAt, timezone };
+  const next = {
+    name,
+    category,
+    address,
+    lat,
+    lng,
+    opensAt,
+    closesAt,
+    timezone: timezone ?? row.timezone,
+  };
   await db.update(stores).set(next).where(eq(stores.id, row.id));
   return toStore({ ...row, ...next });
 };
@@ -103,13 +125,15 @@ export const getStoreDetail = async (
       qtyAvailable: bags.qtyAvailable,
       pickupStart: bags.pickupStart,
       pickupEnd: bags.pickupEnd,
+      photoKey: bags.photoKey,
     })
     .from(bags)
     .where(and(eq(bags.storeId, id), eq(bags.isActive, true), gt(bags.pickupEnd, nowIso())))
     .orderBy(asc(bags.pickupStart))
     .all();
-  const available = today.filter((b) => b.qtyAvailable > 0);
-  const soldOut = today.filter((b) => b.qtyAvailable <= 0);
+  const listed = today.map(({ photoKey, ...b }) => ({ ...b, photoUrl: imageUrl(photoKey) }));
+  const available = listed.filter((b) => b.qtyAvailable > 0);
+  const soldOut = listed.filter((b) => b.qtyAvailable <= 0);
   const store = toStore(row);
   const [rating, reviews, saved] = await Promise.all([
     storeRatingDetail(db, id),

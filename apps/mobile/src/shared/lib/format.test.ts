@@ -1,4 +1,6 @@
+import i18n from '../i18n';
 import {
+  currencySymbol,
   dayKind,
   formatDate,
   formatDay,
@@ -118,5 +120,53 @@ describe('day and time helpers', () => {
     );
     expect(formatTime('2026-09-29T13:40:00Z', 'Europe/Kyiv')).toBe('16:40');
     expect(formatDate(now, 'Europe/Kyiv')).toBe('Tue, 29 Sep');
+  });
+});
+
+describe('money in Oman (OMR, 3 decimals)', () => {
+  beforeEach(() => {
+    process.env.EXPO_PUBLIC_MARKET = 'OM';
+  });
+  afterEach(async () => {
+    process.env.EXPO_PUBLIC_MARKET = 'UA';
+    await i18n.changeLanguage('en');
+  });
+
+  it('shows baisa as OMR with three decimals, always', () => {
+    expect(formatMoney(1500)).toBe('OMR 1.500');
+    expect(formatMoney(3000)).toBe('OMR 3.000');
+    expect(formatMoney(5)).toBe('OMR 0.005');
+    expect(formatMoney(1234500)).toBe('OMR 1,234.500');
+  });
+
+  it('puts the Arabic symbol after the amount in Arabic', async () => {
+    await i18n.changeLanguage('ar');
+    expect(formatMoney(1500)).toBe('1.500 ر.ع.');
+    expect(currencySymbol()).toBe('ر.ع.');
+  });
+
+  it('totals 1.500 × 2 from 4.000 in integer baisa', () => {
+    const unit = 1500;
+    const original = 4000;
+    const qty = 2;
+    expect(formatMoney(unit * qty)).toBe('OMR 3.000');
+    expect(formatMoney((original - unit) * qty)).toBe('OMR 5.000');
+  });
+
+  it('keeps the discount readable', () => {
+    expect(formatDiscount(4000, 1500)).toBe('−63%');
+  });
+});
+
+describe('dates in Arabic', () => {
+  afterEach(() => i18n.changeLanguage('en'));
+
+  it('uses Arabic day and month names with Western digits', async () => {
+    await i18n.changeLanguage('ar');
+    const now = new Date('2026-09-29T10:00:00Z');
+    const day = formatDay('2026-10-03T14:00:00Z', 'Asia/Muscat', now);
+    expect(day).toBe('السبت، 3 أكتوبر');
+    expect(formatDay('2026-09-29T14:00:00Z', 'Asia/Muscat', now)).toBe('اليوم');
+    expect(formatTime('2026-09-29T14:00:00Z', 'Asia/Muscat')).toBe('18:00');
   });
 });

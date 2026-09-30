@@ -1,18 +1,19 @@
 import type { ReactNode } from 'react';
 import { Text, View } from 'react-native';
-import { artBg, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   art: ReactNode;
   title: string;
   text?: string;
-  tone?: keyof typeof artBg;
+  tone?: keyof ReturnType<typeof useStyles>['artBg'];
   actions?: ReactNode;
   /** Announce on appearance (errors, confirmations). */
   live?: boolean;
 };
 
 export function EmptyState({ art, title, text, tone = 'default', actions, live }: Props) {
+  const { artBg, styles } = useStyles();
   return (
     <View
       style={styles.root}

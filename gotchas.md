@@ -47,3 +47,17 @@
 - Expo typed routes (`.expo/types/router.d.ts`) only regenerate while a dev server runs: after adding a route, start `pnpm dev:mobile` once or typecheck fails on the new path.
 - `CI=1 expo start` also turns off file watching: the web page keeps serving the old bundle.
 - Web in automated/background tabs: `document.hidden` is true there, so React Query pauses interval polling (Pickup's 15 s check); a visible tab polls normally.
+- Money minor units depend on the market: OMR has 3 decimals (1 OMR = 1000 baisa), UAH 2. Never hard-code 100; use `minorPerMajor(activeMarket().currency)` (`@leftover/shared`), and keep the API's `MARKET` and the app's `EXPO_PUBLIC_MARKET` the same. The seeds' prices are in their market's units: the Lviv seed under `OM` shows `OMR 149.000`.
+- `I18nManager.forceRTL` + reload doesn't work in Expo Go. RTL here is the root view's `direction` (`AppFrame`) plus expo-router's `LocaleProvider`, so `left`/`right` style props are *not* swapped for you: use `start`/`end`. Touch `locationX` stays physical (see `Slider`).
+- Arabic text: don't give it `letterSpacing` at all — on iOS even `0` can drop the dots (marks). `theme.sheet()` removes it in Arabic; an inline `letterSpacing` would bring the bug back.
+- Noto Kufi Arabic (tried for display text) loses its dots above letters on iOS and overflows its line height; the Arabic faces are IBM Plex Sans Arabic only.
+- `Intl` in Arabic gives Arabic-Indic digits unless `-u-nu-latn` is honoured; Hermes may ignore it, so date parts go through `westernDigits`. Hermes may also lack `Intl.PluralRules`: `src/shared/i18n/plural-rules.ts` fills it for en/ar.
+- A Zustand `setState` inside a synchronous `act(() => …)` may not re-render a subscribed hook in Jest; use `await act(async () => …)`.
+- `EXPO_PUBLIC_*` values are inlined at bundle time; after changing `EXPO_PUBLIC_MARKET` restart Metro with `--clear`. Jest reads it at call time (`jest.env.ts` sets `UA` for the older suites).
+- Images (20): the API sends `/images/<key>` paths, not full URLs; resolve with `imageUri` (`client.ts`) or pass them to the kit (`Photo`, `CategoryMedia photo`, `StoreLogo logo`), which does. The local bucket lives in `apps/api/.wrangler/state` with D1; `wrangler r2 object put … --local` writes to it (see `seed/load-images.mjs`).
+- Replacing an image writes the new object, updates the row, then deletes the old object. Keep that order: a failure leaves an orphan object, never a row pointing at nothing.
+- React Native's `FormData` takes a file as `{ uri, name, type }`; on web it needs a real `Blob` (`apiUpload` fetches the picked blob: URI first).
+- expo-image in Jest: its `onError` wrapper needs `{ nativeEvent: … }` in `fireEvent`, and `source` comes back as an array. Media and logos are hidden from accessibility, so queries need `includeHiddenElements`.
+- Re-running a seed deletes the seed users: a device signed in as a seed account is signed out. Log in again (Muscat: `aisha@`, Lviv: `olena@`).
+- Expo Go reads `userInterfaceStyle` from the manifest when the project loads: after changing `app.json`, reload the app, or `useColorScheme()` stays on the old value (System looks stuck on light).
+- Colors that aren't styles (icon `color`, `placeholderTextColor`, map pins) must come from `useStyles()`/`useTheme()` too; `styles-guard.test.ts` fails on a static import of themed tokens.

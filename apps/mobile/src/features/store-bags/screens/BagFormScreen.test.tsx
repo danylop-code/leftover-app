@@ -1,6 +1,7 @@
 import { act, fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 import { Text } from 'react-native';
-import { ApiError, apiRequest } from '../../../shared/api/client';
+import { ApiError, apiRequest, apiUpload, NetworkError } from '../../../shared/api/client';
+import { pickImage } from '../../../shared/lib/pick-image';
 import { fakeNow } from '../../../shared/testing/fake-date';
 import { shopBag, shopBags } from '../../../shared/testing/fixtures';
 import { pickTime } from '../../../shared/testing/pick-time';
@@ -10,8 +11,13 @@ import { BagFormScreen } from './BagFormScreen';
 jest.mock('../../../shared/api/client', () => ({
   ...jest.requireActual('../../../shared/api/client'),
   apiRequest: jest.fn(),
+  apiUpload: jest.fn(),
 }));
+jest.mock('../../../shared/lib/pick-image', () => ({ pickImage: jest.fn() }));
 const request = apiRequest as jest.Mock;
+const uploadFile = apiUpload as jest.Mock;
+const pick = pickImage as jest.Mock;
+const picked = { uri: 'file:///tmp/photo.jpg', name: 'photo.jpg', type: 'image/jpeg' };
 
 const existing = shopBag({ id: 'b1', qtyTotal: 5, qtyAvailable: 2, reservedCount: 3 });
 
@@ -48,6 +54,8 @@ const newBag = async () => {
 
 beforeEach(() => {
   request.mockReset();
+  uploadFile.mockReset();
+  pick.mockReset();
   // 17:00 in Kyiv.
   fakeNow('2026-09-29T14:00:00.000Z');
 });
@@ -157,5 +165,90 @@ describe('BagFormScreen', () => {
     });
     expect(writes()[0]).toEqual(['/store/bags/b1', expect.objectContaining({ method: 'DELETE' })]);
     expect(await screen.findByText('My bags')).toBeOnTheScreen();
+  });
+
+  describe('photo (brief 20)', () => {
+    const choosePhoto = async () => {
+      pick.mockResolvedValue({ status: 'picked', file: picked });
+      fireEvent.press(screen.getByRole('button', { name: 'Add photo' }));
+      await act(async () => {
+        fireEvent.press(await screen.findByRole('button', { name: 'Choose from library' }));
+      });
+    };
+
+    it('uploads the picked photo after adding the bag, then closes', async () => {
+      serve(() => shopBag({ id: 'b-new' }));
+      uploadFile.mockImplementation(async (_path, _file, { onProgress }) => {
+        onProgress(0.5);
+        return { url: '/images/bags/b-new/photo/x.jpg' };
+      });
+      await open('/bag/new');
+      await newBag();
+      await choosePhoto();
+      expect(pick).toHaveBeenCalledWith('library');
+      expect(screen.getByRole('button', { name: 'Change photo' })).toBeOnTheScreen();
+      await act(async () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Add bag' }));
+      });
+      expect(uploadFile).toHaveBeenCalledWith(
+        '/store/bags/b-new/photo',
+        picked,
+        expect.objectContaining({ onProgress: expect.any(Function) }),
+      );
+      expect(await screen.findByText('My bags')).toBeOnTheScreen();
+    });
+
+    it('keeps the form open with Retry when the upload fails, and never adds the bag twice', async () => {
+      serve(() => shopBag({ id: 'b-new' }));
+      uploadFile.mockRejectedValueOnce(new NetworkError());
+      uploadFile.mockResolvedValueOnce({ url: '/images/bags/b-new/photo/x.jpg' });
+      await open('/bag/new');
+      await newBag();
+      await choosePhoto();
+      await act(async () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Add bag' }));
+      });
+      expect(
+        await screen.findByText('The photo didn’t upload. Check your connection and retry.'),
+      ).toBeOnTheScreen();
+      await act(async () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Retry' }));
+      });
+      expect(uploadFile).toHaveBeenCalledTimes(2);
+      expect(await screen.findByText('My bags')).toBeOnTheScreen();
+      expect(writes().filter(([, o]) => o.method === 'POST')).toHaveLength(1);
+    });
+
+    it('removes an existing photo on save', async () => {
+      const withPhoto = shopBag({ ...existing, photoUrl: '/images/bags/b1/photo/old.jpg' });
+      request.mockImplementation(async (path: string, options: { method?: string }) => {
+        if (path.endsWith('/photo')) return { url: null };
+        return options.method ? withPhoto : shopBags([withPhoto]);
+      });
+      await open('/bag/b1');
+      fireEvent.press(screen.getByRole('button', { name: 'Remove' }));
+      expect(screen.getByRole('button', { name: 'Add photo' })).toBeOnTheScreen();
+      await act(async () => {
+        fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
+      });
+      expect(request).toHaveBeenCalledWith(
+        '/store/bags/b1/photo',
+        expect.objectContaining({ method: 'DELETE' }),
+      );
+      expect(await screen.findByText('My bags')).toBeOnTheScreen();
+    });
+
+    it('says how to allow photo access when it was refused', async () => {
+      serve();
+      await open('/bag/new');
+      pick.mockResolvedValue({ status: 'denied' });
+      fireEvent.press(screen.getByRole('button', { name: 'Add photo' }));
+      await act(async () => {
+        fireEvent.press(await screen.findByRole('button', { name: 'Take a photo' }));
+      });
+      expect(
+        screen.getByText('Allow photo access for Leftover in Settings to add one.'),
+      ).toBeOnTheScreen();
+    });
   });
 });

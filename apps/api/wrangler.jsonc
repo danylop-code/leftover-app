@@ -5,6 +5,8 @@
   "compatibility_date": "2026-08-15",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
+    // Active market (brief 21): currency, default shop time zone. "OM" (Oman) or "UA" (Ukraine).
+    "MARKET": "OM",
     // Address autocomplete provider (brief 05). komoot's public Photon: free, no key, fair use.
     // Self-host Photon (or switch the adapter in src/services/geo) before real traffic.
     "PHOTON_URL": "https://photon.komoot.io",
@@ -19,5 +21,8 @@
       "database_id": "00000000-0000-0000-0000-000000000000",
       "migrations_dir": "migrations"
     }
-  ]
+  ],
+  // Shop logos, covers and bag photos (brief 20). `wrangler dev` and the test pool use a local
+  // bucket; create the real one with `wrangler r2 bucket create leftover-images` before deploying.
+  "r2_buckets": [{ "binding": "IMAGES", "bucket_name": "leftover-images" }]
 }

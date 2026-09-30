@@ -32,13 +32,15 @@ Recommended sequence: 01 → 02 → 03 → 04 → 05 → 18 → 06 → 07 → 08
 Next (drafted 2026-09-30, for the Oman showcase): 21 → 20 → 19. Localization first because it's what the client sees; images next for the demo's look; dark theme last (it touches every style file, so it's cheaper once RTL's logical-properties sweep is done). Each brief opens with the decisions to make before it's frozen.
 
 ## Cross-cutting decisions
-- **Money:** UAH, integer kopiyky (`priceMinor: 14900` = ₴149). Format with `formatMoney` only in UI.
-- **Time:** ISO-8601 UTC on the wire and in D1. Stores carry an IANA `timezone` (default `Europe/Kyiv`) for "today" and opening-hour logic. Services take `now` from `src/lib/clock.ts` so tests can freeze it.
+- **Money:** the market's currency in integer minor units — OMR baisa (`1500` = OMR 1.500, 3 decimals) or UAH kopiyky (`14900` = ₴149). One market per deployment (21: `MARKET` / `EXPO_PUBLIC_MARKET`, default `OM`). Format with `formatMoney` only in UI.
+- **Time:** ISO-8601 UTC on the wire and in D1. Stores carry an IANA `timezone` (the market's by default: `Asia/Muscat` or `Europe/Kyiv`) for "today" and opening-hour logic. Services take `now` from `src/lib/clock.ts` so tests can freeze it.
 - **Stock:** reserve, cancel and quantity edits use `db.batch()` with a guarded `UPDATE`, and zero rows affected means a conflict (see `gotchas.md`).
 - **Order status:** stored as `reserved | collected | cancelled`. Derived for display only: `ready` (reserved, now inside the window) and `missed` (reserved, window ended).
 - **Geo:** `haversineKm` lives in `@leftover/shared`. Distance always comes from the location selected in the Zustand store.
 - **Auth:** PBKDF2 (WebCrypto) password hashes, opaque session tokens stored hashed, `Authorization: Bearer`, and the token kept in `expo-secure-store`.
 - **Payment:** pay at the store. The app never handles money.
+- **Theme (19, 21):** `makeStyles((theme) => …)` in every `styles.ts`; the theme is one of light/dark × Latin/Arabic. Colors never come from a static import.
+- **Images (20):** R2 (`IMAGES` binding), uploaded through the Worker, served at `/images/<key>` with immutable caching; the API sends paths, the app resolves them. Category tint / initial stay as placeholder and fallback.
 
 ## Global out of scope (every brief)
-Payments · push notifications · password reset / email verification · real food photos (category tint placeholders stay) · languages other than English · admin UI · rate limiting · web target (until [17](17-web-support.md); demos run on the iOS Simulator / Android emulator via Expo Go until then).
+Payments · push notifications · password reset / email verification · languages other than English and Arabic · admin UI · rate limiting · web target (until [17](17-web-support.md); demos run on the iOS Simulator / Android emulator via Expo Go until then).

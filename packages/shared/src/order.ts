@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { Category } from './category';
 import { Id, IsoDateTime, Latitude, Longitude, MoneyMinor } from './common';
+import { ImageUrl } from './image';
 
 /** Stored status. `ready` and `missed` are derived for display only (see the roadmap). */
 export const OrderStatus = z.enum(['reserved', 'collected', 'cancelled']);
@@ -73,6 +74,7 @@ export const OrderDetail = Order.omit({ userId: true }).extend({
     category: Category,
     pickupStart: IsoDateTime,
     pickupEnd: IsoDateTime,
+    photoUrl: ImageUrl.nullable(),
   }),
   store: z.object({
     id: Id,
@@ -81,6 +83,7 @@ export const OrderDetail = Order.omit({ userId: true }).extend({
     lat: Latitude,
     lng: Longitude,
     timezone: z.string().min(1),
+    logoUrl: ImageUrl.nullable(),
   }),
   /** The customer's overall rating once they've reviewed it (13). */
   rating: z.number().int().min(1).max(5).nullable(),

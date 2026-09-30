@@ -1,7 +1,7 @@
 import { Platform, Pressable, Text, View } from 'react-native';
 import { useKeyboardVisible } from '../../lib/use-keyboard-visible';
 import { Icon, type IconName } from '../icons';
-import { styles, tint } from './styles';
+import { useStyles } from './styles';
 import { useTabBarBottom } from './use-tab-bar-inset';
 
 export type TabItem = {
@@ -20,6 +20,7 @@ type Props = { items: readonly TabItem[] };
  * Profile. Hidden while the Android keyboard is open (it would ride up on top of it).
  */
 export function TabBar({ items }: Props) {
+  const { styles, tint } = useStyles();
   const bottom = useTabBarBottom();
   const keyboard = useKeyboardVisible();
   if (keyboard && Platform.OS === 'android') return null;

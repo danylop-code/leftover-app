@@ -11,7 +11,7 @@ export const placeAt = async (point: LatLng): Promise<Place> => {
   try {
     const { place } = await apiRequest('/geo/reverse', {
       schema: ReverseResponse,
-      query: { lat: point.lat, lng: point.lng },
+      query: { lat: point.lat, lng: point.lng, lang: i18n.language === 'ar' ? 'ar' : 'en' },
     });
     if (place) return place;
   } catch {

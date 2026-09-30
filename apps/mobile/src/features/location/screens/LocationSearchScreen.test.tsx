@@ -68,7 +68,7 @@ describe('LocationSearchScreen', () => {
     expect(request).toHaveBeenCalledTimes(1);
     expect(request).toHaveBeenCalledWith(
       '/geo/autocomplete',
-      expect.objectContaining({ query: { q: 'Dorosh', lat: pin.lat, lng: pin.lng } }),
+      expect.objectContaining({ query: { q: 'Dorosh', lat: pin.lat, lng: pin.lng, lang: 'en' } }),
     );
     expect(first).toHaveAccessibleName('vul. Doroshenka 14, Lviv, Ukraine, 0.2 km');
     const rows = screen.getAllByRole('button', { name: /Dorosh/ });

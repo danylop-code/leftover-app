@@ -25,6 +25,7 @@ export const StoreBag = Bag.pick({
   qtyAvailable: true,
   pickupStart: true,
   pickupEnd: true,
+  photoUrl: true,
 });
 export type StoreBag = z.infer<typeof StoreBag>;
 

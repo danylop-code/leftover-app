@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import { apiRequest, NetworkError } from '../../../shared/api/client';
 import { shopBag, shopBags } from '../../../shared/testing/fixtures';
 import { routerProviders } from '../../../shared/testing/render';
-import { tones } from '../../../shared/ui/Badge/styles';
+import { color } from '../../../shared/theme';
 import { StoreBagsScreen } from './StoreBagsScreen';
 
 jest.mock('../../../shared/api/client', () => ({
@@ -58,7 +58,7 @@ describe('StoreBagsScreen', () => {
     expect(screen.getByLabelText('2 bags live now')).toBeOnTheScreen();
     expect(screen.getByLabelText('5 reserved today')).toBeOnTheScreen();
     expect(screen.getByText('3 of 5 left')).toBeOnTheScreen();
-    expect(screen.getByText('1 of 4 left')).toHaveStyle({ color: tones.low.fg });
+    expect(screen.getByText('1 of 4 left')).toHaveStyle({ color: color.accentPressed });
     expect(screen.getByText('Paused · 4')).toBeOnTheScreen();
     expect(screen.getByText('Sold out')).toBeOnTheScreen();
     expect(liveSwitch('Sandwich bag')).not.toBeChecked();

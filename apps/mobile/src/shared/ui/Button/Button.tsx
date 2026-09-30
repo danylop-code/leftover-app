@@ -1,6 +1,6 @@
 import { ActivityIndicator, Pressable, Text } from 'react-native';
 import { Icon, type IconName } from '../icons';
-import { labelColor, smHitSlop, styles } from './styles';
+import { smHitSlop, useStyles } from './styles';
 
 type Props = {
   label: string;
@@ -25,6 +25,7 @@ export function Button({
   disabled,
   accessibilityHint,
 }: Props) {
+  const { labelColor, styles } = useStyles();
   // `danger` is the ghost button in red (`.btn-ghost.danger`).
   const look = variant === 'danger' ? 'ghost' : variant;
   const fg = disabled ? labelColor.disabled : labelColor[variant];

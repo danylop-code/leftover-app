@@ -7,6 +7,8 @@ export * from './common';
 export * from './discovery';
 export * from './favorite';
 export * from './geo';
+export * from './image';
+export * from './market';
 export * from './order';
 export * from './place';
 export * from './profile';

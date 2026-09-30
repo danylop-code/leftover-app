@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { formatDuration } from '../../../../shared/lib/duration';
 import { formatDay, formatTime, formatTimeRange } from '../../../../shared/lib/format';
 import { Icon, ProgressBar } from '../../../../shared/ui';
-import { clockColors, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { order: OrderDetail; now: Date; reservedAt: string };
 
@@ -13,6 +13,7 @@ type Props = { order: OrderDetail; now: Date; reservedAt: string };
  * of reserving), "Ready now · until 19:30" inside it, "Pickup window ended" after.
  */
 export function PickupTimeCard({ order, now, reservedAt }: Props) {
+  const { clockColors, styles } = useStyles();
   const { t } = useTranslation();
   const { bag, store, displayStatus } = order;
   const start = new Date(bag.pickupStart).getTime();

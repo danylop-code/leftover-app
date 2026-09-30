@@ -9,9 +9,10 @@ import { FooterLink } from '../components/FooterLink/FooterLink';
 import { PasswordInput } from '../components/PasswordInput/PasswordInput';
 import { RoleCard } from '../components/RoleCard/RoleCard';
 import { type FieldErrors, useFormErrors } from '../hooks/use-form-errors';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 export function RegisterScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const register = useRegister();

@@ -1,11 +1,13 @@
 import {
   AutocompleteResponse,
+  type Language,
   type LatLng,
   PLACE_QUERY_MIN,
   type PlaceSuggestion,
 } from '@leftover/shared';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { SUGGEST_DEBOUNCE_MS, SUGGEST_TIMEOUT_MS } from '../constants/location';
+import { useLanguage } from '../i18n/use-language';
 import { searchOnDevice } from '../lib/device-geo';
 import { useDebouncedValue } from '../lib/use-debounced-value';
 import { ApiError, apiRequest, NetworkError, ParseError } from './client';
@@ -13,10 +15,11 @@ import { keys } from './keys';
 
 type Near = LatLng | null;
 
-const fromApi = async (q: string, near: Near, signal: AbortSignal) => {
+const fromApi = async (q: string, near: Near, lang: Language, signal: AbortSignal) => {
   const { results } = await apiRequest('/geo/autocomplete', {
     schema: AutocompleteResponse,
-    query: { q, lat: near?.lat, lng: near?.lng },
+    // The language picks the script of the labels (local Arabic names in Arabic).
+    query: { q, lat: near?.lat, lng: near?.lng, lang },
     signal,
   });
   return results;
@@ -36,6 +39,7 @@ export const fetchAddressSuggestions = async (
   q: string,
   near: Near,
   signal: AbortSignal,
+  lang: Language = 'en',
 ): Promise<PlaceSuggestion[]> => {
   const controller = new AbortController();
   const abort = () => controller.abort();
@@ -46,7 +50,7 @@ export const fetchAddressSuggestions = async (
     controller.abort();
   }, SUGGEST_TIMEOUT_MS);
   try {
-    return await fromApi(q, near, controller.signal);
+    return await fromApi(q, near, lang, controller.signal);
   } catch (error) {
     if (signal.aborted) throw error;
     if (timedOut || providerUnavailable(error)) return searchOnDevice(q, near);
@@ -66,9 +70,10 @@ export const useAddressSuggestions = (text: string, near: Near) => {
   // Too short to search (or cleared): no need to wait.
   const q = useDebouncedValue(trimmed, SUGGEST_DEBOUNCE_MS, (v) => v.length < PLACE_QUERY_MIN);
   const enabled = q.length >= PLACE_QUERY_MIN;
+  const { language } = useLanguage();
   const query = useQuery({
-    queryKey: keys.addressSuggestions({ q, near }),
-    queryFn: ({ signal }) => fetchAddressSuggestions(q, near, signal),
+    queryKey: keys.addressSuggestions({ q, near, lang: language }),
+    queryFn: ({ signal }) => fetchAddressSuggestions(q, near, signal, language),
     enabled,
     retry: false,
     placeholderData: keepPreviousData,

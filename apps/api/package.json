@@ -9,7 +9,8 @@
     "types": "wrangler types",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:seed:local": "wrangler d1 execute DB --local --file=seed/dev.sql",
+    "db:seed:local": "wrangler d1 execute DB --local --file=seed/dev.sql && node seed/load-images.mjs lviv",
+    "db:seed:oman": "wrangler d1 execute DB --local --file=seed/oman.sql && node seed/load-images.mjs oman",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"

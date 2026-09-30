@@ -1,6 +1,7 @@
 // The shared UI kit. Screens import from here, never from a component folder.
 export { AddressAutocomplete } from './AddressAutocomplete/AddressAutocomplete';
 export { AppFrame } from './AppFrame/AppFrame';
+export { useScreenOptions } from './AppFrame/use-screen-options';
 export { Badge, type BadgeTone } from './Badge/Badge';
 export { stockTone } from './Badge/stock-tone';
 export { BagCard } from './BagCard/BagCard';
@@ -11,6 +12,7 @@ export { Button } from './Button/Button';
 export { CategoryMedia } from './CategoryMedia/CategoryMedia';
 export { Chip } from './Chip/Chip';
 export { ChipRow } from './Chip/ChipRow';
+export { ChoiceList } from './ChoiceList/ChoiceList';
 export { EmptyState } from './EmptyState/EmptyState';
 export { FavoriteButton } from './FavoriteButton/FavoriteButton';
 export { Field } from './Field/Field';
@@ -27,6 +29,8 @@ export { ListGroup } from './ListRow/ListGroup';
 export { ListRow } from './ListRow/ListRow';
 export { MapPicker } from './MapPicker/MapPicker';
 export { OrderCard } from './OrderCard/OrderCard';
+export { Photo } from './Photo/Photo';
+export { PhotoField } from './PhotoField/PhotoField';
 export { PlaceRow } from './PlaceRow/PlaceRow';
 export { Price } from './Price/Price';
 export { ProgressBar } from './ProgressBar/ProgressBar';

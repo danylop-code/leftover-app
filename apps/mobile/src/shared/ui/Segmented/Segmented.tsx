@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
-import { segmentHitSlop, styles } from './styles';
+import { segmentHitSlop, useStyles } from './styles';
 
 type Option<T extends string> = { value: T; label: string; count?: number };
 
@@ -12,6 +12,7 @@ type Props<T extends string> = {
 
 /** Two-or-more segment switch (`.seg`) with an optional count pill per segment. */
 export function Segmented<T extends string>({ options, value, onChange }: Props<T>) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.root} accessibilityRole="tablist">

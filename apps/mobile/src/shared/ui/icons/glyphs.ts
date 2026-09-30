@@ -71,6 +71,11 @@ export const icons = {
   flag: [{ d: 'M5 21V4M5 4h11l-2 4.5 2 4.5H5' }],
   logout: [{ d: 'M10 4H5v16h5M14 8l4 4-4 4M18 12H9' }],
   share: [{ d: 'M12 15V3M7 8l5-5 5 5M5 13v7h14v-7' }],
+  // Appearance (brief 19).
+  moon: [{ d: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z' }],
+  // Photos (brief 20): take one, or pick from the library.
+  camera: [{ d: 'M4 8h3l2-3h6l2 3h3v11H4z' }, { circle: [12, 13, 3.5] }],
+  image: [{ rect: [3, 4, 18, 16, 2] }, { circle: [9, 10, 2] }, { d: 'm21 16-5-5-9 9' }],
 } as const satisfies Record<string, readonly Shape[]>;
 
 export type IconName = keyof typeof icons;

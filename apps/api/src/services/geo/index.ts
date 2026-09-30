@@ -1,9 +1,9 @@
 import {
   type AutocompleteQuery,
   haversineKm,
-  type LatLng,
   type Place,
   type PlaceSuggestion,
+  type ReverseQuery,
 } from '@leftover/shared';
 import { AppError } from '../../lib/errors';
 import { ProviderError, photonAutocomplete, photonReverse } from './photon';
@@ -52,11 +52,11 @@ export const autocompletePlaces = async (
  */
 export const reversePlace = async (
   env: Pick<Env, 'PHOTON_URL'>,
-  point: LatLng,
+  { lang, ...point }: ReverseQuery,
 ): Promise<Place | null> => {
   let nearest: PlaceSuggestion | null;
   try {
-    nearest = await photonReverse(env.PHOTON_URL, point);
+    nearest = await photonReverse(env.PHOTON_URL, point, lang);
   } catch (error) {
     if (error instanceof ProviderError) {
       console.warn(error.message, error.cause);

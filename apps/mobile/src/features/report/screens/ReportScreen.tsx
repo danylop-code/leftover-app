@@ -13,6 +13,7 @@ import { useSession } from '../../../shared/store/session';
 import {
   Banner,
   Button,
+  ChoiceList,
   EmptyState,
   Field,
   Header,
@@ -22,8 +23,7 @@ import {
 } from '../../../shared/ui';
 import { useCreateReport } from '../api/use-create-report';
 import { useRecentOrders } from '../api/use-recent-orders';
-import { ChoiceList } from '../components/ChoiceList/ChoiceList';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 const NO_ORDER = 'none';
 
@@ -32,6 +32,7 @@ const NO_ORDER = 'none';
  * then the reference to quote. Stored only (there's no support inbox yet).
  */
 export function ReportScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const user = useSession((s) => s.user);

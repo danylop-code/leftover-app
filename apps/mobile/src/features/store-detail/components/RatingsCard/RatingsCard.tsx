@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { RATING_DECIMALS } from '../../../../shared/constants/ui';
 import { RatingBar, Stars } from '../../../../shared/ui';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = { rating: StoreRatingDetail };
 
 /** The Ratings card: average, stars and count, then a bar per aspect people rated. */
 export function RatingsCard({ rating }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const rated = REVIEW_ASPECTS.filter((a) => rating.aspects[a] !== null);
   return (

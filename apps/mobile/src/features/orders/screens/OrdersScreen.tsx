@@ -18,10 +18,11 @@ import {
 } from '../../../shared/ui';
 import { useMyOrders } from '../api/use-my-orders';
 import { MyOrderCard } from '../components/MyOrderCard/MyOrderCard';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 /** Orders / OrdersPast / OrdersEmpty artboards: current reservations and past pickups. */
 export function OrdersScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const [scope, setScope] = useState<OrdersScope>('current');

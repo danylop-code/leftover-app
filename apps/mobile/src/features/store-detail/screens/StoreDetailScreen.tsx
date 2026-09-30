@@ -30,7 +30,7 @@ import { AddressCard } from '../components/AddressCard/AddressCard';
 import { RatingsCard } from '../components/RatingsCard/RatingsCard';
 import { ReviewCard } from '../components/ReviewCard/ReviewCard';
 import { StoreBagRow } from '../components/StoreBagRow/StoreBagRow';
-import { backPosition, STAR_SIZE, styles } from './styles';
+import { backPosition, STAR_SIZE, useStyles } from './styles';
 
 const statusKey: Record<OpenStatus, 'openToday' | 'opensLater' | 'opensTomorrow'> = {
   open: 'openToday',
@@ -43,6 +43,7 @@ const statusKey: Record<OpenStatus, 'openToday' | 'opensLater' | 'opensTomorrow'
  * today's bags (sold-out ones dimmed). Ratings appear once the shop has some (13).
  */
 export function StoreDetailScreen() {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -124,7 +125,7 @@ export function StoreDetailScreen() {
   return (
     <View style={styles.root}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <CategoryMedia category={store.category} variant="hero">
+        <CategoryMedia category={store.category} variant="hero" photo={store.coverUrl}>
           <View style={[styles.heroBar, backPosition(insets.top)]}>
             <IconButton icon="back" variant="filled" label={t('ui.back')} onPress={goBack} />
             <FavoriteButton name={store.name} saved={detail.data.isFavorite} onToggle={setSaved} />
@@ -132,7 +133,7 @@ export function StoreDetailScreen() {
         </CategoryMedia>
         <View style={styles.content}>
           <View style={styles.logo}>
-            <StoreLogo id={store.id} name={store.name} size="xl" />
+            <StoreLogo id={store.id} name={store.name} size="xl" logo={store.logoUrl} />
           </View>
           <View style={styles.intro}>
             <Text style={styles.name} accessibilityRole="header">

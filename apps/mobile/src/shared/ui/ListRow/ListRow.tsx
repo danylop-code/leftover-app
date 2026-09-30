@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Pressable, Text, View } from 'react-native';
 import { Icon, type IconName } from '../icons';
-import { iconColor, styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   label: string;
@@ -23,6 +23,7 @@ export function ListRow({
   chevron = Boolean(onPress),
   last,
 }: Props) {
+  const { iconColor, styles } = useStyles();
   const { t } = useTranslation();
   const content = (
     <>

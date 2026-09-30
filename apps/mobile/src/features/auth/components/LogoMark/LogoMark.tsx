@@ -1,9 +1,10 @@
 import Svg, { Path, Rect } from 'react-native-svg';
-import { mark } from './styles';
+import { useStyles } from './styles';
 
 type Props = { size: number };
 
 export function LogoMark({ size }: Props) {
+  const { mark } = useStyles();
   const { handle, body, smile, leaf } = mark;
   return (
     <Svg width={size} height={size} viewBox={mark.viewBox}>

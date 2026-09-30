@@ -1,5 +1,4 @@
-import { StyleSheet } from 'react-native';
-import { color, radius } from '../../theme';
+import { makeStyles, radius } from '../../theme';
 
 // Photo placeholder heights from the design: card 132, row 88.
 export const variants = {
@@ -15,22 +14,25 @@ export const variants = {
 
 const highlight = 180;
 
-export const styles = StyleSheet.create({
-  root: { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
-  card: { height: variants.card.height, alignSelf: 'stretch' },
-  hero: { height: variants.hero.height, alignSelf: 'stretch' },
-  row: { width: variants.row.width, height: variants.row.height, borderRadius: 14 },
-  tile: { width: variants.tile.width, height: variants.tile.height, borderRadius: 14 },
-  small: { width: variants.small.width, height: variants.small.height, borderRadius: 14 },
-  thumb: { width: variants.thumb.width, height: variants.thumb.height, borderRadius: radius.md },
-  // `.media::before`: soft light circle top-right.
-  highlight: {
-    position: 'absolute',
-    width: highlight,
-    height: highlight,
-    borderRadius: highlight / 2,
-    right: -50,
-    top: -70,
-    backgroundColor: color.mediaHighlight,
-  },
+export const useStyles = makeStyles(({ color, sheet }) => {
+  const styles = sheet({
+    root: { alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+    card: { height: variants.card.height, alignSelf: 'stretch' },
+    hero: { height: variants.hero.height, alignSelf: 'stretch' },
+    row: { width: variants.row.width, height: variants.row.height, borderRadius: 14 },
+    tile: { width: variants.tile.width, height: variants.tile.height, borderRadius: 14 },
+    small: { width: variants.small.width, height: variants.small.height, borderRadius: 14 },
+    thumb: { width: variants.thumb.width, height: variants.thumb.height, borderRadius: radius.md },
+    // `.media::before`: soft light circle top-right.
+    highlight: {
+      position: 'absolute',
+      width: highlight,
+      height: highlight,
+      borderRadius: highlight / 2,
+      end: -50,
+      top: -70,
+      backgroundColor: color.mediaHighlight,
+    },
+  });
+  return { styles };
 });

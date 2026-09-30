@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { SINGLE_LINE } from '../../constants/ui';
 import { IconButton } from '../IconButton/IconButton';
 import type { IconName } from '../icons';
-import { styles } from './styles';
+import { useStyles } from './styles';
 
 type Props = {
   title?: string;
@@ -15,6 +15,7 @@ type Props = {
 
 /** Top bar (`.hdr`): back/close, centered title, optional right action. */
 export function Header({ title, onBack, backIcon = 'back', right }: Props) {
+  const { styles } = useStyles();
   const { t } = useTranslation();
   return (
     <View style={styles.bar}>

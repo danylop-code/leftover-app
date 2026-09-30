@@ -11,13 +11,16 @@ import { Icon } from '../icons';
 import { Price } from '../Price/Price';
 import { Star } from '../Stars/Star';
 import { StoreLogo } from '../StoreLogo/StoreLogo';
-import { metaIconColor, STAR_SIZE, styles } from './styles';
+import { STAR_SIZE, useStyles } from './styles';
 
 type Props = {
   title: string;
   category: Category;
   storeId: string;
   storeName: string;
+  /** The bag's photo and the shop's logo (20); placeholders when null. */
+  photoUrl?: string | null;
+  storeLogoUrl?: string | null;
   pickupStart: string;
   pickupEnd: string;
   timezone: string;
@@ -34,6 +37,7 @@ type Props = {
 
 /** Discover card (`.bag-card`): the whole card is one tap target; the save button sits on top. */
 export function BagCard(props: Props) {
+  const { metaIconColor, styles } = useStyles();
   const { t } = useTranslation();
   const window = formatWindow(props.pickupStart, props.pickupEnd, props.timezone);
   const stock =
@@ -53,14 +57,14 @@ export function BagCard(props: Props) {
         onPress={props.onPress}
         style={({ pressed }) => [styles.clip, pressed && styles.pressed]}
       >
-        <CategoryMedia category={props.category}>
+        <CategoryMedia category={props.category} photo={props.photoUrl}>
           <View style={styles.stock}>
             <Badge tone={stockTone(props.qtyAvailable)} label={stock} />
           </View>
         </CategoryMedia>
         <View style={styles.body}>
           <View style={styles.logo}>
-            <StoreLogo id={props.storeId} name={props.storeName} ring />
+            <StoreLogo id={props.storeId} name={props.storeName} logo={props.storeLogoUrl} ring />
           </View>
           <Text style={styles.store} numberOfLines={SINGLE_LINE}>
             {props.storeName}

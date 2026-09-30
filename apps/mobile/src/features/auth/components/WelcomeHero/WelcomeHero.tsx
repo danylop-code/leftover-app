@@ -1,10 +1,11 @@
 import { View } from 'react-native';
 import { CategoryMedia } from '../../../../shared/ui';
 import { LogoMark } from '../LogoMark/LogoMark';
-import { LOGO_SIZE, styles } from './styles';
+import { LOGO_SIZE, useStyles } from './styles';
 
 /** Decorative hero: brand mark over tilted category tiles. Hidden from screen readers. */
 export function WelcomeHero() {
+  const { styles } = useStyles();
   return (
     <View
       style={styles.hero}

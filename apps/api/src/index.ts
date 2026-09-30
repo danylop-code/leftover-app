@@ -8,6 +8,7 @@ import { bags } from './routes/bags';
 import { favorites } from './routes/favorites';
 import { geo } from './routes/geo';
 import { health } from './routes/health';
+import { images } from './routes/images';
 import { me } from './routes/me';
 import { orders } from './routes/orders';
 import { reportsRoute } from './routes/reports';
@@ -37,5 +38,6 @@ app.route('/orders', orders);
 app.route('/store', store);
 app.route('/favorites', favorites);
 app.route('/reports', reportsRoute);
+app.route('/images', images);
 
 export default app;

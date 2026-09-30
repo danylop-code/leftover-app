@@ -47,3 +47,18 @@ export const elevation = {
   2: toNativeShadow(shadows[2], androidElevation[2]),
   3: toNativeShadow(shadows[3], androidElevation[3]),
 } as const;
+
+// Dark scheme (brief 19): black shadows, stronger, so cards still lift off near-black surfaces.
+export const darkShadows = {
+  0: 'none',
+  1: '0 1px 2px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.3)',
+  2: '0 4px 10px rgba(0,0,0,.35),0 10px 24px rgba(0,0,0,.35)',
+  3: '0 12px 28px rgba(0,0,0,.45),0 24px 56px rgba(0,0,0,.4)',
+} as const satisfies Record<Level, string>;
+
+export const darkElevation = {
+  0: toNativeShadow(darkShadows[0], androidElevation[0]),
+  1: toNativeShadow(darkShadows[1], androidElevation[1]),
+  2: toNativeShadow(darkShadows[2], androidElevation[2]),
+  3: toNativeShadow(darkShadows[3], androidElevation[3]),
+} as const;

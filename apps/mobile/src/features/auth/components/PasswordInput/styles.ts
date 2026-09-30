@@ -1,3 +1,6 @@
-import { color } from '../../../../shared/theme';
+import { makeStyles } from '../../../../shared/theme';
 
-export const toggleColor = color.textSecondary;
+export const useStyles = makeStyles(({ color }) => {
+  const toggleColor = color.textSecondary;
+  return { toggleColor };
+});

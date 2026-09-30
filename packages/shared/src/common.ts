@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-/** Money is always integer minor units (kopiyky: 14900 = ₴149). */
+/** Money is always integer minor units of the market's currency (baisa: 1500 = OMR 1.500). */
 export const MoneyMinor = z.number().int().nonnegative();
 export type MoneyMinor = z.infer<typeof MoneyMinor>;
 
@@ -30,3 +30,7 @@ export const TimeZone = z.string().refine(
   },
   { message: 'Unknown timezone' },
 );
+
+/** App languages (brief 21). Sent to address search so labels come back in a matching script. */
+export const Language = z.enum(['en', 'ar']);
+export type Language = z.infer<typeof Language>;

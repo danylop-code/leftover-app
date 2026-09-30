@@ -2,7 +2,7 @@ import { type ReactNode, useState } from 'react';
 import { Text, TextInput, type TextInputProps, View } from 'react-native';
 import { Icon, type IconName } from '../icons';
 import { useFieldContext } from './field-context';
-import { iconColor, inputStyles, placeholderColor } from './styles';
+import { useStyles } from './styles';
 
 type Props = Omit<TextInputProps, 'style'> & {
   icon?: IconName;
@@ -14,6 +14,7 @@ type Props = Omit<TextInputProps, 'style'> & {
 
 /** Single-line input; takes its accessible label and error state from the enclosing <Field>. */
 export function Input({ icon, prefix, right, pill, onFocus, onBlur, ...rest }: Props) {
+  const { iconColor, inputStyles, placeholderColor } = useStyles();
   const { label, invalid } = useFieldContext();
   const [focused, setFocused] = useState(false);
   return (
