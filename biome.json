@@ -1,6 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
   "files": {
     "includes": [
       "**",
@@ -12,21 +16,68 @@
       "!pnpm-lock.yaml"
     ]
   },
-  "formatter": { "enabled": true, "indentStyle": "space", "indentWidth": 2, "lineWidth": 100 },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
   "javascript": {
-    "formatter": { "quoteStyle": "single", "trailingCommas": "all", "semicolons": "always" }
+    "formatter": {
+      "quoteStyle": "single",
+      "trailingCommas": "all",
+      "semicolons": "always"
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
       "preset": "recommended",
-      "correctness": { "noUnusedImports": "error", "noUnusedVariables": "error" },
-      "style": { "noNonNullAssertion": "error", "useImportType": "error" },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "error",
+        "useImportType": "error"
+      },
       "suspicious": {
         "noExplicitAny": "error",
-        "noConsole": { "level": "error", "options": { "allow": ["warn", "error"] } }
+        "noConsole": {
+          "level": "error",
+          "options": {
+            "allow": ["warn", "error"]
+          }
+        }
       }
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } }
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "apps/mobile/src/**/*.ts",
+        "apps/mobile/src/**/*.tsx",
+        "apps/mobile/app/**/*.tsx",
+        "!**/*.test.ts",
+        "!**/*.test.tsx",
+        "!apps/mobile/src/shared/theme/**"
+      ],
+      "plugins": ["./tools/biome/no-color-literal.grit"]
+    },
+    {
+      "includes": ["apps/mobile/src/**/*.tsx", "apps/mobile/app/**/*.tsx", "!**/*.test.tsx"],
+      "plugins": [
+        "./tools/biome/no-numeric-jsx-prop.grit",
+        "./tools/biome/no-jsx-text.grit",
+        "./tools/biome/no-inline-style.grit"
+      ]
+    }
+  ]
 }

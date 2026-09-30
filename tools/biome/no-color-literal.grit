@@ -1,0 +1,12 @@
+language js
+
+`$s` where {
+  $s <: string(),
+  $s <: or {
+    r"^['\"]#[0-9a-fA-F]{3,8}['\"]$",
+    r"^['\"]rgba?[(].*$",
+    r"^['\"]hsla?[(].*$",
+    r"^['\"]transparent['\"]$"
+  },
+  register_diagnostic(span=$s, message="Color literal outside the theme: use a token from src/shared/theme (rules/conventions.md).")
+}

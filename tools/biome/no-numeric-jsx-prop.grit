@@ -1,0 +1,10 @@
+language js
+
+// `<View hitSlop={8}>` / `size={20}`: sizes and limits come from the theme or constants.
+JsxExpressionAttributeValue(expression=$n) where {
+  $n <: or {
+    JsNumberLiteralExpression(),
+    JsUnaryExpression(argument=JsNumberLiteralExpression())
+  },
+  register_diagnostic(span=$n, message="Raw number in JSX: use a theme token or a named constant (rules/conventions.md).")
+}

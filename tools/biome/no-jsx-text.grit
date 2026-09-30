@@ -1,0 +1,7 @@
+language js
+
+// Copy lives in en.json and reaches JSX through t(); literal text children are not allowed.
+jsx_text() as $t where {
+  $t <: r"(?s).*[A-Za-z].*",
+  register_diagnostic(span=$t, message="Inline copy in JSX: add a key to en.json and use t() (rules/conventions.md).")
+}

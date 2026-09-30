@@ -23,13 +23,13 @@ Canvas artboards **Main** (Foundations) and **Components**, plus the design's `t
 - Global list: see [README](README.md#global-out-of-scope-every-brief).
 
 ### Acceptance criteria
-- [ ] Given the theme module, when compared with the design's `theme.css` `:root`, then every token exists with an identical value.
-- [ ] Given `formatMoney(14900)`, then it returns `₴149`; given `formatMoney(348000)`, then `₴3,480`; floats are rejected in dev.
-- [ ] Given a pickup window today in the store's timezone, when formatted, then it reads `Today · 18:00–19:30`; tomorrow reads `Tomorrow · …`; later dates read `Sat, 26 Sep · …`.
-- [ ] Given a Stepper with min 1 and max 3, when pressing + at 3 or − at 1, then the value doesn't change and that button is disabled.
-- [ ] Given Stars in input mode, when a star is pressed, then onChange gets 1–5 and each star has an accessible label.
-- [ ] No component file contains a color literal, a raw number outside `styles.ts`, or user-facing copy (`pnpm lint` plus review).
-- [ ] Every interactive primitive has a hit area ≥ `tapMin` (48) and an accessibilityRole.
+- [x] Given the theme module, when compared with the design's `theme.css` `:root`, then every token exists with an identical value.
+- [x] Given `formatMoney(14900)`, then it returns `₴149`; given `formatMoney(348000)`, then `₴3,480`; floats are rejected in dev.
+- [x] Given a pickup window today in the store's timezone, when formatted, then it reads `Today · 18:00–19:30`; tomorrow reads `Tomorrow · …`; later dates read `Sat, 26 Sep · …`.
+- [x] Given a Stepper with min 1 and max 3, when pressing + at 3 or − at 1, then the value doesn't change and that button is disabled.
+- [x] Given Stars in input mode, when a star is pressed, then onChange gets 1–5 and each star has an accessible label.
+- [x] No component file contains a color literal, a raw number outside `styles.ts`, or user-facing copy (`pnpm lint` plus review).
+- [x] Every interactive primitive has a hit area ≥ `tapMin` (48) and an accessibilityRole.
 
 ### Approach steps
 1. Port `theme.css` to `src/shared/theme/{colors,typography,spacing,radius,elevation,index}.ts`.
@@ -47,10 +47,19 @@ Canvas artboards **Main** (Foundations) and **Components**, plus the design's `t
 ---
 
 ## Status
-planned
+done
 
 ## Last updated
 2026-09-29
 
 ## Changelog
 - 2026-09-29 — created from the design canvas
+- 2026-09-29 — plan frozen; work started on `feat/01-design-system`
+- 2026-09-29 — done. Decisions and deviations:
+  - Colors the design's component CSS uses outside `:root` (switch track, role/code tint, toast icons, welcome hero shape, media highlight, store logo palette) are named theme tokens, so no component carries a literal.
+  - Category → tint: `meals` → `meal`, `groceries` → `grocery`. `other` has no design tint and uses surface-sunken / text-secondary. Grocery and other glyphs are new, drawn in the design's stroke style.
+  - Fraunces' SOFT axis isn't in the static `@expo-google-fonts` files; display text renders at default softness.
+  - Native elevation is derived from the largest CSS shadow layer (iOS) plus an Android `elevation` level; the CSS strings stay in `shadows` for parity.
+  - The no-literals criterion is enforced by Biome GritQL plugins in `tools/biome/` (color literals, raw numbers in JSX props, inline JSX copy, inline style objects), scoped to mobile component code.
+  - Theme parity fixture is a TS module (`fixtures/design-root.ts`) because mobile tests have no Node types.
+  - Kit extras beyond the list: `Text`, `ListGroup`, `HeaderLarge`, `stockTone` (low at ≤ 2, per the Components artboard).
